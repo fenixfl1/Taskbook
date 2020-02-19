@@ -253,7 +253,7 @@ class DetalleEvento(Base):
         #     'hora en la termina': self.hora_fin
         # }
 
-        return '{}'.format(self.lugar, self.hora_inicio)
+        return '{}'.format(self.lugar)
 
 
 class PlanEstudio(Base):

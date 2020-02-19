@@ -1,6 +1,7 @@
 from . import user_view
 from flask import render_template
 from flask_security import login_required, current_user
+from sqlalchemy.orm import *
 from datetime import datetime
 from app.database import db
 from app.database.models import DetalleEvento, Eventos
@@ -21,17 +22,22 @@ def index():
 @login_required
 def events():
 
-    for column in db.query(Eventos).filter(
-            Eventos.user_id == current_user.id).order_by(Eventos.id)[1:5]:
+    event_user = db.query(Eventos).filter(
+        Eventos.user_id == current_user.id).options(contains_eager(
+            Eventos.user)).all()
 
-        event_user = column
+    # for column in DetalleEvento.query.filter(
+    #         DetalleEvento.evento_id == Eventos.id).filter(
+    #         Eventos.user_id == current_user.id).filter(
+    #         DetalleEvento.estado == True).all():
 
-    for column in DetalleEvento.query.filter(
-            DetalleEvento.evento_id == Eventos.id).filter(
+    #     detail_evento = column
+
+    detail_evento = db.query(DetalleEvento).join(DetalleEvento.evento).\
+        filter(DetalleEvento.evento_id == Eventos.id).filter(
             Eventos.user_id == current_user.id).filter(
-            DetalleEvento.estado == True).all():
-
-        detail_evento = column
+            DetalleEvento.estado == True).options(contains_eager(
+                DetalleEvento.evento)).all()
 
     print(detail_evento)
 
