@@ -26,12 +26,9 @@ def events():
         Eventos.user_id == current_user.id).options(contains_eager(
             Eventos.user)).all()
 
-    # for column in DetalleEvento.query.filter(
-    #         DetalleEvento.evento_id == Eventos.id).filter(
-    #         Eventos.user_id == current_user.id).filter(
-    #         DetalleEvento.estado == True).all():
-
-    #     detail_evento = column
+    # Numero total de eventos
+    num_event = db.query(Eventos).filter(
+        Eventos.user_id == current_user.id).count()
 
     detail_evento = db.query(DetalleEvento).join(DetalleEvento.evento).\
         filter(DetalleEvento.evento_id == Eventos.id).filter(
@@ -39,12 +36,13 @@ def events():
             DetalleEvento.estado == True).options(contains_eager(
                 DetalleEvento.evento)).all()
 
-    print(detail_evento)
+    print(detail_evento, num_event)
 
     return render_template(
         'user/events.html',
         title='Events',
         detail_evento=detail_evento,
         event_user=event_user,
+        num_event=num_event,
         year=datetime.now().year
     )

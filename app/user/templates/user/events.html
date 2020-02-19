@@ -11,28 +11,37 @@
             <div class="row">
 
                 <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        <h6> {{ event_user[0].name }} </h6>
-                                    </div>
+                {% for i in range(num_event) %}
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <h6> {{ event_user[i].name }} </h6>
+                                        </div>
 
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                       {{ detail_evento[0].dia }}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                           {{ event_user[i].detalle[0].dia }}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    <a href="#" title="Detalles" class="btn-circle btn btn-success">
-                                        <i class="fas fa-receipt fa-2x text-gray-300"></i>
-                                    </a>
+                                    <div class="col-auto">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					                    	<h2>...</h2>
+					                    </a>
+					                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+						                    <div class="dropdown-header">Dropdown Header:</div>
+						                        <a class="dropdown-item" href="#">Action</a>
+						                        <a class="dropdown-item" href="#">Another action</a>
+						                    <div class="dropdown-divider"></div>
+						                    <a class="dropdown-item" href="#">Something else here</a>
+					                    </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> 
-                </div>
+                        </div> 
+                    </div>
+                {% endfor %}
 
                 <!-- Earnings (Monthly) Card Example -->
                 {# <div class="col-xl-3 col-md-6 mb-4">
