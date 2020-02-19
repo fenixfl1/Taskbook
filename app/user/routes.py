@@ -36,8 +36,6 @@ def events():
             DetalleEvento.estado == True).options(contains_eager(
                 DetalleEvento.evento)).all()
 
-    print(detail_evento, num_event)
-
     return render_template(
         'user/events.html',
         title='Events',

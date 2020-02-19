@@ -25,7 +25,7 @@ PRODUCTION_DOMAIN = 'https://myroom.com/'
 DEVELOPMENT_DOMAIN = 'myroom.com:5555'
 
 SERVER_NAME = ''
-DEVELOPMENT_DOMAIN = 'miapp.com:5555'
+DEVELOPMENT_DOMAIN = 'taskbook.com:5555'
 
 # Security
 SECURITY_PASSWORD_HASH = 'sha512_crypt'
