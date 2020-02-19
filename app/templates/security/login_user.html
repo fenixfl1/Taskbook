@@ -1,0 +1,83 @@
+{% extends 'anonimus_user_base.html' %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% from 'macro.html' import Form_off_label %} 
+{% block content %}
+
+<body>
+
+	<div class="container">
+    
+    	<!-- Outer Row -->
+	    <div class="row justify-content-center">
+
+	      <div class="col-xl-5 col-lg-6 col-md-9">
+
+	        <div class="card o-hidden border-0 shadow-lg my-5">
+
+	          <div class="card-body p-0">
+	            <!-- Nested Row within Card Body -->
+	            <div class="row">
+
+	              <div class="col-lg-12">
+
+	                <div class="p-5">
+
+	                  <div class="text-center">
+	                  	{% include 'messages.html' %}
+	                    <h1 class="h4 text-gray-900 mb-4">Inicio de sesión</h1>
+	                    <hr>
+	                  </div>
+
+	                    <form class="user" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+
+	                    	{{ login_user_form.hidden_tag() }}
+
+		                    <div class="form-group">
+			    				{{ Form_off_label(login_user_form.email, class="form-control ", placeholder='Direccion de correo electronico', autofocus='autofocus') }}
+		                    </div>
+
+		                    <div class="form-group">
+		                      {{ Form_off_label(login_user_form.password, class="form-control ",id="exampleInputPassword", placeholder="Contraseña") }}
+		                    </div>
+
+		                    <div class="form-group">
+					    		<div class="form-check">
+					    			{{ Form_off_label(login_user_form.remember, class="form-check-input") }}
+					    			<label for="remember" class="form-check-label">Recordarme</label> 
+					    		</div>
+					    	</div>
+
+		                    <div class="form-group">
+		                    	{{ Form_off_label(login_user_form.submit, class="btn btn-primary form-control", value='Login') }}
+		                    </div>
+
+	                  	</form>
+
+	                  	<hr>
+
+	                    <div class="text-center">
+	                    	<a class="small" href="{{ url_for_security('forgot_password') }}">¿Se te olvidó tu contraseña?</a>
+	                    </div>
+
+		                <div class="text-center">
+		                    <a class="small" href="{{ url_for_security('register') }}">¡Crea una cuenta!</a>
+		                </div>
+
+	                </div>
+	                
+	              </div>
+
+	            </div>
+
+	          </div>
+
+	        </div>
+
+	      </div>
+
+	    </div>
+
+	</div>
+</body>
+
+{% endblock %}

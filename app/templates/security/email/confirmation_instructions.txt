@@ -1,0 +1,12 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+	<p>{{ _('Please confirm your email through the link below:') }}</p>
+
+	<div class="card-auth">
+		<p class="btn btn-primary from-control">
+			<a href="{{ confirmation_link }}">{{ _('Confirm my account') }}</a>
+		</p>
+	</div>
+	
+{% endblock %}
