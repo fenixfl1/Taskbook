@@ -24,12 +24,12 @@
   <div id="wrapper">
 
 	<!-- Sidebar -->
-	<ul class="navbar-nav bg-gradient-primary sidebar shadow sidebar-dark " id="accordionSidebar">
+	<ul class="navbar-nav bg-gradient-primary sidebar shadow-sm sidebar-dark " id="accordionSidebar">
 
 	  <!-- Sidebar - Brand -->
 	  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/index">
 		<div class="sidebar-brand-icon rotate-n-15">
-		  <i class="fas fa-laugh-wink"></i>
+		  	<i class="fas fa-book"></i>
 		</div>
 		<div class="sidebar-brand-text mx-3 notranslate">
 			Taskbook
@@ -41,8 +41,8 @@
 
 	  <!-- Nav Item - Dashboard -->
 	  <li class="nav-item active">
-		<a class="nav-link" href="index.html">
-		  <i class="fas fa-fw fa-tachometer-alt"></i>
+		<a class="nav-link" href="/calendario">
+		  <i class="fas fa-calendar-alt"></i>
 		  <span>Calendario</span></a>
 	  </li>
 
@@ -51,49 +51,30 @@
 	  
 	  <!-- Nav Item - Utilities Collapse Menu -->
 	  <li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-		  <i class="fas fa-fw fa-wrench"></i>
+		<a class="nav-link collapsed" href="/horario">
+		  <i class="fas fa-calendar"></i>
 		  <span>Horario de clase</span>
 		</a>
-		<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-		  <div class="bg-white py-2 collapse-inner rounded">
-			<a class="collapse-item" href="#">Colors</a>
-			<a class="collapse-item" href="#">Borders</a>
-			<a class="collapse-item" href="#">Animations</a>
-			<a class="collapse-item" href="#">Other</a>
-		  </div>
-		</div>
 	  </li>
 
 	  <!-- Nav Item - Pages Collapse Menu -->
 	  <li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-		  <i class="fas fa-fw fa-folder"></i>
+		<a class="nav-link" href="/tareas">
+		  <i class="fas fa-clipboard-list"></i>
 		  <span>Tareas</span>
 		</a>
-		<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-		  <div class="bg-white py-2 collapse-inner rounded">
-			<a class="collapse-item" href="login.html">Login</a>
-			<a class="collapse-item" href="register.html">Register</a>
-			<a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-			<div class="collapse-divider"></div>
-			<h6 class="collapse-header">Other Pages:</h6>
-			<a class="collapse-item" href="404.html">404 Page</a>
-			<a class="collapse-item" href="blank.html">Blank Page</a>
-		  </div>
-		</div>
 	  </li>
 
 	  <!-- Nav Item - Charts -->
 	  <li class="nav-item">
-		<a class="nav-link" href="#">
-		  <i class="fas fa-fw fa-chart-area"></i>
+		<a class="nav-link" href="/plan de estudio">
+		  <i class="fas fa-fw fa-book-reader"></i>
 		  <span>Plan de estudio</span></a>
 	  </li>
 
 	  <!-- Nav Item - Tables -->
 	  <li class="nav-item">
-		<a class="nav-link" href="#">
+		<a class="nav-link" href="eventos">
 		  <i class="fas fa-fw fa-table"></i>
 		  <span>Eventos</span></a>
 	  </li>
@@ -197,8 +178,8 @@
 				<li class="nav-item dropdown no-arrow">
 				  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-					<span class="mr-2 d-none d-lg-inline text-gray-600 small">
-						{{ current_user.first_name }} {{ current_user.last_name }}
+					<span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
+						{{ current_user.first_name.capitalize() }} {{ current_user.last_name.capitalize() }}
 					</span>
 
 					
@@ -220,8 +201,8 @@
 					</a>
 
 					{% if 'Admin' in current_user.roles %}
-						<a class="dropdown-item" href="/admin">
-							<i class="fas fa-user-shield text-gray-400"></i>
+						<a class="dropdown-item" href="admin.taskbook.com">
+							<i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
 						  Panel de administracion
 						</a>
 					{% endif %}

@@ -14,7 +14,7 @@ from .extendforms import ExtendRegisterForm
 
 
 mail = Mail()
-adm = Admin()
+adm = Admin(subdomain='admin')
 login = LoginManager()
 security = Security()
 
@@ -26,7 +26,7 @@ class MyAdminIndexView(AdminIndexView):
 
         return self.render(
             'admin/index.html',
-            title='Admin'
+            name='Taskbook'
         )
 
 

@@ -18,9 +18,37 @@ def index():
     )
 
 
-@user_view.route('/events')
+@user_view.route('/calendario')
 @login_required
-def events():
+def calendario():
+
+    return 'Calendario'
+
+
+@user_view.route('/horario')
+@login_required
+def horario():
+
+    return 'Horario'
+
+
+@user_view.route('/tareas')
+@login_required
+def tareas():
+
+    return 'Tareas'
+
+
+@user_view.route('/plan de estudio')
+@login_required
+def plan_de_estudio():
+
+    return 'plan de estudio'
+
+
+@user_view.route('/eventos')
+@login_required
+def eventos():
 
     event_user = db.query(Eventos).filter(
         Eventos.user_id == current_user.id).options(contains_eager(
