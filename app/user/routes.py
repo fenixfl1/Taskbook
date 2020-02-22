@@ -4,16 +4,75 @@ from flask_security import login_required, current_user
 from sqlalchemy.orm import *
 from datetime import datetime
 from app.database import db
-from app.database.models import DetalleEvento, Eventos
+from app.database.models import Eventos, Tarea, PlanEstudio
 
 
-@user_view.route('/index')
+# Perform query of any entity for current_user
+def queries(entity):
+
+    return db.query(entity).filter(entity.user_id == current_user.id).\
+        options(contains_eager(entity.user)).all()
+
+
+# number of records in an entity
+def contador(entity):
+
+    return db.query(Eventos).filter(
+        Eventos.user_id == current_user.id).count()
+
+
+# get the time in text formt
+def literal_time(entity):
+
+    date_str = str(entity[0].detalle[0].dia)
+
+    date_object = datetime.strptime(date_str, '%Y-%m-%d')
+
+    date = datetime.strftime(date_object, '%a %d de %b')
+
+    return date
+
+
+# get the next activity to perform
+def get_most_recent(result):
+
+    date = []
+
+    num_activity = contador(result)
+
+    for i in range(num_activity):
+
+        for x in result[i].detalle[i].dia:
+
+            date.append(x)
+
+    return max(data)
+
+
+@user_view.route('/inicio')
 @login_required
 def index():
+
+    event = queries(Eventos)
+
+    task = queries(Tarea)
+
+    plan = queries(PlanEstudio)
+
+    fecha = literal_time(event)
+
+    next_to = get_most_recent(task)
+
+    print('Ok', next_to)
 
     return render_template(
         'user/index.html',
         title='Inicio',
+        event_user=event,
+        task_user=task,
+        fecha=fecha,
+        next_to=next_to,
+        stady_plan=plan,
         year=datetime.now().year
     )
 
@@ -36,39 +95,48 @@ def horario():
 @login_required
 def tareas():
 
-    return 'Tareas'
+    task = queries(Tarea)
+
+    num_task = contador(Tarea)
+
+    return render_template(
+        'user/task.html',
+        title='Tareas',
+        task_user=task,
+        num_task=num_task,
+        year=datetime.now().year
+    )
 
 
 @user_view.route('/plan de estudio')
 @login_required
 def plan_de_estudio():
 
-    return 'plan de estudio'
+    plan = queries(PlanEstudio)
+
+    num_plan = contador(PlanEstudio)
+
+    return render_template(
+        'user/stady_plan.html',
+        title='plan de estudio',
+        stady_plan=plan,
+        num_plan=num_plan,
+        year=datetime.now().year
+    )
 
 
 @user_view.route('/eventos')
 @login_required
 def eventos():
 
-    event_user = db.query(Eventos).filter(
-        Eventos.user_id == current_user.id).options(contains_eager(
-            Eventos.user)).all()
+    event = queries(Eventos)
 
-    # Numero total de eventos
-    num_event = db.query(Eventos).filter(
-        Eventos.user_id == current_user.id).count()
-
-    detail_evento = db.query(DetalleEvento).join(DetalleEvento.evento).\
-        filter(DetalleEvento.evento_id == Eventos.id).filter(
-            Eventos.user_id == current_user.id).filter(
-            DetalleEvento.estado == True).options(contains_eager(
-                DetalleEvento.evento)).all()
+    num_event = contador(Eventos)
 
     return render_template(
         'user/events.html',
         title='Events',
-        detail_evento=detail_evento,
-        event_user=event_user,
+        event_user=event,
         num_event=num_event,
         year=datetime.now().year
     )

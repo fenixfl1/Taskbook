@@ -245,14 +245,6 @@ class DetalleEvento(Base):
 
     def __repr__(self):
 
-        # detalles = {
-        #     'name': self.evento,
-        #     'lugar': self.lugar,
-        #     'dia': self.dia,
-        #     'hora de inicio': self.hora_inicio,
-        #     'hora en la termina': self.hora_fin
-        # }
-
         return '{}'.format(self.lugar)
 
 

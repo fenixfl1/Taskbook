@@ -14,7 +14,7 @@ from .extendforms import ExtendRegisterForm
 
 
 mail = Mail()
-adm = Admin(subdomain='admin')
+adm = Admin()
 login = LoginManager()
 security = Security()
 
