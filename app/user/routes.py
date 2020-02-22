@@ -38,15 +38,15 @@ def get_most_recent(result):
 
     date = []
 
-    num_activity = contador(result)
+    # num_activity = contador(result)
 
-    for i in range(num_activity):
+    for i in range(2):
 
-        for x in result[i].detalle[i].dia:
+        date.append(result[i].detalle[i].dia)
 
-            date.append(x)
+        print(date)
 
-    return max(data)
+    return max(date)
 
 
 @user_view.route('/inicio')
@@ -61,17 +61,12 @@ def index():
 
     fecha = literal_time(event)
 
-    next_to = get_most_recent(task)
-
-    print('Ok', next_to)
-
     return render_template(
         'user/index.html',
         title='Inicio',
         event_user=event,
         task_user=task,
         fecha=fecha,
-        next_to=next_to,
         stady_plan=plan,
         year=datetime.now().year
     )

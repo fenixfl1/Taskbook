@@ -20,72 +20,93 @@
 
 <body id="page-top">
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+  	<!-- Page Wrapper -->
+  	<div id="wrapper">
 
 	<!-- Sidebar -->
 	<ul class="navbar-nav bg-gradient-primary sidebar shadow-sm sidebar-dark " id="accordionSidebar">
 
-	  <!-- Sidebar - Brand -->
-	  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/index">
-		<div class="sidebar-brand-icon rotate-n-15">
-		  	<i class="fas fa-book"></i>
-		</div>
-		<div class="sidebar-brand-text mx-3 notranslate active">
-			Taskbook
-		</div>
-	  </a>
+	  	<!-- Sidebar - Brand -->
+	  	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/inicio">
+			<div class="sidebar-brand-icon rotate-n-15">
+		  		<i class="fas fa-book"></i>
+			</div>
+			<div class="sidebar-brand-text mx-3 notranslate active">
+				Taskbook
+			</div>
+	  	</a>
 
-	  <!-- Divider -->
-	  <hr class="sidebar-divider my-0">
+	  	<!-- Divider -->
+	  	<hr class="sidebar-divider my-0">
 
-	  <!-- Nav Item - Dashboard -->
-	  <li class="nav-item">
-		<a class="nav-link" href="/calendario">
-		  <i class="fas fa-calendar-alt"></i>
-		  <span>Calendario</span></a>
-	  </li>
+	  	<!-- Nav Item - Dashboard -->
+	  	<li class="nav-item">
+			<a class="nav-link" href="/perfil" title="Perfil">
+		  		<i class="fas fa-user"></i>
+		  		<span>Perfil</span>
+		  	</a>
+	  	</li>
 
-	  <!-- Divider -->
-	  <hr class="sidebar-divider">
+	  	<!-- Divider -->
+	  	<hr class="sidebar-divider">
+
+	  	<li class="nav-item">
+			<a class="nav-link" href="/calendario" title="Calendario">
+		  		<i class="fas fa-calendar-alt"></i>
+		  		<span>Calendario</span>
+		  	</a>
+	  	</li>
 	  
-	  <!-- Nav Item - Utilities Collapse Menu -->
-	  <li class="nav-item">
-		<a class="nav-link collapsed" href="/horario">
-		  <i class="fas fa-calendar"></i>
-		  <span>Horario de clase</span>
-		</a>
-	  </li>
+	  	<!-- Nav Item - Utilities Collapse Menu -->
+	  	<li class="nav-item">
+			<a class="nav-link collapsed" href="/horario" title="Horario de clase">
+		  		<i class="fas fa-calendar"></i>
+			  	<span>Horario de clase</span>
+			</a>
+	  	</li>
 
-	  <!-- Nav Item - Pages Collapse Menu -->
-	  <li class="nav-item">
-		<a class="nav-link" href="/tareas">
-		  <i class="fas fa-clipboard-list"></i>
-		  <span>Tareas</span>
-		</a>
-	  </li>
+	  	<!-- Nav Item - Pages Collapse Menu -->
+	  	<li class="nav-item">
+			<a class="nav-link" href="/tareas" title="Tareas">
+		  		<i class="fas fa-clipboard-list"></i>
+		  		<span>Tareas</span>
+			</a>
+	  	</li>
 
-	  <!-- Nav Item - Charts -->
-	  <li class="nav-item">
-		<a class="nav-link" href="/plan de estudio">
-		  <i class="fas fa-fw fa-book-reader"></i>
-		  <span>Plan de estudio</span></a>
-	  </li>
+	  	<!-- Nav Item - Charts -->
+	  	<li class="nav-item">
+			<a class="nav-link" href="/plan de estudio" title="Plan de estudio">
+		  		<i class="fas fa-fw fa-book-reader"></i>
+		  		<span>Plan de estudio</span>
+		  	</a>
+	  	</li>
 
-	  <!-- Nav Item - Tables -->
-	  <li class="nav-item">
-		<a class="nav-link" href="eventos">
-		  <i class="fas fa-fw fa-table"></i>
-		  <span>Eventos</span></a>
-	  </li>
+	  	<!-- Nav Item - Tables -->
+	  	<li class="nav-item">
+			<a class="nav-link" href="eventos" title="Eventos">
+		  		<i class="fas fa-fw fa-table"></i>
+		  		<span>Eventos</span>
+		  	</a>
+	  	</li>
 
-	  <!-- Divider -->
-	  <hr class="sidebar-divider d-none d-md-block">
+	  	<hr class="sidebar-divider">
 
-	  <!-- Sidebar Toggler (Sidebar) -->
-	  <div class="text-center d-none d-md-inline">
-		<button class="rounded-circle border-0" id="sidebarToggle"></button>
-	  </div>
+	  	{% if 'Admin' in current_user.roles %}
+	  		<li class="nav-item">
+				<a class="nav-link" href="/admin" title="Panel de administracion">
+					<i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
+					<span>Panel de administracion</span>
+				</a>
+			</li>
+		{% endif %}
+
+	  	<!-- Divider -->
+	  	<hr class="sidebar-divider d-none d-md-block">
+
+	  	<!-- Sidebar Toggler (Sidebar) -->
+	  	<div class="text-center d-none d-md-inline">
+			<button class="rounded-circle border-0" id="sidebarToggle"></button>
+	  	</div>
 
 	</ul>
 	<!-- End of Sidebar -->
@@ -176,7 +197,7 @@
 
 				<!-- Nav Item - User Information -->
 				<li class="nav-item dropdown no-arrow">
-				  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Perfil">
 
 					<span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
 						{{ current_user.first_name.capitalize() }} {{ current_user.last_name.capitalize() }}
@@ -194,18 +215,6 @@
 						<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 					  Perfil
 					</a>
-
-					<a class="dropdown-item" href="#">
-						<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-					  Configuraciones
-					</a>
-
-					{% if 'Admin' in current_user.roles %}
-						<a class="dropdown-item" href="/admin">
-							<i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
-						  Panel de administracion
-						</a>
-					{% endif %}
 
 					<div class="dropdown-divider"></div>
 
