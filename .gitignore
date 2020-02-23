@@ -39,5 +39,7 @@ pip-delete-this-directory.txt
 
 dotenv
 instance/
+env/
+.code/
 Pipfile
 Pipfile.lock
