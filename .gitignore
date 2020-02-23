@@ -40,7 +40,7 @@ pip-delete-this-directory.txt
 dotenv
 instance/
 env/
-.code/
+.vscode/
 Pipfile
 Pipfile.lock
 *.json
