@@ -43,3 +43,4 @@ env/
 .code/
 Pipfile
 Pipfile.lock
+*.json
