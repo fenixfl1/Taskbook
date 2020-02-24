@@ -10,27 +10,41 @@ from app.database.models import Eventos, Tarea, PlanEstudio
 # Perform query of any entity for current_user
 def queries(entity):
 
-    return db.query(entity).filter(entity.user_id == current_user.id).\
-        options(contains_eager(entity.user)).all()
+    try:
+        return db.query(entity).filter(entity.user_id == current_user.id).\
+            options(contains_eager(entity.user)).all()
+            
+    except:
+        pass
 
 
 # number of records in an entity
 def contador(entity):
 
-    return db.query(Eventos).filter(
-        Eventos.user_id == current_user.id).count()
+    try:
+        return db.query(Eventos).filter(
+            Eventos.user_id == current_user.id).count()
+        
+    except:
+        pass
 
 
 # get the time in text formt
 def literal_time(entity):
+    
+    try:
 
-    date_str = str(entity[0].detalle[0].dia)
+        date_str = str(entity[0].detalle[0].dia)
 
-    date_object = datetime.strptime(date_str, '%Y-%m-%d')
+        date_object = datetime.strptime(date_str, '%Y-%m-%d')
 
-    date = datetime.strftime(date_object, '%a %d de %b')
+        date = datetime.strftime(date_object, '%a %d de %b')
 
-    return date
+    
+        return date
+    
+    except:
+        pass
 
 
 # get the next activity to perform

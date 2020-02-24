@@ -9,7 +9,7 @@ from app.database import db
 from app.database.models import (User, Role, Eventos, Tarea,
                                  PlanEstudio, HorarioClases, Materias,
                                  Profesor, DetalleEvento, DetallePlan,
-                                 DetalleTarea)
+                                 DetalleTarea, Weekdays)
 
 role_name = ['Admin', 'Editor', 'Coordinador']
 
@@ -108,3 +108,4 @@ adm.add_view(DetallePlanView(DetallePlan, db))
 adm.add_view(HorarioView(HorarioClases, db))
 adm.add_view(AdminView(Materias, db))
 adm.add_view(UserRelatedView(Profesor, db))
+# adm.add_view(UserRelatedView(Weekdays, db))

@@ -140,6 +140,7 @@ class Materias(Base):
     id = Column(Integer, primary_key=True)
     profe_id = Column(Integer, ForeignKey('profesor.id'))
     profe = relationship('Profesor', back_populates='materia')
+    tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
     name = Column(String(80), nullable=False)
     estado = Column(Boolean(), default=True)
@@ -194,6 +195,8 @@ class DetalleTarea(Base):
     id = Column(Integer, primary_key=True)
     tarea_id = Column(Integer, ForeignKey('tarea.id'))
     tarea = relationship('Tarea', back_populates='detalle')
+    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia = relationship('Materias', back_populates='tareas')
     asignada_en = Column(DateTime(), default=func.now())
     dia = Column(Date(), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
@@ -282,6 +285,20 @@ class DetallePlan(Base):
     def __repr__(self):
 
         return '{}'.format(self.plan)
+    
+    
+class Weekdays(Base):
+    
+    __tablename__ = 'dias'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(9), nullable=False)
+    code = Column(String(3), nullable=False)
+    
+    def __repr__(self):
+        
+        return '{}'.format(self.name)
+    
 
 
 # class Proyectos(Base):
