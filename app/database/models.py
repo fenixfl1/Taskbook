@@ -16,7 +16,7 @@ class RolesUsers(Base):
 
     id = Column(Integer(), primary_key=True)
     user_id = Column('user_id', Integer, ForeignKey('user.id'))
-    role_id = Column('role_id', Integer, ForeignKey('role.id'))
+    role_id = Column('role_id', Integer, ForeignKey('role.id')) 
 
 
 class Role(Base, RoleMixin):
@@ -43,7 +43,6 @@ class User(Base, UserMixin):
     password = Column(String(255), nullable=False)
     phone_number = Column(PhoneNumberType(), nullable=False)
     country = Column(CountryType(), nullable=False)
-    univercity = Column(String(100))
     gender = Column(String(3), nullable=False)
     last_login_at = Column(DateTime(timezone=True))
     current_login_at = Column(DateTime(timezone=True))
@@ -157,7 +156,8 @@ class HorarioClases(Base):
     id = Column(Integer, primary_key=True)
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='horario')
-    dias = Column(String(10), nullable=False)
+    weekday_id = Column(Integer, ForeignKey('weekdays.id'))
+    weekday = relationship('Weekdays', back_populates='horario')
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     aula = Column(String(5), nullable=False)
@@ -165,10 +165,7 @@ class HorarioClases(Base):
 
     def __repr__(self):
 
-        return '{0}, {1}-{2}, {3}'.format(self.materia,
-                                          self.hora_inicio,
-                                          self.hora_fin,
-                                          self.aula)
+        return '{}'.format(self.hora_inicio)
 
 
 class Tarea(Base):
@@ -275,7 +272,8 @@ class DetallePlan(Base):
     plan_id = Column(Integer, ForeignKey('plan_estudio.id'))
     plan = relationship('PlanEstudio', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
-    dia = Column(Date(), nullable=False)
+    weekday_id = Column(Integer, ForeignKey('weekdays.id'))
+    dias = relationship('Weekdays', back_populates='plan')
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     objetivo = Column(String(255))
@@ -284,16 +282,18 @@ class DetallePlan(Base):
 
     def __repr__(self):
 
-        return '{}'.format(self.plan)
-    
-    
+        return '{}'.format(self.plan) 
+
+
 class Weekdays(Base):
     
-    __tablename__ = 'dias'
+    __tablename__ = 'weekdays'
     
     id = Column(Integer, primary_key=True)
     name = Column(String(9), nullable=False)
     code = Column(String(3), nullable=False)
+    horario = relationship('HorarioClases', back_populates='weekday')
+    plan = relationship('DetallePlan', back_populates='dias')
     
     def __repr__(self):
         

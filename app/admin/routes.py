@@ -20,22 +20,24 @@ class AdminView(ModelView):
     edit_modal = True
     can_delete = False
 
-    def is_accessible(self):
+    # def is_accessible(self):
 
-        for i in role_name:
+    #     for i in role_name:
 
-            if i in current_user.roles:
+    #         if i in current_user.roles:
 
-                return True
+    #             return True
 
-            else:
-                return False
+    #         else:
+    #             return False
 
 
 class UserView(AdminView):
 
-    column_exclude_list = ['password']
-    column_searchable_list = ('first_name', 'email')
+    column_exclude_list = ['password', 'gender', 'last_login_at', 
+                           'current_login_at', 'current_login_ip',
+                           'login_count', 'confirmed_at']
+    column_searchable_list = ('first_name', 'email', 'country')
     column_filters = ('first_name', 'email')
     can_export = True
 
@@ -108,4 +110,4 @@ adm.add_view(DetallePlanView(DetallePlan, db))
 adm.add_view(HorarioView(HorarioClases, db))
 adm.add_view(AdminView(Materias, db))
 adm.add_view(UserRelatedView(Profesor, db))
-# adm.add_view(UserRelatedView(Weekdays, db))
+adm.add_view(UserRelatedView(Weekdays, db))

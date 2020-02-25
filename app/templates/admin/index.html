@@ -1,17 +1,35 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
+	<div class='row'>
 
+		<div class="col-xl-8 col-lg-7">
+	            	
+			<div class="card shadow mb-4">
+				<!-- Card Header - title -->
+				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				
+					<h6 class="m-0 font-weight-bold text-primary">Estadisticas</h6>
 
-	{% for item in current_user.tarea %}
+				</div>
+						
+				<!-- Card Body -->
+				<div class="card-body">
 
-		<div>
+					<div class="chart-area">
 
-			{{ item }}
-			
-		</div>
-		
-	{% endfor %}
+						<canvas id="myAreaChart">
+							
+						</canvas>
 
-	
+					</div>
+
+				</div>
+
+			</div>
+
+	    </div>
+
+	</div>
+
 {% endblock %}

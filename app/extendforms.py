@@ -15,6 +15,5 @@ class ExtendRegisterForm(RegisterForm):
     phone_number = PhoneNumberField('Telefono', validators=[DataRequired()])
     country = CountryField('País', validators=[DataRequired()])
     aceptar = BooleanField('', validators=[DataRequired()])
-    univercity = StringField('Univercity', validators=[DataRequired()])
     gender = SelectField('Genero', choices=genders,
                          validators=[DataRequired()])
