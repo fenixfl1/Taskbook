@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% block content %} {% from 'macro.html' import Form_off_label, Form %}
+
+<div class="d-flex flex-column">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <form action="/uploads" method="post" enctype="multipart/form-data">
+
+                                {{ upload_form.hidden_tag() }}
+
+                                <div class="input-file">
+                                    {{ Form(upload_form.picture, id="file", onchange="mostrar()") }}
+                                    <img class="col-xl-10" id="img" />
+                                </div>
+
+                                <div class="">
+                                    {{ Form(upload_form.submit, value='Subir', class='btn btn-primary') }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class=col-md-8>
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <form action="/uploads" method="post" enctype="multipart/form-data">
+                                {{ upload_form.hidden_tag() }}
+                                <div class="input-file">
+                                    {{ Form(upload_form.picture, id="file", onchange="mostrar()") }}
+                                    <img class="col-xl-10 card-img" id="img" />
+                                </div>
+
+                                <div class="">
+                                    {{ Form(upload_form.submit, value='Subir', class='btn btn-primary') }}
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

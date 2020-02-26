@@ -1,9 +1,10 @@
 from . import user_view
-from flask import render_template
+from flask import render_template, request
 from flask_security import login_required, current_user
 from sqlalchemy.orm import *
 from datetime import datetime
 from app.database import db
+from app.auth.forms import LoadForm
 from app.database.models import Eventos, Tarea, PlanEstudio
 
 
@@ -82,6 +83,21 @@ def index():
         task_user=task,
         fecha=fecha,
         stady_plan=plan,
+        year=datetime.now().year
+    )
+    
+    
+@user_view.route('/profile/<user>/')
+@login_required
+def profile(user):
+    
+    form = LoadForm(request.form)
+    
+    return render_template(
+        'user/profile.html',
+        title='perfil',
+        user=user,
+        upload_form=form,
         year=datetime.now().year
     )
 

@@ -20,16 +20,16 @@ class AdminView(ModelView):
     edit_modal = True
     can_delete = False
 
-    # def is_accessible(self):
+    def is_accessible(self):
 
-    #     for i in role_name:
+        for i in role_name:
 
-    #         if i in current_user.roles:
+            if i in current_user.roles:
 
-    #             return True
+                return True
 
-    #         else:
-    #             return False
+            else:
+                return False
 
 
 class UserView(AdminView):
