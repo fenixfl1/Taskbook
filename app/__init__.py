@@ -6,11 +6,13 @@ from flask_fontawesome import FontAwesome
 from flask_admin import Admin, AdminIndexView, expose
 from flask_login import LoginManager, login_required
 from flask_migrate import Migrate
-from flask_security import Security, SQLAlchemySessionUserDatastore
+from flask_security import Security, SQLAlchemySessionUserDatastore, roles_required
+from app.database import init_db
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
 from .extendforms import ExtendRegisterForm
+from datetime import datetime
 
 
 mail = Mail()
@@ -22,6 +24,7 @@ security = Security()
 class MyAdminIndexView(AdminIndexView):
     @expose()
     @login_required
+    @roles_required('Admin')
     def index(self):
 
         return self.render(
@@ -30,7 +33,7 @@ class MyAdminIndexView(AdminIndexView):
         )
 
 
-user_dataestore = SQLAlchemySessionUserDatastore(db, User, Role)
+user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
 
 def creatre_app(setting_module):
@@ -53,7 +56,7 @@ def creatre_app(setting_module):
     mail.init_app(app)
     adm.init_app(app, index_view=MyAdminIndexView())
     login.init_app(app)
-    security.init_app(app, user_dataestore,
+    security.init_app(app, user_datastore,
                       register_form=ExtendRegisterForm,
                       confirm_register_form=ExtendRegisterForm)
 

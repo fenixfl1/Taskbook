@@ -1,5 +1,5 @@
 # from . import admin_view
-# from flask import render_template
+from flask import redirect, url_for
 from app import adm
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
@@ -9,7 +9,7 @@ from app.database import db
 from app.database.models import (User, Role, Eventos, Tarea,
                                  PlanEstudio, HorarioClases, Materias,
                                  Profesor, DetalleEvento, DetallePlan,
-                                 DetalleTarea, Weekdays)
+                                 DetalleTarea)
 
 role_name = ['Admin', 'Editor', 'Coordinador']
 
@@ -19,6 +19,7 @@ class AdminView(ModelView):
     create_modal = True
     edit_modal = True
     can_delete = False
+    can_view_details = True
 
     def is_accessible(self):
 
@@ -29,12 +30,17 @@ class AdminView(ModelView):
                 return True
 
             else:
+                
+                if current_user.is_authenticated:
+                    
+                    return redirect(url_for('index'))
+                
                 return False
 
 
 class UserView(AdminView):
 
-    column_exclude_list = ['password', 'gender', 'last_login_at', 
+    column_exclude_list = ['password', 'gender', 'last_login_at',
                            'current_login_at', 'current_login_ip',
                            'login_count', 'confirmed_at']
     column_searchable_list = ('first_name', 'email', 'country')
@@ -59,7 +65,28 @@ class UserRelatedView(AdminView):
     }
 
 
-class DetalleEventView(AdminView):
+class Details(AdminView):
+    
+    column_exclude_list = {
+        'asignada_en',
+        'creada_en', 'realizada_en'
+    }
+
+    form_choices = {
+        'dia': [
+            ('', ''),
+            ('Sun', 'Sunday'),
+            ('Mon', 'Monday'),
+            ('Tus', 'Tuesday'),
+            ('Wed', 'Wednesday'),
+            ('Thu', 'Thursday.'),
+            ('Fri', 'Friday'),
+            ('Sat', 'Saturday')
+        ]
+    }
+
+
+class DetalleEventView(Details):
 
     form_args = {
         'evento': {
@@ -69,7 +96,7 @@ class DetalleEventView(AdminView):
     }
 
 
-class DetalleTareaView(AdminView):
+class DetalleTareaView(Details):
 
     form_args = {
         'tarea': {
@@ -79,7 +106,7 @@ class DetalleTareaView(AdminView):
     }
 
 
-class DetallePlanView(AdminView):
+class DetallePlanView(Details):
 
     form_args = {
         'plan': {
@@ -99,15 +126,14 @@ class HorarioView(AdminView):
     }
 
 
-adm.add_view(UserView(User, db))
-adm.add_view(AdminView(Role, db))
-adm.add_view(UserRelatedView(Eventos, db))
-adm.add_view(DetalleEventView(DetalleEvento, db))
-adm.add_view(UserRelatedView(Tarea, db))
-adm.add_view(DetalleTareaView(DetalleTarea, db))
-adm.add_view(UserRelatedView(PlanEstudio, db))
-adm.add_view(DetallePlanView(DetallePlan, db))
+adm.add_view(UserView(User, db, category='User'))
+adm.add_view(AdminView(Role, db, category='User'))
+adm.add_view(UserRelatedView(Eventos, db, category='Events'))
+adm.add_view(DetalleEventView(DetalleEvento, db, category='Events'))
+adm.add_view(UserRelatedView(Tarea, db, category='Task'))
+adm.add_view(DetalleTareaView(DetalleTarea, db, category='Task'))
+adm.add_view(UserRelatedView(PlanEstudio, db, category='Stady plan'))
+adm.add_view(DetallePlanView(DetallePlan, db, category='Stady plan'))
 adm.add_view(HorarioView(HorarioClases, db))
 adm.add_view(AdminView(Materias, db))
 adm.add_view(UserRelatedView(Profesor, db))
-adm.add_view(UserRelatedView(Weekdays, db))

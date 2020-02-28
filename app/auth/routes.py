@@ -1,12 +1,14 @@
 from . import auth_view
 from flask import render_template, flash, request, redirect
 from flask_login import login_required, current_user
+from flask_security import user_registered
+from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from .forms import LoadForm
 from app.database import db
 from app.database.models import ProfilePicture
-from config.default import *
+from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 
 
@@ -71,20 +73,6 @@ def Uploads():
         year=datetime.now().year,
         upload_form=form
     )
-
-
-@auth_view.route('/image')
-@login_required
-def image():
-
-    user = ProfilePicture()
-
-    return render_template(
-        'auth/imagen.html',
-        title='Cargar imagen',
-        user=user
-    )
-
 
 @auth_view.route('/register event', methods=['GET', 'POST'])
 def register_event():

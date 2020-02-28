@@ -28,7 +28,7 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center
-                    justify-content-center" href="/inicio">
+                    justify-content-center" href="/index">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-book"></i>
                     </div>
@@ -41,7 +41,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('users.profile',
-                        user=current_user.first_name) }}" title="Perfil">
+                        user=current_user.first_name) }}" title="Profile">
                         <i class="fas fa-user"></i>
                         <span>Perfil</span>
                     </a>
@@ -49,56 +49,54 @@
 
                 <hr class="sidebar-divider">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/calendario" title="Calendario">
+                {# <li class="nav-item">
+                    <a class="nav-link" href="/schedule" title="schedule">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Calendario</span>
                     </a>
-                </li>
+                </li> #}
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="/horario" title="Horario
-                        de clase">
+                    <a class="nav-link collapsed" href="/schedule" title="schedules">
                         <i class="fas fa-calendar"></i>
-                        <span>Horario de clase</span>
+                        <span>Horarios</span>
                     </a>
                 </li>
 
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/tareas" title="Tareas">
+                    <a class="nav-link" href="/tasks" title="Tasks">
                         <i class="fas fa-clipboard-list"></i>
                         <span>Tareas</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/plan de estudio" title="Plan de
-                        estudio">
+                    <a class="nav-link" href="/studies-plan" title="Studies plan">
                         <i class="fas fa-fw fa-book-reader"></i>
                         <span>Plan de estudio</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="eventos" title="Eventos">
+                    <a class="nav-link" href="events" title="Events">
                         <i class="fas fa-fw fa-table"></i>
                         <span>Eventos</span>
                     </a>
                 </li>
 
-                <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles
-                %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin" title="Panel de
-                        administracion">
-                        <i class="fas fa-user-shield fa-sm fa-fw mr-2
-                            text-gray-400"></i>
-                        <span>Panel de administracion</span>
-                    </a>
-                </li>
+                <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles%}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin" title="Panel de
+                            administracion">
+                            <i class="fas fa-user-shield fa-sm fa-fw mr-2
+                                text-gray-400"></i>
+                            <span>Panel de administracion</span>
+                        </a>
+                    </li>
 
-                <hr class="sidebar-divider d-none d-md-block"> {% endif %}
+                    <hr class="sidebar-divider d-none d-md-block"> 
+                {% endif %}
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
@@ -244,8 +242,7 @@
                                     <img class="rounded-circle" src="{{
                                         url_for('static',filename=current_user.picture)
                                         }}"> {% else %}
-                                    <img width="50" height="50"
-                                        clase='rounded-circle' src="{{
+                                    <img clase='rounded-circle' src="{{
                                         url_for('static',filename='images/default.png')
                                         }}"> {% endif %}
                                 </a>
@@ -280,15 +277,14 @@
 
                     {% endblock %}
 
-                    <!-- Footer -->
+                    <!-- Footer 
                     <footer class="sticky-footer bg-white">
                         <div class="container my-auto">
                             <div class="copyright text-center my-auto">
                                 <span>Copyright &copy;Rainsoft {{ year }}</span>
                             </div>
                         </div>
-                    </footer>
-                    <!-- End of Footer -->
+                    </footer> -->
                 </div>
             </div>
         </body>

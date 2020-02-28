@@ -1,14 +1,16 @@
-from sqlalchemy import *
+from sqlalchemy import Integer, String, ForeignKey,\
+    Column, DateTime, Boolean, Time, Date
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from flask_security import RoleMixin, UserMixin
 from sqlalchemy_utils import CountryType
 from sqlalchemy_utils.types.phone_number import PhoneNumberType
 from sqlalchemy_utils.types.url import URLType
-# from sqlalchemy_utils.types.weekdays import WeekDaysType
 import hashlib
 from . import Base
 
+from sqlalchemy_utils.types.weekdays import WeekDaysType
+from sqlalchemy_utils.types.weekdays import WeekDaysType
 
 class RolesUsers(Base):
 
@@ -156,8 +158,7 @@ class HorarioClases(Base):
     id = Column(Integer, primary_key=True)
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='horario')
-    weekday_id = Column(Integer, ForeignKey('weekdays.id'))
-    weekday = relationship('Weekdays', back_populates='horario')
+    dia = Column(String(3), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     aula = Column(String(5), nullable=False)
@@ -272,8 +273,7 @@ class DetallePlan(Base):
     plan_id = Column(Integer, ForeignKey('plan_estudio.id'))
     plan = relationship('PlanEstudio', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
-    weekday_id = Column(Integer, ForeignKey('weekdays.id'))
-    dias = relationship('Weekdays', back_populates='plan')
+    dia = Column(String(3), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     objetivo = Column(String(255))
@@ -282,31 +282,4 @@ class DetallePlan(Base):
 
     def __repr__(self):
 
-        return '{}'.format(self.plan) 
-
-
-class Weekdays(Base):
-    
-    __tablename__ = 'weekdays'
-    
-    id = Column(Integer, primary_key=True)
-    name = Column(String(9), nullable=False)
-    code = Column(String(3), nullable=False)
-    horario = relationship('HorarioClases', back_populates='weekday')
-    plan = relationship('DetallePlan', back_populates='dias')
-    
-    def __repr__(self):
-        
-        return '{}'.format(self.name)
-    
-
-
-# class Proyectos(Base):
-
-#     __tablename__ = 'proyecto'
-
-#     id = Column(Integer, primary_key=True)
-#     user_id = Column(Integer, ForeignKey('user.id'))
-#     name = Column(String(100), nullable=False)
-#     creada_en = Column(DateTime(), default=func.now())
-#     estado = Column(Boolean(), default=True)
+        return '{}'.format(self.plan)

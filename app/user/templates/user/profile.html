@@ -31,13 +31,16 @@
                         <div class="col-md-4">
                             <form action="/uploads" method="post" enctype="multipart/form-data">
                                 {{ upload_form.hidden_tag() }}
-                                <div class="input-file">
-                                    {{ Form(upload_form.picture, id="file", onchange="mostrar()") }}
+                                <div class="form-group container-fluid">
+                                    <img src=" {{ url_for('static',filename='images/camera-icon.png') }} " alt=""> 
+                                    <div class='input-file'>
+                                        {{ Form_off_label(upload_form.picture, id="file", onchange="mostrar()") }}
+                                    </div
                                     <img class="col-xl-10 card-img" id="img" />
                                 </div>
 
                                 <div class="">
-                                    {{ Form(upload_form.submit, value='Subir', class='btn btn-primary') }}
+                                    {{ Form_off_label(upload_form.submit, value='Subir', class='btn btn-primary') }}
                                 </div>
                             </form>
                         </div>

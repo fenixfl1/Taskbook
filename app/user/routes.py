@@ -1,7 +1,7 @@
 from . import user_view
 from flask import render_template, request
 from flask_security import login_required, current_user
-from sqlalchemy.orm import *
+from sqlalchemy.orm import contains_eager
 from datetime import datetime
 from app.database import db
 from app.auth.forms import LoadForm
@@ -48,7 +48,7 @@ def literal_time(entity):
         pass
 
 
-# get the next activity to perform
+# get the next activities to perform
 def get_most_recent(result):
 
     date = []
@@ -64,7 +64,7 @@ def get_most_recent(result):
     return max(date)
 
 
-@user_view.route('/inicio')
+@user_view.route('/index')
 @login_required
 def index():
 
@@ -78,7 +78,7 @@ def index():
 
     return render_template(
         'user/index.html',
-        title='Inicio',
+        title='Index',
         event_user=event,
         task_user=task,
         fecha=fecha,
@@ -102,21 +102,18 @@ def profile(user):
     )
 
 
-@user_view.route('/calendario')
-@login_required
-def calendario():
-
-    return 'Calendario'
-
-
-@user_view.route('/horario')
+@user_view.route('/schedule')
 @login_required
 def horario():
 
-    return 'Horario'
+    return render_template(
+        'user/schedule.html',
+        title='Schedule',
+        year=datetime.now().year
+    )
 
 
-@user_view.route('/tareas')
+@user_view.route('/tasks')
 @login_required
 def tareas():
 
@@ -126,14 +123,14 @@ def tareas():
 
     return render_template(
         'user/task.html',
-        title='Tareas',
+        title='Tasks',
         task_user=task,
         num_task=num_task,
         year=datetime.now().year
     )
 
 
-@user_view.route('/plan de estudio')
+@user_view.route('/studies-plan')
 @login_required
 def plan_de_estudio():
 
@@ -143,14 +140,14 @@ def plan_de_estudio():
 
     return render_template(
         'user/stady_plan.html',
-        title='plan de estudio',
+        title='Studies plan',
         stady_plan=plan,
         num_plan=num_plan,
         year=datetime.now().year
     )
 
 
-@user_view.route('/eventos')
+@user_view.route('/events')
 @login_required
 def eventos():
 
