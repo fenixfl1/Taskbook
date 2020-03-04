@@ -4,11 +4,9 @@
         {{ field(**kwargs) | safe }}
 
     	{% if field.errors %}
-            <ul>
-                {% for error in errors %}
-                    <li> {{ error }} </li>
-                {% endfor %}
-            </ul>
+            {% for error in errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
         {% endif %}
     </p>
 {% endmacro %}
@@ -18,36 +16,9 @@
     {{ field(**kwargs) | safe }}
 
     {% if field.errors %}
-        <ul>
-            {% for error in errors %}
-                <li> {{ error }} </li>
-            {% endfor %}
-        </ul>
+        {% for error in errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
     {% endif %}
     
 {% endmacro %}
-
-{# <div class="container">
-                            <div class="row">
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    <div class="col mr-2">
-
-                                        <a href="#" title="Detalles" class="btn-circle btn btn-primary">
-                                            <i class="fas fa-receipt"></i>
-                                        </a>
-
-                                        <a href="#" title="Hecho" class="btn-circle btn bg-secondary">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-
-                                        <a href="#" title="Actualizar" class="btn-circle btn btn-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-
-                                        <a href="#" title="Eliminar" class="btn-circle btn btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> #}

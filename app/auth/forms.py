@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
-from wtforms import SubmitField, FileField, StringField
+from wtforms import SubmitField, FileField, StringField, SelectField
 from wtforms.fields.html5 import DateField, TimeField
 
+weekdays = [('Sun','Sunday'),
+            ('Mon', 'Monday'),
+            ('Tus', 'Tuesday'),
+            ('Wed', 'Wednesday'),
+            ('Thu', 'Thursday'),
+            ('Fri', 'Friday'),
+            ('Sat', 'Saturday')]
 
 class LoadForm(FlaskForm):
 
@@ -19,8 +26,8 @@ class EventForm(FlaskForm):
     lugar = StringField(
         'Lugar', validators=[DataRequired(), Length(max=100)])
 
-    dia = DateField(
-        'Dia', validators=[DataRequired()])
+    dia = SelectField('Dia', choices=weekdays,
+                      validators=[DataRequired()])
 
     hora_inicio = TimeField(
         'Hora de Inicio', validators=[DataRequired()])

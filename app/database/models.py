@@ -237,10 +237,10 @@ class DetalleEvento(Base):
     evento = relationship('Eventos', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
     lugar = Column(String(100), nullable=False)
-    dia = Column(Date(), nullable=False)
+    dia = Column(String(3), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
-    nota = Column(String(100))
+    comentario = Column(String(100))
     realizada_en = Column(DateTime())
     estado = Column(Boolean(), default=True)
 
@@ -283,3 +283,4 @@ class DetallePlan(Base):
     def __repr__(self):
 
         return '{}'.format(self.plan)
+    

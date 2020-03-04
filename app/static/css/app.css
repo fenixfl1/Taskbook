@@ -11,3 +11,7 @@
 .row-striped {
     padding: 15px 0;
 }
+
+col-float-left {
+    float: left;
+}

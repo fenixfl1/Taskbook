@@ -17,7 +17,6 @@ IMAGE_SET_EXT = ('jpg', 'jpe', 'jpeg', 'png', 'gif', 'svg', 'bmp')
 # configuracion de despligue de la aplicacion
 DEBUG = False
 TESTING = False
-
 ENV = ''
 
 SERVER_NAME = 'localhost:5000'
@@ -38,3 +37,5 @@ SECURITY_POST_LOGIN_VIEW = '/index'
 SECURITY_POST_REGISTER_VIEW = '/'
 
 FLASK_ADMIN_SWATCH = 'flatly'
+
+SQLALCHEMY_TRACK_MODIFICATIONS = False

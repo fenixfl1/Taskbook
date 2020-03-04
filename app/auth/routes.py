@@ -81,3 +81,9 @@ def register_event():
         'auth/register_event.html',
         title='Register event'
     )
+    
+
+@auth_view.route('/register task', methods=['GET', 'POST'])
+def register_task():
+    
+    return 'Nuw task added'

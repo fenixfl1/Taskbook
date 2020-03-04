@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %} {% block content %}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <h6>  </h6>
+                                        </div>
+
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-auto dropdown no-arrow mx-1">
+                                        <button class="btn btn-circle btn-primary" id="alertsDropdown" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                                            <i class="fas fa-plus"></i>
+                                            <!-- Counter - Alerts -->
+                                            <!-- <span class="badge badge-danger badge-counter"></span> -->
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

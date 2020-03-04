@@ -4,8 +4,8 @@ from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from datetime import datetime
 from app.database import db
-from app.auth.forms import LoadForm
-from app.database.models import Eventos, Tarea, PlanEstudio
+from app.auth.forms import LoadForm, EventForm
+from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento
 
 
 # Perform query of any entity for current_user
@@ -67,7 +67,7 @@ def get_most_recent(result):
 @user_view.route('/index')
 @login_required
 def index():
-
+        
     event = queries(Eventos)
 
     task = queries(Tarea)
@@ -150,6 +150,8 @@ def plan_de_estudio():
 @user_view.route('/events')
 @login_required
 def eventos():
+    
+    form = EventForm(request.form)
 
     event = queries(Eventos)
 
@@ -160,5 +162,6 @@ def eventos():
         title='Events',
         event_user=event,
         num_event=num_event,
+        event_form=form,
         year=datetime.now().year
     )

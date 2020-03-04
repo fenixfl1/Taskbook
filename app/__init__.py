@@ -3,6 +3,8 @@ from flask_mail import Mail
 from flask_wtf import CSRFProtect
 from flask_bootstrap import Bootstrap
 from flask_fontawesome import FontAwesome
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_admin import Admin, AdminIndexView, expose
 from flask_login import LoginManager, login_required
 from flask_migrate import Migrate
@@ -16,7 +18,9 @@ from datetime import datetime
 
 
 mail = Mail()
-adm = Admin()
+adm = Admin(name='Taskbook', template_mode='bootstrap3')
+sql = SQLAlchemy()
+migrate = Migrate()
 login = LoginManager()
 security = Security()
 
@@ -54,6 +58,8 @@ def creatre_app(setting_module):
     Migrate(app, db)
     FontAwesome(app)
     mail.init_app(app)
+    sql.init_app(app)
+    migrate.init_app(app, sql)
     adm.init_app(app, index_view=MyAdminIndexView())
     login.init_app(app)
     security.init_app(app, user_datastore,
