@@ -1,0 +1,32 @@
+{% if current_user.is_authenticated %}
+    {% extends 'base.html' %} 
+    {% block content %}
+        <div class="container">
+            <div class="card-z col-md-5">
+                <div class="text-center">
+                    <article>
+                        <p class="text-center notranslate">
+                            <strong>{{ e }}</strong> 
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </div>   
+    {% endblock  %}
+{% else %}
+    {% extends 'error_base.html' %}
+    {% block container %}
+        <div class="container">
+            <div class="card-z col-md-5"
+                <div class="text-center">
+                    <article>
+                        <h2 class="notranslate text-center"> Taskbook </h2>
+                        <p> 
+                            <strong>{{ e }}</strong>
+                        </p>
+                    </article>
+                </div>
+            </div> 
+        </div>
+    {% endblock %}
+{% endif %}}

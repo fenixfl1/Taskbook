@@ -1,19 +1,34 @@
 {% extends 'base.html' %} {% block content %}
+{% from 'macro.html' import Form, Form_off_label %}
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
-        <div class="row">
-            <form action="{{ url_for('auth.register_task') }}" method="post">
+        {% include 'messages.html' %}
+        <div class="row shadow col-md-12">
+            <div class="col-md-8">
+                <h2>My Tasks </h2>
+            </div>
+
+            <form action="{{ url_for('auth.register_task_name') }}" method="post" class="col-md-4">
+                {{ task_form.hidden_tag() }}
                 <div class="form-row">
                     <div class="col-7">
-                        <input type="text" name="name" id="name" class="form-control " placeholder="Name">
+                        {{ Form_off_label(task_form.name, placeholder="Name", class="form-control") }}
                     </div>
 
                     <div class="col">
-                        <input type="submit" value="Crear" class="btn btn-primary">
+                        {{ Form_off_label(task_form.submit, class="btn btn-primary", value="Crear") }}
                     </div>
                 </div>
             </form>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                {% for i in task_user %}
+                    {{ task_user[i] }}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

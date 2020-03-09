@@ -4,7 +4,7 @@ from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from datetime import datetime
 from app.database import db
-from app.auth.forms import LoadForm, EventForm
+from app.auth.forms import LoadForm, EventForm, TaskForm
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento
 
 
@@ -115,9 +115,11 @@ def horario():
 
 @user_view.route('/tasks')
 @login_required
-def tareas():
+def task():
 
     task = queries(Tarea)
+    
+    form = TaskForm(request.form)
 
     num_task = contador(Tarea)
 
@@ -126,6 +128,7 @@ def tareas():
         title='Tasks',
         task_user=task,
         num_task=num_task,
+        task_form=form,
         year=datetime.now().year
     )
 

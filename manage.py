@@ -1,6 +1,6 @@
 from flask_script import Manager
 from flask_migrate import MigrateCommand
-from runserver import app
+from wsgi import app
 from app import migrate
 
 

@@ -4,12 +4,12 @@ import os
 
 settings_module = os.getenv('APP_SETTINGS_MODULE')
 
-app = creatre_app(settings_module)
-
 if __name__ == '__main__':
+    
+    app = creatre_app(settings_module)
 
-    app.app_context().push()
+    with app.app_context():
 
-    init_db()
+        init_db()
 
     app.run()

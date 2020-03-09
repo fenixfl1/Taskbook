@@ -7,12 +7,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_admin import Admin, AdminIndexView, expose
 from flask_login import LoginManager, login_required
-from flask_migrate import Migrate
 from flask_security import Security, SQLAlchemySessionUserDatastore, roles_required
 from app.database import init_db
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
+from app.extra import register_error_handlers, MyAdminIndexView, create_user
 from .extendforms import ExtendRegisterForm
 from datetime import datetime
 
@@ -25,20 +25,7 @@ login = LoginManager()
 security = Security()
 
 
-class MyAdminIndexView(AdminIndexView):
-    @expose()
-    @login_required
-    @roles_required('Admin')
-    def index(self):
-
-        return self.render(
-            'admin/index.html',
-            name='Taskbook'
-        )
-
-
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
-
 
 def creatre_app(setting_module):
 
@@ -74,5 +61,8 @@ def creatre_app(setting_module):
 
     from .admin import admin_view
     app.register_blueprint(admin_view)
+    
+    register_error_handlers(app)
+    # create_user(app, user_datastore, db)
 
     return app

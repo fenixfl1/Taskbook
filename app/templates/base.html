@@ -6,7 +6,7 @@
 <meta name="Description" content="Edcation Web">
 <meta name="viewport" content="width=devic-width, initial-scale=1.0">
 <meta name="Author" content="Benjamin Rosario --Rainsoft--"> {% endblock %} {% block title %}
-<title class="notranslate"> {{ title }} Taskbook</title>
+<title class="notranslate"> {{ title }} - Taskbook</title>
 {% endblock %} {{ fontawesome_html() }} {{ bootstrap.load_css() }}
 <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet">
@@ -82,10 +82,8 @@
 
             <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles%}
             <li class="nav-item">
-                <a class="nav-link" href="/admin" title="Panel de
-                            administracion">
-                    <i class="fas fa-user-shield fa-sm fa-fw mr-2
-                                text-gray-400"></i>
+                <a class="nav-link" href="/admin" title="Panel de administracion">
+                    <i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
                     <span>Panel de administracion</span>
                 </a>
             </li>

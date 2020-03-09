@@ -15,3 +15,17 @@
 col-float-left {
     float: left;
 }
+
+.card-z {
+    margin: 0 auto;
+    /* Added */
+    float: none;
+    /* Added */
+    /* margin-bottom: 50%; */
+    /* Added */
+    margin-top: 25%;
+}
+
+.form {
+    float: right;
+}

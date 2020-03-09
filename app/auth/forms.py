@@ -16,6 +16,15 @@ class LoadForm(FlaskForm):
     picture = FileField(id='file', _name='file')
 
     submit = SubmitField('', id='publish')
+    
+    
+class TaskForm(FlaskForm):
+    
+    name = StringField(
+        'Nombre', validators=[DataRequired(), Length(max=80)]
+    )
+    
+    submit = SubmitField('')
 
 
 class EventForm(FlaskForm):

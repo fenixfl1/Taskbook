@@ -13,15 +13,6 @@ from app.database.models import (User, Role, Eventos, Tarea,
 
 role_name = ['Admin', 'Editor', 'Coordinador']
 
-
-@admin_view.errorhandler(403)
-def error(e):
-    
-    return render_template(
-        'admin/error_403.html',
-        title='Error'
-    ), 403
-
 class AdminView(ModelView):
 
     create_modal = True

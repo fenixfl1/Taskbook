@@ -1,13 +1,13 @@
 from . import auth_view
-from flask import render_template, flash, request, redirect
+from flask import render_template, flash, request, redirect, url_for
 from flask_login import login_required, current_user
 from flask_security import user_registered
 from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from .forms import LoadForm
+from .forms import LoadForm, TaskForm
 from app.database import db
-from app.database.models import ProfilePicture
+from app.database.models import ProfilePicture, Tarea
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 
@@ -83,7 +83,33 @@ def register_event():
     )
     
 
-@auth_view.route('/register task', methods=['GET', 'POST'])
-def register_task():
+@auth_view.route('/register-task-name', methods=['GET', 'POST'])
+def register_task_name():
     
-    return 'Nuw task added'
+    form = TaskForm(request.form)
+    message = ''
+    
+    if form.validate_on_submit():
+        
+        task = form.name.data
+        
+        new_task = Tarea(name=task, 
+                         user_id=current_user.id)
+        
+        try:
+            db.add(new_task)
+            db.commit()
+            message = 'Tarea guardada con exito!'
+            flash(message, 'success')
+            
+        except:
+            message = 'No fue posible guardar los cambios!'
+            flash(message, 'error')
+        
+        return redirect(url_for('users.task'))
+
+
+@auth_view.route('/register-task-description', methods=['GET', 'POST'])
+def register_task_description(id=None):
+    
+    pass

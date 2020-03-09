@@ -53,7 +53,7 @@ class User(Base, UserMixin):
     confirmed_at = Column(DateTime(timezone=True))
     picture = relationship(
         'ProfilePicture', uselist=False, back_populates='user')
-    profe = relationship('Profesor', back_populates='user')
+    materia = relationship('Materias', back_populates='user')
     evento = relationship('Eventos', back_populates='user')
     plan = relationship('PlanEstudio', back_populates='user')
     tarea = relationship('Tarea', back_populates='user')
@@ -121,9 +121,8 @@ class Profesor(Base):
     __tablename__ = 'profesor'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('User', back_populates='profe')
-    materia = relationship('Materias', back_populates='profe')
+    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia = relationship('Materias', back_populates='profesor')
     name = Column(String(80), nullable=False)
     last_name = Column(String(80))
     email = Column(String(100))
@@ -139,10 +138,11 @@ class Materias(Base):
     __tablename__ = 'materias'
 
     id = Column(Integer, primary_key=True)
-    profe_id = Column(Integer, ForeignKey('profesor.id'))
-    profe = relationship('Profesor', back_populates='materia')
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User', back_populates='materia')
     tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
+    profesor = relationship('Profesor', back_populates='materia')
     name = Column(String(80), nullable=False)
     estado = Column(Boolean(), default=True)
 
