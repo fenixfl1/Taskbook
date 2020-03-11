@@ -1,5 +1,5 @@
 from . import admin_view
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, request
 from app import adm
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
@@ -11,17 +11,17 @@ from app.database.models import (User, Role, Eventos, Tarea,
                                  Profesor, DetalleEvento, DetallePlan,
                                  DetalleTarea)
 
-role_name = ['Admin', 'Editor', 'Coordinador']
+role_name = ['Admin', 'admin', 'administrador']
 
 class AdminView(ModelView):
 
     create_modal = True
     edit_modal = True
-    can_delete = False
+    # can_delete = False
     can_view_details = True
 
     def is_accessible(self):
-
+        
         for i in role_name:
 
             if i in current_user.roles:
@@ -30,6 +30,10 @@ class AdminView(ModelView):
 
             else:
                 return False
+            
+    def inaccessible_callback(self, name, **kwargs):
+        
+        return redirect(url_for('users.index'))
 
 class UserView(AdminView):
 

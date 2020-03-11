@@ -63,6 +63,6 @@ def creatre_app(setting_module):
     app.register_blueprint(admin_view)
     
     register_error_handlers(app)
-    # create_user(app, user_datastore, db)
+    # create_user(app, user_datastore, db, Role)
 
     return app

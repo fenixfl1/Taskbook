@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
-from wtforms import SubmitField, FileField, StringField, SelectField
+from wtforms import SubmitField, FileField, StringField, TextAreaField, SelectField
 from wtforms.fields.html5 import DateField, TimeField
 
 weekdays = [('Sun','Sunday'),
@@ -21,8 +21,19 @@ class LoadForm(FlaskForm):
 class TaskForm(FlaskForm):
     
     name = StringField(
-        'Nombre', validators=[DataRequired(), Length(max=80)]
-    )
+        'Task', validators=[DataRequired()])
+    
+    materia = StringField(
+        'Asignatura', validators=[DataRequired(), Length(max=80)])
+    
+    asignada_en = DateField(
+        'Fecha de asignacion', validators=[DataRequired()])
+    
+    dia_entrega = DateField(
+        'Fecha de entrega', validators=[DataRequired()])
+    
+    nota = TextAreaField(
+        'Comment', validators=[Length(max=150)])
     
     submit = SubmitField('')
 

@@ -145,6 +145,10 @@ class Materias(Base):
     profesor = relationship('Profesor', back_populates='materia')
     name = Column(String(80), nullable=False)
     estado = Column(Boolean(), default=True)
+    
+    def __init__(self, name, **kwargs):
+        
+        self.name = name
 
     def __repr__(self):
 
@@ -196,15 +200,14 @@ class DetalleTarea(Base):
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='tareas')
     asignada_en = Column(DateTime(), default=func.now())
-    dia = Column(Date(), nullable=False)
-    hora_inicio = Column(Time(), nullable=False)
-    hora_fin = Column(Time(), nullable=False)
+    dia_endrega = Column(Date(), nullable=False)
+    comentario = Column(String(150))
     realizada_en = Column(DateTime())
     estado = Column(Boolean(), default=True)
 
     def __repr__(self):
 
-        return '{0} - {1}'.format(self.dia, self.hora_inicio)
+        return '{0}'.format(self.comentario)
 
 
 class Eventos(Base):

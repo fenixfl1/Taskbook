@@ -5,76 +5,21 @@ from sqlalchemy.orm import contains_eager
 from datetime import datetime
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm
-from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento
-
-
-# Perform query of any entity for current_user
-def queries(entity):
-
-    try:
-        return db.query(entity).filter(entity.user_id == current_user.id).\
-            options(contains_eager(entity.user)).all()
-            
-    except:
-        pass
-
-
-# number of records in an entity
-def contador(entity):
-
-    try:
-        return db.query(Eventos).filter(
-            Eventos.user_id == current_user.id).count()
-        
-    except:
-        pass
-
-
-# get the time in text formt
-def literal_time(entity):
-    
-    try:
-
-        date_str = str(entity[0].detalle[0].dia)
-
-        date_object = datetime.strptime(date_str, '%Y-%m-%d')
-
-        date = datetime.strftime(date_object, '%a %d de %b')
-
-    
-        return date
-    
-    except:
-        pass
-
-
-# get the next activities to perform
-def get_most_recent(result):
-
-    date = []
-
-    # num_activity = contador(result)
-
-    for i in range(2):
-
-        date.append(result[i].detalle[i].dia)
-
-        print(date)
-
-    return max(date)
+from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento, DetalleTarea
+from app.database.queries import Queries
 
 
 @user_view.route('/index')
 @login_required
 def index():
         
-    event = queries(Eventos)
+    event = Queries.queries(Eventos, current_user)
 
-    task = queries(Tarea)
+    task = Queries.queries(Tarea, current_user)
 
-    plan = queries(PlanEstudio)
+    plan = Queries.queries(PlanEstudio, current_user)
 
-    fecha = literal_time(event)
+    fecha = Queries.literal_time(event)
 
     return render_template(
         'user/index.html',
@@ -115,19 +60,31 @@ def horario():
 
 @user_view.route('/tasks')
 @login_required
-def task():
-
-    task = queries(Tarea)
+def tasks():
     
-    form = TaskForm(request.form)
+    num_details = []
 
-    num_task = contador(Tarea)
+    task = Queries.queries(Tarea, current_user)
+    
+    form = TaskForm()
 
+    num_task = Queries.contador(Tarea, current_user)
+    
+    for i in range(num_task):
+        
+        index = task[i].id
+    
+        num = db.query(DetalleTarea).filter(DetalleTarea.tarea_id ==\
+             index and index.user_id == current_user.id).count()
+        
+        num_details.append(num)
+    
     return render_template(
         'user/task.html',
         title='Tasks',
         task_user=task,
         num_task=num_task,
+        num_details=num_details,
         task_form=form,
         year=datetime.now().year
     )
@@ -137,9 +94,9 @@ def task():
 @login_required
 def plan_de_estudio():
 
-    plan = queries(PlanEstudio)
+    plan = Queries.queries(PlanEstudio, current_user)
 
-    num_plan = contador(PlanEstudio)
+    num_plan = Queries.contador(PlanEstudio, current_user)
 
     return render_template(
         'user/stady_plan.html',
@@ -156,9 +113,9 @@ def eventos():
     
     form = EventForm(request.form)
 
-    event = queries(Eventos)
+    event = Queries.queries(Eventos, current_user)
 
-    num_event = contador(Eventos)
+    num_event = Queries.contador(Eventos, current_user)
 
     return render_template(
         'user/events.html',

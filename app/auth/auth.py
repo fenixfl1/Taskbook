@@ -7,7 +7,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from .forms import LoadForm, TaskForm
 from app.database import db
-from app.database.models import ProfilePicture, Tarea
+from app.database.queries import Queries
+from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 
@@ -74,6 +75,7 @@ def Uploads():
         upload_form=form
     )
 
+
 @auth_view.route('/register event', methods=['GET', 'POST'])
 def register_event():
 
@@ -81,35 +83,51 @@ def register_event():
         'auth/register_event.html',
         title='Register event'
     )
-    
 
-@auth_view.route('/register-task-name', methods=['GET', 'POST'])
-def register_task_name():
-    
-    form = TaskForm(request.form)
+
+@auth_view.route('/register_task', methods=['GET', 'POST'])
+def register_task():
+
+    form = TaskForm()
     message = ''
-    
+
     if form.validate_on_submit():
-        
+
         task = form.name.data
-        
-        new_task = Tarea(name=task, 
-                         user_id=current_user.id)
-        
+        materia = form.materia.data
+        asignada_en = form.asignada_en.data
+        dia_entrega = form.dia_entrega.data
+        comentario = form.nota.data
+
         try:
-            db.add(new_task)
+            # task = Tarea(
+            #     name=task, user_id=current_user.id,
+            #     detalle=DetalleTarea(
+            #         materia=Materias(name=materia),
+            #         asignada_en=asignada_en,
+            #         dia_endrega=dia_entrega,
+            #         comentario=comentario
+            #     )
+            # )
+            task = Tarea(name=task, user_id=current_user.id)
+
+            details_task = DetalleTarea(
+                materia=Materias(name=materia),
+                asignada_en=asignada_en,
+                dia_endrega=dia_entrega,
+                comentario=comentario
+            )
+
+            db.add(task)
+            db.add(details_task)
             db.commit()
             message = 'Tarea guardada con exito!'
             flash(message, 'success')
-            
-        except:
+
+        except ValueError as e:
             message = 'No fue posible guardar los cambios!'
             flash(message, 'error')
-        
-        return redirect(url_for('users.task'))
+            print("este es el error")
+            print(e)
 
-
-@auth_view.route('/register-task-description', methods=['GET', 'POST'])
-def register_task_description(id=None):
-    
-    pass
+        return redirect(url_for('users.tasks'))
