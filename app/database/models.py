@@ -123,7 +123,7 @@ class Profesor(Base):
     id = Column(Integer, primary_key=True)
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='profesor')
-    name = Column(String(80), nullable=False)
+    name = Column(String(80), nullable=False, unique=True)
     last_name = Column(String(80))
     email = Column(String(100))
     phone_number = Column(String(22))
@@ -143,16 +143,21 @@ class Materias(Base):
     tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
     profesor = relationship('Profesor', back_populates='materia')
-    name = Column(String(80), nullable=False)
+    name = Column(String(80), nullable=False, unique=True)
     estado = Column(Boolean(), default=True)
     
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, user_id):
         
         self.name = name
+        self.user_id = user_id
 
     def __repr__(self):
 
         return '{}'.format(self.name)
+    
+    @staticmethod
+    def get_by_name(name):
+        return User.query.filter_by(name=name).first
 
 
 class HorarioClases(Base):
@@ -199,7 +204,7 @@ class DetalleTarea(Base):
     tarea = relationship('Tarea', back_populates='detalle')
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='tareas')
-    asignada_en = Column(DateTime(), default=func.now())
+    asignada_en = Column(Date(), default=func.now())
     dia_endrega = Column(Date(), nullable=False)
     comentario = Column(String(150))
     realizada_en = Column(DateTime())

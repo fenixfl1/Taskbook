@@ -4,8 +4,10 @@ from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from datetime import datetime
 from app.database import db
-from app.auth.forms import LoadForm, EventForm, TaskForm
-from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento, DetalleTarea
+from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
+    AssingForm
+from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento, DetalleTarea, \
+    Materias, Profesor
 from app.database.queries import Queries
 
 
@@ -13,16 +15,16 @@ from app.database.queries import Queries
 @login_required
 def index():
         
-    event = Queries.queries(Eventos, current_user)
+    event = Queries.queries(Eventos, current_user, order_by="name")
 
-    task = Queries.queries(Tarea, current_user)
+    task = Queries.queries(Tarea, current_user, order_by="name")
 
-    plan = Queries.queries(PlanEstudio, current_user)
+    plan = Queries.queries(PlanEstudio, current_user, order_by="name")
 
     fecha = Queries.literal_time(event)
 
     return render_template(
-        'user/index.html',
+        'user/index.html.j2',
         title='Index',
         event_user=event,
         task_user=task,
@@ -39,10 +41,33 @@ def profile(user):
     form = LoadForm(request.form)
     
     return render_template(
-        'user/profile.html',
+        'user/profile.html.j2',
         title='perfil',
         user=user,
         upload_form=form,
+        year=datetime.now().year
+    )
+    
+    
+@user_view.route('/subjects')
+@login_required
+def subjects():
+    
+    subjects = Queries.queries(Materias, current_user)
+    count = Queries.contador(Materias, current_user)
+    
+    sform = SubjectsForm()
+    pform = ProfeForm()
+    aform = AssingForm()
+    
+    return render_template(
+        'user/subjects.html.j2',
+        title='Subjects',
+        subject_form=sform,
+        subjects_user=subjects,
+        profe_form=pform,
+        num_subjects=count,
+        form=aform,
         year=datetime.now().year
     )
 
@@ -52,22 +77,22 @@ def profile(user):
 def horario():
 
     return render_template(
-        'user/schedule.html',
+        'user/schedule.html.j2',
         title='Schedule',
         year=datetime.now().year
     )
 
 
-@user_view.route('/tasks')
+@user_view.route('/tasks', methods=['GET', 'POST'])
 @login_required
-def tasks():
+def tasks(order_by='id'):
     
     num_details = []
-
-    task = Queries.queries(Tarea, current_user)
     
     form = TaskForm()
 
+    task = Queries.queries(Tarea, current_user, order_by=order_by)
+        
     num_task = Queries.contador(Tarea, current_user)
     
     for i in range(num_task):
@@ -75,12 +100,13 @@ def tasks():
         index = task[i].id
     
         num = db.query(DetalleTarea).filter(DetalleTarea.tarea_id ==\
-             index and index.user_id == current_user.id).count()
+             index and index.user_id == current_user.id).\
+                 filter(DetalleEvento.estado==True).count()
         
         num_details.append(num)
     
     return render_template(
-        'user/task.html',
+        'user/task.html.j2',
         title='Tasks',
         task_user=task,
         num_task=num_task,
@@ -99,7 +125,7 @@ def plan_de_estudio():
     num_plan = Queries.contador(PlanEstudio, current_user)
 
     return render_template(
-        'user/stady_plan.html',
+        'user/stady_plan.html.j2',
         title='Studies plan',
         stady_plan=plan,
         num_plan=num_plan,
@@ -118,7 +144,7 @@ def eventos():
     num_event = Queries.contador(Eventos, current_user)
 
     return render_template(
-        'user/events.html',
+        'user/events.html.j2',
         title='Events',
         event_user=event,
         num_event=num_event,

@@ -26,6 +26,6 @@ col-float-left {
     margin-top: 25%;
 }
 
-.form {
-    float: right;
+.cursor {
+    cursor: pointer;
 }

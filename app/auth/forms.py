@@ -1,9 +1,23 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, TextAreaField, SelectField
-from wtforms.fields.html5 import DateField, TimeField
+from wtforms.fields.html5 import DateField, TimeField, EmailField
+from wtforms_alchemy import PhoneNumberField
+from wtforms_alchemy.fields import QuerySelectField
+from app.database.models import Materias, Profesor
+from app.database import db
+from flask_security import current_user
 
-weekdays = [('Sun','Sunday'),
+
+def subject_query():
+    return db.query(Materias).filter(Materias.user_id == current_user.id).\
+        order_by(Materias.name)
+        
+def profesor_query():
+    return db.query(Profesor).order_by(Profesor.name)
+
+
+weekdays = [('Sun', 'Sunday'),
             ('Mon', 'Monday'),
             ('Tus', 'Tuesday'),
             ('Wed', 'Wednesday'),
@@ -11,30 +25,81 @@ weekdays = [('Sun','Sunday'),
             ('Fri', 'Friday'),
             ('Sat', 'Saturday')]
 
+
 class LoadForm(FlaskForm):
 
     picture = FileField(id='file', _name='file')
 
-    submit = SubmitField('', id='publish')
+    submit = SubmitField(id='publish')
     
+class AssingForm(FlaskForm):
     
-class TaskForm(FlaskForm):
+    subjects = QuerySelectField(
+        'Asignatura', validators=[DataRequired()], query_factory=subject_query,
+        allow_blank=True
+    )
     
+    profe = QuerySelectField(
+        'Profesores', validators=[DataRequired()], query_factory=profesor_query,
+        allow_blank=True
+    )
+    
+    submit = SubmitField()
+
+
+class SubjectsForm(FlaskForm):
+
     name = StringField(
-        'Task', validators=[DataRequired()])
-    
-    materia = StringField(
-        'Asignatura', validators=[DataRequired(), Length(max=80)])
-    
+        'Nombre', validators=[DataRequired()]
+    )
+
+    submit = SubmitField()
+
+
+class ProfeForm(FlaskForm):
+
+    subjects = QuerySelectField(
+        'Asignaturas', validators=[DataRequired()], query_factory=subject_query,
+        allow_blank=True
+    )
+
+    name = StringField(
+        'Nombre del Profesor', validators=[DataRequired(), Length(max=80)]
+    )
+
+    last_name = StringField(
+        'Apellido', validators=[Length(max=80)]
+    )
+
+    email = EmailField(
+        'Email',  validators=[Length(max=80)]
+    )
+
+    phone = PhoneNumberField(
+        'Telefono'
+    )
+
+    submit = SubmitField()
+
+
+class TaskForm(FlaskForm):
+
+    name = StringField(
+        'Tarea', validators=[DataRequired()])
+
+    materia = QuerySelectField(
+        query_factory=subject_query, allow_blank=True
+    )
+
     asignada_en = DateField(
         'Fecha de asignacion', validators=[DataRequired()])
-    
+
     dia_entrega = DateField(
         'Fecha de entrega', validators=[DataRequired()])
-    
+
     nota = TextAreaField(
-        'Comment', validators=[Length(max=150)])
-    
+        'Comentario', validators=[Length(max=150)])
+
     submit = SubmitField('')
 
 

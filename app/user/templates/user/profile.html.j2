@@ -3,29 +3,25 @@
 <div class="d-flex flex-column">
     <div class="container-fluid">
         <div class="row">
-            <!-- <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <form action="/uploads" method="post" enctype="multipart/form-data">
+            <div class="row card-header col-md-12">
+                
+                <div class='col-md-2'>
+                    <img src=" {{ url_for('static',filename=current_user.picture) }} " width="150px" height="150px" class=" rounded-circle img-fluid" id="img">
+                </div>
 
-                                {{ upload_form.hidden_tag() }}
-
-                                <div class="input-file">
-                                    {{ Form(upload_form.picture, id="file", onchange="mostrar()") }}
-                                    <img class="col-xl-10" id="img" />
-                                </div>
-
-                                <div class="">
-                                    {{ Form(upload_form.submit, value='Subir', class='btn btn-primary') }}
-                                </div>
-                            </form>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class=" my-3"> {{current_user.first_name}} {{current_user.last_name}} </h3>
+                            <a href="#"> <p> {{current_user.email}} </p> </a>
+                            {# <p> {{current_user.gender}} </p> #}
+                            <p> {{current_user.phone_number}} </p>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
-            <div class=col-md-8>
+            {# <div class=col-md-8>
                 <div class="card mb-3" style="max-width: 540px;">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -53,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> #}
         </div>
     </div>
 </div>

@@ -43,13 +43,13 @@
                 </a>
             </li>
 
-            <hr class="sidebar-divider"> {#
+            <hr class="sidebar-divider">
             <li class="nav-item">
-                <a class="nav-link" href="/schedule" title="schedule">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Calendario</span>
+                <a class="nav-link collapsed" href="/subjects" title="subjects">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Asignaturas</span>
                 </a>
-            </li> #}
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/schedule" title="schedules">
@@ -105,8 +105,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white
-                        topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -116,36 +115,29 @@
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger
-                                        badge-counter"></span>
+                                <span class="badge badge-danger badge-counter"></span>
                             </a>
                             <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu
-                                    dropdown-menu-right shadow
-                                    animated--grow-in" aria-labelledby="alertsDropdown">
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header"> Centro de alertas </h6>
 
-                                <a class="dropdown-item d-flex
-                                        align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt
-                                                    text-white"></i>
+                                            <i class="fas fa-file-alt text-white"></i>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new
-                                                monthly report is ready to
-                                                download!</span>
+                                        <span class="font-weight-bold">
+                                            A new monthly report is ready to download!
+                                        </span>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex
-                                        align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate
-                                                    text-white"></i>
+                                            <i class="fas fa-donate text-white"></i>
                                         </div>
                                     </div>
                                     <div>
@@ -153,13 +145,10 @@
                                         $290.29 has been deposited into your account!
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex
-                                        align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-warning">
-                                            <i class="fas
-                                                    fa-exclamation-triangle
-                                                    text-white"></i>
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
                                         </div>
                                     </div>
                                     <div>
@@ -167,8 +156,7 @@
                                         Spending Alert: We've noticed unusually high spending for your account.
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small
-                                        text-gray-500" href="#">Show All Alerts</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
 
@@ -176,45 +164,39 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Perfil">
-                                <span class="mr-2 d-none d-lg-inline
-                                        text-gray-600 small notranslate">
-                                        {{ current_user.first_name.capitalize()
-                                        }} {{
-                                        current_user.last_name.capitalize() }}
-                                    </span> {% if current_user.picture != None %}
-                                <img class="rounded-circle" src="{{
-                                        url_for('static',filename=current_user.picture)
-                                        }}"> {% else %}
-                                <img clase='rounded-circle' src="{{
-                                        url_for('static',filename='images/default.png')
-                                        }}"> {% endif %}
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
+                                    {{ current_user.first_name.capitalize()}} 
+                                    {{ current_user.last_name.capitalize() }}
+                                </span> 
+                                {% if current_user.picture != None %}
+                                    <img class="rounded-circle" src="{{ url_for('static',filename=current_user.picture)}}">
+                                {% else %}
+                                    <img clase='rounded-circle' src="{{url_for('static',filename='images/default.png')}}"> 
+                                {% endif %}
                             </a>
 
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right
                                     shadow animated--grow-in" aria-labelledby="userDropdown">
 
-                                <a class="dropdown-item" href="{{
-                                        url_for('users.profile',
-                                        user=current_user.first_name) }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2
-                                            text-gray-400"></i> Perfil
+                                <a class="dropdown-item" href="{{url_for('users.profile',user=current_user.first_name) }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item" href="{{
-                                        url_for_security('logout') }}">
-                                    <i class="fas fa-sign-out-alt fa-sm
-                                            fa-fw mr-2 text-gray-400"></i> Serrar session
+                                <a class="dropdown-item" href="{{url_for_security('logout') }}">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Cerrar session
                                 </a>
                             </div>
                         </li>
                     </ul>
                 </nav>
 
-                {# bloque de conteneidos para las platillas herederas #} {% block content %} {% endblock %}
+                {# bloque de conteneidos para las platillas herederas #} 
+                {% block content %} 
 
+                {% endblock %}
                 <!-- Footer 
                     <footer class="sticky-footer bg-white">
                         <div class="container my-auto">

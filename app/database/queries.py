@@ -9,32 +9,30 @@ class Queries():
     """
 
     @staticmethod
-    def queries(entity, user):
+    def queries(entity, user, **kwargs):
         """
         event = Queries.queries(entity, user)
         """
 
         try:
             return db.query(entity).filter(entity.user_id == user.id).\
-                options(contains_eager(entity.user)).all()
-                
+                options(contains_eager(entity.user))
         except:
             pass
-        
+
     @staticmethod
     def contador(entity, user):
 
         try:
-            return db.query(entity).filter(
-                entity.user_id == user.id).count()
-            
+            return db.query(entity).filter(entity.user_id == user.id).count()
+
         except:
             pass
-        
+
     # get the time in text formt
     @staticmethod
     def literal_time(entity):
-        
+
         try:
 
             date_str = str(entity[0].detalle[0].dia)
@@ -43,13 +41,11 @@ class Queries():
 
             date = datetime.strftime(date_object, '%a %d de %b')
 
-        
             return date
-        
+
         except:
             pass
-        
-        
+
     # get the next activities to perform
     @staticmethod
     def get_most_recent(result):
@@ -65,3 +61,8 @@ class Queries():
             print(date)
 
         return max(date)
+
+    @staticmethod
+    def get_query(entity, user):
+
+        return db.query(entity).filter(entity.user_id == user.id)
