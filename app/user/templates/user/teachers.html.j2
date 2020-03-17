@@ -1,0 +1,114 @@
+{% extends "base.html" %}{% block content %}
+{% from 'macro.html' import Form_off_label %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <h3>
+                                        <h3 style="color: white;">Nuevo Profesor/a</h3>
+                                    </h3>
+                                    <a href="/subjects/teachers" class="btn btn-circle" data-dissmis="modal" style="color: white;">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                </div>
+
+                                {# modal for register teacher form #}
+                                <div class=" modal-body ">
+                                    <form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
+                                        {{ profe_form.hidden_tag() }}
+                                        <div class="form-group">
+                                            {{ Form_off_label(profe_form.subjects.label) }}
+                                            {{ Form_off_label(profe_form.subjects, class="form-control") }}
+                                        </div>
+
+                                        <div class="form-group">
+                                            {{ Form_off_label(profe_form.name.label) }}
+                                            {{ Form_off_label(profe_form.name, class="form-control") }}
+                                        </div>
+
+                                        <div class="form-group">
+                                            {{ Form_off_label(profe_form.last_name.label) }}
+                                            {{ Form_off_label(profe_form.last_name, class="form-control") }}
+                                        </div>
+
+                                        <div class="form-group">
+                                            {{ Form_off_label(profe_form.email.label) }}
+                                            {{ Form_off_label(profe_form.email, class="form-control") }}
+                                        </div>
+
+                                        <div class="form-group">
+                                            {{ Form_off_label(profe_form.phone.label) }}
+                                            {{ Form_off_label(profe_form.phone, class="form-control") }}
+                                        </div>
+
+                                        {{ Form_off_label(profe_form.submit, class="form-control btn btn-primary") }}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'messages.html' %}
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="/subjects/" class="nav-link">Materias({{ num_subjects }}) </a>
+                    </li>
+                                
+                    <li class="nav-item">
+                        <a href="/subjects/finished" class="nav-link">
+                            Cursadas(0)
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/subjects/teachers" class="nav-link active">
+                            Profesores({{ 3 }})
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover model-list p-3 mb-5 bg-white rounded" id="mytable">
+                        <thead>
+                            <tr>
+                                <th class=""></th>
+                                <th class="text-primary column-header">Nombre</th>
+                                <th class="text-primary column-header">Apellido</th>
+                                <th class="text-primary column-header">Email</th>
+                                <th class="text-primary column-header">Nummer de Contacto</th>
+                                <th class="text-primary column-header"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {# {% for i in range(num_task) %}
+                                <tr>
+                                    <td class="list-buttons-column">
+                                        <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info my-2 my-sm-0">
+                                            <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                        </a>
+
+                                        <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger my-2 my-sm-0" onclick="try_delete()">
+                                            <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    </td>
+                                    <th>{{task_user[i].name}}</th>
+                                    <td>{{task_user[i].detalle[0].materia['name'] }}</td>
+                                    <td>{{task_user[i].detalle[0].asignada_en}}</td>
+                                    <td>{{task_user[i].detalle[0].dia_endrega}}</td>
+                                    <td>{{task_user[i].detalle[0].comentario}}</td>
+                                </tr>
+                            {% endfor %} #}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

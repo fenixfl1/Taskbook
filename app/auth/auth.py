@@ -5,7 +5,7 @@ from flask_security import user_registered
 from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm
+from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm, AssingForm
 from app.database import db
 from app.database.queries import Queries
 from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor
@@ -103,6 +103,26 @@ def register_subjects():
             category = 'error'
     
     flash(messages, category)
+    return redirect(url_for('users.subjects'))
+
+
+# function to assing teacher to subjects
+@auth_view.route('/assing-teacher', methods=['POST'])
+def assing_teacher():
+    
+    form = AssingForm()
+    
+    id = form.profe.data
+    print('Esto es lo que Busco:', id)
+    
+    if form.validate_on_submit():
+        
+        profe = db.query(Profesor).filter(Profesor.id==id)
+                
+        db.query(Materias).filter(Materias.user_id==current_user.id).\
+            update({Materias.profesor: profe}, synchronize_session=False)
+        
+    
     return redirect(url_for('users.subjects'))
 
 

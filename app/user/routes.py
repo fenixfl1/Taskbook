@@ -30,7 +30,7 @@ def index():
         task_user=task,
         fecha=fecha,
         stady_plan=plan,
-        year=datetime.now().year
+        year=datetime.now()
     )
     
     
@@ -45,11 +45,12 @@ def profile(user):
         title='perfil',
         user=user,
         upload_form=form,
-        year=datetime.now().year
+        year=datetime.now()
     )
     
     
-@user_view.route('/subjects')
+@user_view.route('/subjects/')
+@user_view.route('/subjects/finished')
 @login_required
 def subjects():
     
@@ -68,9 +69,24 @@ def subjects():
         profe_form=pform,
         num_subjects=count,
         form=aform,
-        year=datetime.now().year
+        year=datetime.now()
     )
 
+
+@user_view.route('/subjects/teachers')
+@login_required
+def teachers():
+    
+    form = ProfeForm()
+    count = Queries.contador(Materias, current_user)
+    
+    return render_template(
+        'user/teachers.html.j2',
+        title="teachers",
+        profe_form=form,
+        num_subjects=count,
+        year=datetime.now()
+    )
 
 @user_view.route('/schedule')
 @login_required
@@ -79,7 +95,7 @@ def horario():
     return render_template(
         'user/schedule.html.j2',
         title='Schedule',
-        year=datetime.now().year
+        year=datetime.now()
     )
 
 
@@ -112,7 +128,7 @@ def tasks(order_by='id'):
         num_task=num_task,
         num_details=num_details,
         task_form=form,
-        year=datetime.now().year
+        year=datetime.now()
     )
 
 
@@ -129,7 +145,7 @@ def plan_de_estudio():
         title='Studies plan',
         stady_plan=plan,
         num_plan=num_plan,
-        year=datetime.now().year
+        year=datetime.now()
     )
 
 
@@ -149,5 +165,5 @@ def eventos():
         event_user=event,
         num_event=num_event,
         event_form=form,
-        year=datetime.now().year
+        year=datetime.now()
     )

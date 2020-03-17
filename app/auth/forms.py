@@ -14,7 +14,7 @@ def subject_query():
         order_by(Materias.name)
         
 def profesor_query():
-    return db.query(Profesor).order_by(Profesor.name)
+    return db.query(Profesor).filter(Profesor.id, Profesor.name).order_by(Profesor.name)
 
 
 weekdays = [('Sun', 'Sunday'),

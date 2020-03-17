@@ -51,9 +51,9 @@ class User(Base, UserMixin):
     current_login_ip = Column(String(100))
     login_count = Column(Integer)
     confirmed_at = Column(DateTime(timezone=True))
-    picture = relationship(
-        'ProfilePicture', uselist=False, back_populates='user')
+    picture = relationship('ProfilePicture', uselist=False, back_populates='user')
     materia = relationship('Materias', back_populates='user')
+    profesor = relationship('Profesor', back_populates='user')
     evento = relationship('Eventos', back_populates='user')
     plan = relationship('PlanEstudio', back_populates='user')
     tarea = relationship('Tarea', back_populates='user')
@@ -121,6 +121,8 @@ class Profesor(Base):
     __tablename__ = 'profesor'
 
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User', back_populates='profesor')
     materia_id = Column(Integer, ForeignKey('materias.id'))
     materia = relationship('Materias', back_populates='profesor')
     name = Column(String(80), nullable=False, unique=True)

@@ -1,245 +1,168 @@
-{% extends 'base.html' %} {% from 'macro.html' import Form, Form_off_label %} {% block content %}
+{% extends 'base.html' %} {% from 'macro.html' import Form, Form_off_label %} 
+{% block content %}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- modal for register new events -->
+                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary">
+                                <h3>
+                                    <h3 style="color: white;">New Event</h3>
+                                </h3>
+                                <a href="/events" class="btn btn-circle" data-dissmis="modal" style="color: white;">X</a>
+                            </div>
 
-<div id="content-wrapper" class="d-flex flex-column">
+                            <div class=" modal-body ">
+                                <form action="{{ url_for( 'auth.register_event') }} " method="POST " class="admin-form form-horizontal ">
+                                    <fieldset>
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="name ">Nombre 
+                                                    <strong style="color: red; ">*</strong>
+                                                </label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.name, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-    <div id="content">
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="lugar ">Lugar 
+                                                    <strong style="color: red; ">*</strong>
+                                                </label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.lugar, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="dia ">Dia 
+                                                    <strong style="color: red; ">*</strong>
+                                                </label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.dia, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-            <div class="row">
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="hora_inicio ">Hora de inicio 
+                                                    <strong style="color: red; ">*</strong>
+                                                </label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.hora_inicio, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div clataskss="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        {# <h6> {{ event_user.name }} </h6> #}
-                                    </div>
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="hora_fin ">Hora limite 
+                                                    <strong style="color: red; ">*</strong>
+                                                </label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.hora_fin, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {# {{ event_user }} #}
-                                    </div>
-                                </div>
-                                <div class="col-auto dropdown no-arrow mx-1">
-                                    <a class="dropdown-toggle btn btn-circle btn-primary" href="#" id="alertsDropdown" role="button" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                                        <i class="fas fa-plus"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter"></span>
-                                    </a>
-                                </div>
+                                        <div class="control-group ">
+                                            <div class="control-label ">
+                                                <label for="nota ">Nota</label>
+                                            </div>
+                                            <div class="controls ">
+                                                <div class="from-control ">
+                                                    {{ Form_off_label(event_form.nota, class='form-control') }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <div class="controls ">
+                                                {{ Form_off_label(event_form.submit, class='btn btn-primary', value='Guardar') }}
+                                                <a href="/events " class="btn btn-danger " data-dissmis="modal ">Cancelar</a>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        <h6>  </h6>
-                                    </div>
+                {# content page #}
+                {% include 'messages.html' %}
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="/subjects/" class="nav-link">Materias({{ num_subjects }}) </a>
+                    </li>
+                                
+                    <li class="nav-item">
+                        <a href="/subjects/finished" class="nav-link">
+                            Cursadas(0)
+                        </a>
+                    </li>
 
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-auto dropdown no-arrow mx-1">
-                                    <a class="dropdown-toggle btn btn-circle btn-primary" href="#" id="alertsDropdown" role="button" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                                        <i class="fas fa-plus"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <li class="nav-item">
+                        <a href="/subjects/teachers" class="nav-link active">
+                            Profesores({{ 3 }})
+                        </a>
+                    </li>
+                </ul>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        <h6>  </h6>
-                                    </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover model-list p-3 mb-5 bg-white rounded" id="mytable">
+                        <thead>
+                            <tr>
+                                <th class=""></th>
+                                <th class="text-primary column-header">Evento</th>
+                                <th class="text-primary column-header">ApeLugarllido</th>
+                                <th class="text-primary column-header">Dia</th>
+                                <th class="text-primary column-header">Nummer de Contacto</th>
+                                <th class="text-primary column-header"></th>
+                            </tr>
+                        </thead>
 
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-auto dropdown no-arrow mx-1">
-                                    <a class="dropdown-toggle btn btn-circle btn-primary" href="#" id="alertsDropdown" role="button" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                                        <i class="fas fa-plus"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <tbody>
+                            {# {% for i in range(num_task) %}
+                                <tr>
+                                    <td class="list-buttons-column">
+                                        <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info my-2 my-sm-0">
+                                            <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                        </a>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        <!-- <h6> {{ event_user.name }} </h6> -->
-                                    </div>
-
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        <!-- {{ event_user }} -->
-                                    </div>
-                                </div>
-                                <div class="col-auto dropdown no-arrow mx-1">
-                                    <a class="dropdown-toggle btn btn-circle btn-primary" href="#" id="alertsDropdown" role="button" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                                        <i class="fas fa-plus"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- See all events -->
-            <div class="col-xl-12 col-lg-10">
-
-                <div class="card shadow mb-4">
-                    <!-- Card Header - title -->
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Todos mis eventos</h6>
-                    </div>
-
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart">
-
-                            </canvas>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-float-left">
-                        <button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#staticBackdrop">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- modal for register new events -->
-            <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-gradient-primary">
-                            <h3>
-                                <h3 style="color: white;">New Event</h3>
-                            </h3>
-                            <a href="/events" class="btn btn-circle" data-dissmis="modal" style="color: white;">X</a>
-                        </div>
-
-                        <div class=" modal-body ">
-                            <form action="{{ url_for( 'auth.register_event') }} " method="POST " class="admin-form form-horizontal ">
-                                <fieldset>
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="name ">Nombre 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.name, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="lugar ">Lugar 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.lugar, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="dia ">Dia 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.dia, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="hora_inicio ">Hora de inicio 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.hora_inicio, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="hora_fin ">Hora limite 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.hora_fin, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group ">
-                                        <div class="control-label ">
-                                            <label for="nota ">Nota</label>
-                                        </div>
-                                        <div class="controls ">
-                                            <div class="from-control ">
-                                                {{ Form_off_label(event_form.nota, class='form-control') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <div class="controls ">
-                                            {{ Form_off_label(event_form.submit, class='btn btn-primary', value='Guardar') }}
-                                            <a href="/events " class="btn btn-danger " data-dissmis="modal ">Cancelar</a>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
+                                        <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger my-2 my-sm-0" onclick="try_delete()">
+                                            <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    </td>
+                                    <th>{{task_user[i].name}}</th>
+                                    <td>{{task_user[i].detalle[0].materia['name'] }}</td>
+                                    <td>{{task_user[i].detalle[0].asignada_en}}</td>
+                                    <td>{{task_user[i].detalle[0].dia_endrega}}</td>
+                                    <td>{{task_user[i].detalle[0].comentario}}</td>
+                                </tr>
+                            {% endfor %} #}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
