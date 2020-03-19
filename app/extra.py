@@ -1,7 +1,30 @@
-from flask import render_template
+from flask import render_template, Flask
 from flask_admin import AdminIndexView, expose
 from flask_security import login_required, roles_required
 from datetime import datetime
+
+
+def __after(app, session):
+    
+    @app.before_request
+    def first_request_func():
+        
+        print('This is the fist request!!')
+    
+    @app.after_request
+    def after_request_func(response):
+        
+        session.close()
+        print('The conecction are closed!')
+        return response
+    
+    @app.teardown_request
+    def teardown_request_func(exception=None):
+        
+        session.remove()
+        print('This is the teardown function!!')
+        
+        
 
 
 # my own index view in admin panel

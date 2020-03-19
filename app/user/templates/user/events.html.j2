@@ -4,6 +4,7 @@
         <div id="content">
             <!-- Begin Page Content -->
             <div class="container-fluid">
+                {# {% include 'messages.html' %}
                 <!-- modal for register new events -->
                 <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
                     <div class="modal-dialog" role="document">
@@ -106,61 +107,62 @@
                         </div>
                     </div>
                 </div>
-
-                {# content page #}
-                {% include 'messages.html' %}
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a href="/subjects/" class="nav-link">Materias({{ num_subjects }}) </a>
-                    </li>
+                <div class="col-xl-8 col-lg-7 auto">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="chart-area">
                                 
-                    <li class="nav-item">
-                        <a href="/subjects/finished" class="nav-link">
-                            Cursadas(0)
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="/subjects/teachers" class="nav-link active">
-                            Profesores({{ 3 }})
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover model-list p-3 mb-5 bg-white rounded" id="mytable">
-                        <thead>
-                            <tr>
-                                <th class=""></th>
-                                <th class="text-primary column-header">Evento</th>
-                                <th class="text-primary column-header">ApeLugarllido</th>
-                                <th class="text-primary column-header">Dia</th>
-                                <th class="text-primary column-header">Nummer de Contacto</th>
-                                <th class="text-primary column-header"></th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {# {% for i in range(num_task) %}
-                                <tr>
-                                    <td class="list-buttons-column">
-                                        <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info my-2 my-sm-0">
-                                            <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a href="/subjects/" class="nav-link">Eventos({{ num_subjects }}) </a>
+                                    </li>
+                                                
+                                    <li class="nav-item">
+                                        <a href="/subjects/finished" class="nav-link">
+                                            Cursadas(0)
                                         </a>
+                                    </li>
 
-                                        <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger my-2 my-sm-0" onclick="try_delete()">
-                                            <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                    <li class="nav-item">
+                                        <a href="/subjects/teachers" class="nav-link active">
+                                            Profesores({{ 3 }})
                                         </a>
-                                    </td>
-                                    <th>{{task_user[i].name}}</th>
-                                    <td>{{task_user[i].detalle[0].materia['name'] }}</td>
-                                    <td>{{task_user[i].detalle[0].asignada_en}}</td>
-                                    <td>{{task_user[i].detalle[0].dia_endrega}}</td>
-                                    <td>{{task_user[i].detalle[0].comentario}}</td>
-                                </tr>
-                            {% endfor %} #}
-                        </tbody>
-                    </table>
+                                    </li>
+                                </ul>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered model-list p-3 mb-5 bg-white rounded my-table" id="mytable">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-primary column-header">Domingo</th>
+                                                <th class="text-primary column-header">Lunes</th>
+                                                <th class="text-primary column-header">Martes</th>
+                                                <th class="text-primary column-header">Miercoles</th>
+                                                <th class="text-primary column-header">Jueves</th>
+                                                <th class="text-primary column-header">Viernes</th>
+                                                <th class="text-primary column-header">Sabado</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                                    Dolorem quibusdam.
+                                                </td>
+                                                <th>Nada</th>
+                                                <th>Nada</th>
+                                                <th>Nada</th>
+                                                <th>Nada</th>
+                                                <th>Nada</th>
+                                                <th>Nada</th>
+                                            </tr>
+                                        </tbody>
+                                    </table> #}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

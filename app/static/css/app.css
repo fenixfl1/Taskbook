@@ -29,3 +29,21 @@ col-float-left {
 .cursor {
     cursor: pointer;
 }
+
+table {
+    table-layout: fixed;
+    width: 90%;
+    text-align: center;
+}
+
+th,
+td {
+    border: 1px solid blueviolet;
+    width: 120px;
+    word-wrap: break-word;
+    background-color: white;
+}
+
+.th {
+    width: 35px;
+}

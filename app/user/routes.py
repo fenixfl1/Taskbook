@@ -50,7 +50,6 @@ def profile(user):
     
     
 @user_view.route('/subjects/')
-@user_view.route('/subjects/finished')
 @login_required
 def subjects():
     

@@ -18,32 +18,34 @@ def allowed_image(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in IMAGE_SET_EXT
 
+messages = ''
+category = ''
 
+# function to upload profile image
 @auth_view.route('/uploads', methods=['GET', 'POST'])
 @login_required
 def Uploads():
 
     form = LoadForm()
 
-    message = ''
-
     if form.validate_on_submit():
 
         picture = request.files['picture']
 
         if 'picture' not in request.files:
-            message = 'Ninguna imagen seleccionada!'
-            flash(message, category='error')
+            messages = 'Ninguna imagen seleccionada!'
+            category = 'error'
+            
             return redirect(request.url)
 
         if picture.filename == '':
-            message = 'Ninguna imagen selecionada!'
-            flash(message, category='error')
+            messages = 'Ninguna imagen selecionada!'
+            category = 'error'
+            
             return redirect(request.url)
 
         if picture and allowed_image(picture.filename):
             filename = secure_filename(picture.filename)
-            message = 'Imagen guardada con exito!'
 
             try:
 
@@ -56,24 +58,22 @@ def Uploads():
 
                 db.add(_picture)
                 db.commit()
+                
+                messages = 'Imagen guardada con exito!'
+                category = 'success'
 
             except Exception as e:
-                message = 'Sea producido un error.'
-                flash(message, category='error')
+                messages = 'Ha ocurrido un error.'
+                category='error'
                 raise e
 
-            flash(message, category='success')
-
         else:
-            message = 'Formato de imagen no permintida!'
-            flash(message, category='error')
+            messages = 'Formato de imagen no permintida!'
+            category='error'
+            
+    flash(messages, category)
 
-    return render_template(
-        'auth/index.html',
-        title='Uploads images',
-        year=datetime.now().year,
-        upload_form=form
-    )
+    return redirect(url_for('users.profile'))
     
     
 # function for register subjects
@@ -81,8 +81,6 @@ def Uploads():
 def register_subjects():
     
     form = SubjectsForm()
-    messages = ''
-    category =''
     
     if form.validate_on_submit():
         
@@ -126,12 +124,9 @@ def assing_teacher():
     return redirect(url_for('users.subjects'))
 
 
-# this function in to register new teacher for the current user
+# this function is to register new teacher for the current user
 @auth_view.route('/register-profesor', methods=['POST'])
 def register_profesor():
-    
-    messages = ''
-    category = ''
     
     form = ProfeForm()
     
@@ -141,18 +136,20 @@ def register_profesor():
                         materia=form.subjects.data,
                         last_name=form.last_name.data,
                         email=form.email.data,
-                        phone_number=form.phone.data)
+                        phone_number=form.phone.data,
+                        user_id=current_user.id)
         
         try:
+            
             db.add(user)
             db.commit()
+            
             messages = 'Registro guardado con exito!'
             category = 'success'
         except:
             
             messages = '{0} ya esta en tu lista de Profesores!'.format(form.name.data)
-            category = 'error'
-        
+            category = 'error'    
     
     flash(messages, category)
     return redirect(url_for('users.subjects'))
@@ -163,7 +160,6 @@ def register_profesor():
 def register_task():
 
     form = TaskForm()
-    message = ''
 
     if form.validate_on_submit():
 
@@ -194,13 +190,14 @@ def register_task():
             db.add(task_detail)
             db.commit()
             message = 'Tarea guardada con exito!'
-            flash(message, 'success')
+            category = 'success'
 
         except:
             db.delete(task)
-            message = 'No fue posible guardar los cambios!'
-            flash(message, 'error')
+            messages = 'No fue posible guardar los cambios!'
+            category = 'error'
 
+        flash(messages, category)
         return redirect(url_for('users.tasks'))
     
     
@@ -209,7 +206,6 @@ def register_task():
 def register_event():
     
     form = EventForm()
-    messages = ''
     
     if form.validate_on_submit():
         
@@ -230,14 +226,14 @@ def delete(id):
         db.delete(task)
         db.commit()
         
-        flash('Registro eliminado con exito!', category='success')
+        messages = 'Registro eliminado con exito!'
+        category='success'
     
     except:
-        flash('No fue posible eliminar el registro!', category='danger')
-        
-    return redirect(url_for('users.tasks'))
+        messages = 'No fue posible eliminar el registro!'
+        category='error'
     
-    flash('Registro borrado con exito!', category='info')
+    flash(messages, category)
     
     return redirect(url_for('users.tasks'))
 

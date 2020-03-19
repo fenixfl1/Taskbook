@@ -12,7 +12,7 @@ from app.database import init_db
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, create_user
+from app.extra import register_error_handlers, MyAdminIndexView, create_user, __after
 from .extendforms import ExtendRegisterForm
 from datetime import datetime
 
@@ -63,6 +63,7 @@ def creatre_app(setting_module):
     app.register_blueprint(admin_view)
     
     register_error_handlers(app)
+    __after(app, db)
     # create_user(app, user_datastore, db, Role)
 
     return app
