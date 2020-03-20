@@ -105,7 +105,7 @@ class ProfilePicture(Base):
     __tablename__ = 'profile_picture'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='picture')
     picture_url = Column(URLType)
     name = Column(String(100), nullable=False)
@@ -121,9 +121,9 @@ class Profesor(Base):
     __tablename__ = 'profesor'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='profesor')
-    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
     materia = relationship('Materias', back_populates='profesor')
     name = Column(String(80), nullable=False, unique=True)
     last_name = Column(String(80))
@@ -140,7 +140,7 @@ class Materias(Base):
     __tablename__ = 'materias'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='materia')
     tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
@@ -167,7 +167,7 @@ class HorarioClases(Base):
     __tablename__ = 'horario_clases'
 
     id = Column(Integer, primary_key=True)
-    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
     materia = relationship('Materias', back_populates='horario')
     dia = Column(String(3), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
@@ -185,9 +185,9 @@ class Tarea(Base):
     __tablename__ = 'tarea'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='tarea')
-    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
     detalle = relationship('DetalleTarea', back_populates='tarea')
     name = Column(String(80), nullable=False)
     estado = Column(Boolean(), default=True)
@@ -202,9 +202,9 @@ class DetalleTarea(Base):
     __tablename__ = 'detalle_tarea'
 
     id = Column(Integer, primary_key=True)
-    tarea_id = Column(Integer, ForeignKey('tarea.id'))
+    tarea_id = Column(Integer, ForeignKey('tarea.id', ondelete='CASCADE'))
     tarea = relationship('Tarea', back_populates='detalle')
-    materia_id = Column(Integer, ForeignKey('materias.id'))
+    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
     materia = relationship('Materias', back_populates='tareas')
     asignada_en = Column(Date(), default=func.now())
     dia_endrega = Column(Date(), nullable=False)
@@ -222,7 +222,7 @@ class Eventos(Base):
     __tablename__ = 'evento'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='evento')
     detalle = relationship('DetalleEvento', back_populates='evento')
     name = Column(String(150), nullable=False)
@@ -243,7 +243,7 @@ class DetalleEvento(Base):
     __tablename__ = 'detalle_evento'
 
     id = Column(Integer, primary_key=True)
-    evento_id = Column(Integer, ForeignKey('evento.id'))
+    evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
     evento = relationship('Eventos', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
     lugar = Column(String(100), nullable=False)
@@ -264,7 +264,7 @@ class PlanEstudio(Base):
     __tablename__ = 'plan_estudio'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='plan')
     detalle = relationship('DetallePlan', back_populates='plan')
     name = Column(String(100), nullable=False)
@@ -280,7 +280,7 @@ class DetallePlan(Base):
     __tablename__ = 'detalle_plan'
 
     id = Column(Integer, primary_key=True)
-    plan_id = Column(Integer, ForeignKey('plan_estudio.id'))
+    plan_id = Column(Integer, ForeignKey('plan_estudio.id', ondelete='CASCADE'))
     plan = relationship('PlanEstudio', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
     dia = Column(String(3), nullable=False)

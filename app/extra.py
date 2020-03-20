@@ -4,25 +4,30 @@ from flask_security import login_required, roles_required
 from datetime import datetime
 
 
-def __after(app, session):
+class all_request(object):
     
-    @app.before_request
-    def first_request_func():
+    @staticmethod
+    def _(app, session):
+        """
+        _(app, session) for execute before, after and teardown requests
+        """
         
-        print('This is the fist request!!')
-    
-    @app.after_request
-    def after_request_func(response):
+        @app.before_request
+        def first_request_func():
+            
+            pass
         
-        session.close()
-        print('The conecction are closed!')
-        return response
-    
-    @app.teardown_request
-    def teardown_request_func(exception=None):
+        @app.after_request
+        def after_request_func(response):
+            
+            session.close()
+            return response
         
-        session.remove()
-        print('This is the teardown function!!')
+        @app.teardown_request
+        def teardown_request_func(exception=None):
+            
+            session.remove()
+            return exception
         
         
 

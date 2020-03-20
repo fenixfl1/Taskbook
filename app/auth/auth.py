@@ -197,8 +197,8 @@ def register_task():
             messages = 'No fue posible guardar los cambios!'
             category = 'error'
 
-        flash(messages, category)
-        return redirect(url_for('users.tasks'))
+    flash(messages, category)
+    return redirect(url_for('users.tasks'))
     
     
 # this function is to authenticate events and events-details

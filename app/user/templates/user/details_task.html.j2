@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% from 'macro.html' import Form_off_label %}
+{% block content %}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid">
+            {% include 'messages.html' %}
+
+            <div class="row">
+                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h3>
+                                    <h3 style="color: white;">Nueva Tarea</h3>
+                                </h3>
+                                <a href="/tasks" class="btn btn-circle" data-dissmis="modal" style="color: white;">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+
+                            <div class=" modal-body ">
+                                {% include 'task_form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a href="/tasks" class="nav-link">Tareas</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/tasks" class="nav-link active">Detalles</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-toggle="modal" data-target="#staticBackdrop">
+                        Crear
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

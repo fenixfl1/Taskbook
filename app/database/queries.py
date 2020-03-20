@@ -13,12 +13,38 @@ class Queries():
         """
         event = Queries.queries(entity, user)
         """
+        
+        if 'order_by' in kwargs and kwargs['order_by'] == 'name':
+            
+            try:
+                return db.query(entity).filter(entity.user_id == user.id).\
+                    options(contains_eager(entity.user)).older_by(entity.name)
+            except:
+                pass
+            
+        if 'order_by' in kwargs and kwargs['order_by'] == 'date1':
+            
+            try:
+                return db.query(entity).filter(entity.user_id == user.id).\
+                    order_by(entity.detalle.dia_endrega).one().options(contains_eager(entity.user))
+            except:
+                pass
+            
+        if 'date2' in kwargs:
+            
+            try:
+                return db.query(entity).filter(entity.user_id == user.id).\
+                    options(contains_eager(entity.user)).older_by(entity.detalle.hora_fin)
+            except:
+                pass
+        
+        else:
 
-        try:
-            return db.query(entity).filter(entity.user_id == user.id).\
-                options(contains_eager(entity.user))
-        except:
-            pass
+            try:
+                return db.query(entity).filter(entity.user_id == user.id).\
+                    options(contains_eager(entity.user))
+            except:
+                pass
 
     @staticmethod
     def contador(entity, user):

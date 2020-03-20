@@ -7,12 +7,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_admin import Admin, AdminIndexView, expose
 from flask_login import LoginManager, login_required
+from flask_cors import CORS
 from flask_security import Security, SQLAlchemySessionUserDatastore, roles_required
 from app.database import init_db
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, create_user, __after
+from app.extra import register_error_handlers, MyAdminIndexView, create_user, all_request
 from .extendforms import ExtendRegisterForm
 from datetime import datetime
 
@@ -44,6 +45,7 @@ def creatre_app(setting_module):
     Bootstrap(app)
     Migrate(app, db)
     FontAwesome(app)
+    CORS(app)
     mail.init_app(app)
     sql.init_app(app)
     migrate.init_app(app, sql)
@@ -63,7 +65,7 @@ def creatre_app(setting_module):
     app.register_blueprint(admin_view)
     
     register_error_handlers(app)
-    __after(app, db)
+    all_request._(app, db)
     # create_user(app, user_datastore, db, Role)
 
     return app

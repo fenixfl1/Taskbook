@@ -1,5 +1,6 @@
 from . import user_view
 from flask import render_template, request
+from flask_restful import Resource
 from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from datetime import datetime
@@ -9,6 +10,7 @@ from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsFor
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento, DetalleTarea, \
     Materias, Profesor
 from app.database.queries import Queries
+import requests
 
 
 @user_view.route('/index')
@@ -17,24 +19,27 @@ def index():
         
     event = Queries.queries(Eventos, current_user, order_by="name")
 
-    task = Queries.queries(Tarea, current_user, order_by="name")
+    task = Queries.queries(Tarea, current_user, order_by="date1")
 
     plan = Queries.queries(PlanEstudio, current_user, order_by="name")
+    
+    count_task = Queries.contador(Tarea, current_user)
 
-    fecha = Queries.literal_time(event)
+    fecha = Queries.literal_time(task)
 
     return render_template(
         'user/index.html.j2',
-        title='Index',
+        title='Index -',
         event_user=event,
         task_user=task,
         fecha=fecha,
+        num_task=count_task,
         stady_plan=plan,
         year=datetime.now()
     )
     
     
-@user_view.route('/profile/<user>/')
+@user_view.route('/profile/<string:user>/')
 @login_required
 def profile(user):
     
@@ -42,7 +47,7 @@ def profile(user):
     
     return render_template(
         'user/profile.html.j2',
-        title='perfil',
+        title='perfil -',
         user=user,
         upload_form=form,
         year=datetime.now()
@@ -62,7 +67,7 @@ def subjects():
     
     return render_template(
         'user/subjects.html.j2',
-        title='Subjects',
+        title='Subjects -',
         subject_form=sform,
         subjects_user=subjects,
         profe_form=pform,
@@ -81,7 +86,7 @@ def teachers():
     
     return render_template(
         'user/teachers.html.j2',
-        title="teachers",
+        title="teachers -",
         profe_form=form,
         num_subjects=count,
         year=datetime.now()
@@ -93,7 +98,7 @@ def horario():
 
     return render_template(
         'user/schedule.html.j2',
-        title='Schedule',
+        title='Schedule -',
         year=datetime.now()
     )
 
@@ -122,10 +127,25 @@ def tasks(order_by='id'):
     
     return render_template(
         'user/task.html.j2',
-        title='Tasks',
+        title='Tasks -',
         task_user=task,
         num_task=num_task,
         num_details=num_details,
+        task_form=form,
+        year=datetime.now()
+    )
+    
+    
+@user_view.route('/tasks/details/<int:id>/', methods=['GET'])
+@login_required
+def details_task(id):
+    
+    form = TaskForm()
+    
+    return render_template(
+        'user/details_task.html.j2',
+        title='details -',
+        details='',
         task_form=form,
         year=datetime.now()
     )
@@ -141,7 +161,7 @@ def plan_de_estudio():
 
     return render_template(
         'user/stady_plan.html.j2',
-        title='Studies plan',
+        title='Studies plan -',
         stady_plan=plan,
         num_plan=num_plan,
         year=datetime.now()
@@ -160,9 +180,16 @@ def eventos():
 
     return render_template(
         'user/events.html.j2',
-        title='Events',
+        title='Events -',
         event_user=event,
         num_event=num_event,
         event_form=form,
         year=datetime.now()
     )
+    
+@user_view.route('/test')
+def test():
+    
+    r = requests.get('https://google.com')
+    
+    return r.json()
