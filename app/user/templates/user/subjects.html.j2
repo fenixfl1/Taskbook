@@ -6,9 +6,9 @@
         <form action=" {{url_for('auth.register_subjects')}} " method="POST" autocomplete="off" class="form-inline">
             {{ subject_form.hidden_tag() }}
 
-            {{ Form_off_label(subject_form.name, class="form-control mr-sm-2", placeholder="Registar Asignaturas", size='30px') }}
+            {{ Form_off_label(subject_form.name, class="form-control mr-sm-2 col-xs-8", placeholder="Registar Asignaturas", size='30px') }}
 
-            {{ Form_off_label(subject_form.submit, class="btn btn-primary my-2 my-sm-0", value="Registrar") }}
+            {{ Form_off_label(subject_form.submit, class="btn btn-primary my-2 my-sm-0 col-xs-4", value="Registrar") }}
         </form>
     </nav>
 

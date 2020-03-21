@@ -13,6 +13,7 @@ from app.database.queries import Queries
 import requests
 
 
+# this is the index mfunction
 @user_view.route('/index')
 @login_required
 def index():
@@ -38,7 +39,8 @@ def index():
         year=datetime.now()
     )
     
-    
+
+# this function yo see the profile of the current user 
 @user_view.route('/profile/<string:user>/')
 @login_required
 def profile(user):
@@ -53,7 +55,8 @@ def profile(user):
         year=datetime.now()
     )
     
-    
+
+# this function is to see and create the subjects
 @user_view.route('/subjects/')
 @login_required
 def subjects():
@@ -77,6 +80,7 @@ def subjects():
     )
 
 
+# this function is to see the details of the subjects 
 @user_view.route('/subjects/teachers')
 @login_required
 def teachers():
@@ -92,17 +96,25 @@ def teachers():
         year=datetime.now()
     )
 
+
+# this function is to create and see the schedule
 @user_view.route('/schedule')
 @login_required
 def horario():
+    
+    subjects = Queries.queries(Materias, current_user)
+    count = Queries.contador(Materias, current_user)
 
     return render_template(
         'user/schedule.html.j2',
         title='Schedule -',
+        subjects_user=subjects,
+        num_subjects=count,
         year=datetime.now()
     )
 
 
+# this function is to see and creat task
 @user_view.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks(order_by='id'):
@@ -135,7 +147,8 @@ def tasks(order_by='id'):
         year=datetime.now()
     )
     
-    
+ 
+# this function is to see the details of the tasks   
 @user_view.route('/tasks/details/<int:id>/', methods=['GET'])
 @login_required
 def details_task(id):
@@ -151,6 +164,7 @@ def details_task(id):
     )
 
 
+# this function is to see and create stuies plan
 @user_view.route('/studies-plan')
 @login_required
 def plan_de_estudio():
@@ -168,6 +182,7 @@ def plan_de_estudio():
     )
 
 
+# this function is to see and creat events
 @user_view.route('/events')
 @login_required
 def eventos():

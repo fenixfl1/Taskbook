@@ -17,13 +17,13 @@ def profesor_query():
     return db.query(Profesor).filter(Profesor.id, Profesor.name).order_by(Profesor.name)
 
 
-weekdays = [('Sun', 'Sunday'),
-            ('Mon', 'Monday'),
-            ('Tus', 'Tuesday'),
-            ('Wed', 'Wednesday'),
-            ('Thu', 'Thursday'),
-            ('Fri', 'Friday'),
-            ('Sat', 'Saturday')]
+weekdays = [(1, 'Sunday'),
+            (2, 'Monday'),
+            (3, 'Tuesday'),
+            (4, 'Wednesday'),
+            (5, 'Thursday'),
+            (6, 'Friday'),
+            (7, 'Saturday')]
 
 
 class LoadForm(FlaskForm):

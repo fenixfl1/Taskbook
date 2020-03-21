@@ -10,5 +10,38 @@
             </div>
         </form>
     </div>
+
+    <table class="table table-striped table-bordered table-hover model-list p-3 mb-5 bg-white rounded">
+        <thead>
+            <tr class="table-head">
+                <th></th>
+                <th>Domingo</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miercoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sabado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for i in range(num_subjects) %}
+                <tr>
+                    <th>{{subjects_user[i].name}}</th>
+                    {% if subjects_user[i].horario | length > 0 %}
+                        {% if subjects_user[i].horario[i].dia == i %}
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                            <td> {{ subjects_user[i].horario[i].dia }} </td>
+                        {% endif %}
+                    {% endif %}
+                </tr>        
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

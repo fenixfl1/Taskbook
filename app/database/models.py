@@ -159,7 +159,7 @@ class Materias(Base):
     
     @staticmethod
     def get_by_name(name):
-        return User.query.filter_by(name=name).first
+        return User.query.filter_by(name=name).first()
 
 
 class HorarioClases(Base):
