@@ -30,7 +30,7 @@ class Queries():
             except:
                 pass
             
-        if 'date2' in kwargs:
+        if 'order_by' in kwargs and kwargs['order_by'] == 'date2':
             
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\

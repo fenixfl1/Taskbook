@@ -68,30 +68,32 @@
                             <th class="text-primary column-header">Asignatura</th>
                             <th class="text-primary column-header">Fecha de Asignacion</th>
                             <th class="text-primary column-header">Fecha de Entrega</th>
-                            <th class="text-primary column-header">Comentario</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {% for i in range(num_task) %}
-                            <tr>
-                                <td class="list-buttons-column">
-                                    <div class="col-auto">
-                                        <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info my-2 my-sm-0">
-                                            <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
-                                        </a>
+                            {% if task_user[i].detalle[0].estado == true %}
+                                <tr>
+                                    <td class="list-buttons-column">
+                                        <div class="col-auto">
+                                            <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info my-2 my-sm-0">
+                                                <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                            </a>
 
-                                        <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger my-2 my-sm-0" onclick="try_delete()">
-                                            <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td style="cursor: pointer;">{{task_user[i].name}}</th>
-                                <td>{{task_user[i].detalle[0].materia['name'] }}</td>
-                                <td>{{task_user[i].detalle[0].asignada_en}}</td>
-                                <td>{{task_user[i].detalle[0].dia_endrega}}</td>
-                                <td>{{task_user[i].detalle[0].comentario}}</td>
-                            </tr>
+                                            <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger my-2 my-sm-0" onclick="try_delete()">
+                                                <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href=" {{url_for('users.details_task', id=task_user[i].id)}} " style="cursor: pointer;">{{task_user[i].name}}</a>
+                                    </th>
+                                    <td>{{task_user[i].detalle[0].materia['name'] }}</td>
+                                    <td>{{task_user[i].detalle[0].asignada_en}}</td>
+                                    <td>{{task_user[i].detalle[0].dia_endrega}}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>

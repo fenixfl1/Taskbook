@@ -3,7 +3,7 @@ from flask import render_template, request
 from flask_restful import Resource
 from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
-from datetime import datetime
+from datetime import datetime, date
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
     AssingForm
@@ -155,12 +155,19 @@ def details_task(id):
     
     form = TaskForm()
     
+    details = db.query(Tarea).filter(Tarea.id==id).\
+        options(contains_eager(Tarea.user)).one()
+        
+    print('_____________________________________________')
+    print(details.detalle[0].asignada_en)
+    print('_____________________________________________')
+    
     return render_template(
         'user/details_task.html.j2',
         title='details -',
-        details='',
+        details=details,
         task_form=form,
-        year=datetime.now()
+        hoy=date(2020, 3, 22)
     )
 
 

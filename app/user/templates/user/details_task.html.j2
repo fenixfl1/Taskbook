@@ -42,6 +42,42 @@
                     </a>
                 </li>
             </ul>
+
+            <div class="row">
+                <div class="col-xl-8 col-md-8 mb-6">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-6">
+                                    <div class="text-xs text-primary text-center font-weight-bold text-segundary text-uppercase mb-1">
+                                        <p class="h5">{{details.name}} </p>
+                                    </div>
+
+                                    <hr class="sidebar-divider">
+
+                                    <div class="mb-0 font-weight-bold">
+                                        <p>Asignatura:  <span>{{ details.detalle[0].materia }}</span></p>
+
+                                        <p>Fecha de Asignación:  <span>{{ details.detalle[0].asignada_en }}</span></p>
+
+                                        <p>Dia de Entrega:  <span>{{ details.detalle[0].dia_endrega }}</span></p>
+
+                                        <p>Comentario:  <span>{{ details.detalle[0].comentario }}</span></p>
+
+                                        {% if details.detalle[0].estado == true and details.detalle[0].dia_endrega < hoy %}
+                                            <p>Estado:  <span>Fuera de la Fecha de Entrega</span></p>
+                                        {% elif details.detalle[0].estado == true and details.detalle[0].dia_endrega > hoy %}
+                                            <p>Estado:  <span>Por Entrega</span></p>
+                                        {% else %}
+                                            <p>Estado:  <span>Entregada</span></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
