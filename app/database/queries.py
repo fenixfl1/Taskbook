@@ -50,7 +50,8 @@ class Queries():
     def contador(entity, user):
 
         try:
-            return db.query(entity).filter(entity.user_id == user.id).count()
+            return db.query(entity).filter(entity.user_id == user.id).\
+                filter(entity.estado==True).count()
 
         except:
             pass

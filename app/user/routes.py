@@ -126,7 +126,7 @@ def tasks(order_by='id'):
     task = Queries.queries(Tarea, current_user, order_by=order_by)
         
     num_task = Queries.contador(Tarea, current_user)
-    
+       
     for i in range(num_task):
         
         index = task[i].id
@@ -155,19 +155,18 @@ def details_task(id):
     
     form = TaskForm()
     
+    num_task = Queries.contador(Tarea, current_user)
+    
     details = db.query(Tarea).filter(Tarea.id==id).\
         options(contains_eager(Tarea.user)).one()
-        
-    print('_____________________________________________')
-    print(details.detalle[0].asignada_en)
-    print('_____________________________________________')
     
     return render_template(
         'user/details_task.html.j2',
         title='details -',
         details=details,
         task_form=form,
-        hoy=date(2020, 3, 22)
+        num_task=num_task,
+        hoy=date.today()
     )
 
 

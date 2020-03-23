@@ -2,10 +2,10 @@
 {% block content %}
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-        <div class="container-fluid">
+        <div class="container-fluid ">
             {% include 'messages.html' %}
 
-            <div class="row">
+            <div class="row mx-auto">
                 <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -26,52 +26,55 @@
                 </div>
             </div>
 
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tab">
 
                 <li class="nav-item">
-                    <a href="/tasks" class="nav-link">Tareas</a>
+                    <a href="/tasks"  style="color: #858796;" class="nav-link">Tareas({{ num_task }})</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/tasks" class="nav-link active">Detalles</a>
+                    <a href="" style="color: #858796;" class="nav-link">Detalles</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-toggle="modal" data-target="#staticBackdrop">
-                        Crear
+                    <a href="" style="color: #858796;" class="nav-link" data-toggle="modal" data-target="#staticBackdrop">
+                       <p>Crear</p>
                     </a>
                 </li>
             </ul>
 
             <div class="row">
-                <div class="col-xl-8 col-md-8 mb-6">
-                    <div class="card shadow h-100 py-2">
+
+                <div class="col-xl-8 col-lg-7">
+
+                    <div class="card shadow mb-4">
+
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-6">
-                                    <div class="text-xs text-primary text-center font-weight-bold text-segundary text-uppercase mb-1">
-                                        <p class="h5">{{details.name}} </p>
-                                    </div>
+                            <div class="chart-area">
+                                <div class="text-xs text-primary text-center font-weight-bold text-segundary text-uppercase mb-1">
+                                    <p class="h5">{{details.name}} </p>
+                                </div>
 
-                                    <hr class="sidebar-divider">
+                                 <hr class="sidebar-divider">
 
-                                    <div class="mb-0 font-weight-bold">
-                                        <p>Asignatura:  <span>{{ details.detalle[0].materia }}</span></p>
+                                <div class="mb-4 font-weight-bold">
+                                    <p style="color: #000;">Asignatura: <span  style="color: #858796;">{{ details.detalle[0].materia }}</span></p>
 
-                                        <p>Fecha de Asignación:  <span>{{ details.detalle[0].asignada_en }}</span></p>
+                                    <p style="color: #000;">Fecha de Asignación: <span  style="color: #858796;">{{ details.detalle[0].asignada_en }}</span></p>
 
-                                        <p>Dia de Entrega:  <span>{{ details.detalle[0].dia_endrega }}</span></p>
+                                    <p style="color: #000;">Fecha de Entrega: <span  style="color: #858796;">{{ details.detalle[0].dia_endrega }}</span></p>
 
-                                        <p>Comentario:  <span>{{ details.detalle[0].comentario }}</span></p>
+                                    <p style="color: #000;">Comentario: <span  style="color: #858796;">{{ details.detalle[0].comentario }}</span></p>
 
-                                        {% if details.detalle[0].estado == true and details.detalle[0].dia_endrega < hoy %}
-                                            <p>Estado:  <span>Fuera de la Fecha de Entrega</span></p>
-                                        {% elif details.detalle[0].estado == true and details.detalle[0].dia_endrega > hoy %}
-                                            <p>Estado:  <span>Por Entrega</span></p>
-                                        {% else %}
-                                            <p>Estado:  <span>Entregada</span></p>
-                                        {% endif %}
-                                    </div>
+                                    {% if details.detalle[0].dia_endrega < hoy %}
+                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Fuera de la Fecha de Entrega</span></p>
+                                    {% elif details.detalle[0].dia_endrega > hoy %}
+                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Por Entrega</span></p>
+                                    {% elif details.detalle[0].dia_endrega == hoy %}
+                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Pendiente para Entregar Hoy</span></p>
+                                    {% else %}
+                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Entregada</span></p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
