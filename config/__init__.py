@@ -5,7 +5,7 @@ Benjamin Rosario
 
 """
 
-__all__ = (
+__all__ = [
 
     'DEBUG',
     'TESTING',
@@ -16,7 +16,6 @@ __all__ = (
     'APP_ENV_LOCAL',
     'ENV',
     'DATABASE_DIR',
-    'LOCAL_DOMAIN'
-)
-
-from . import default
+    'LOCAL_DOMAIN',
+    'MAIL_SENDER'
+]

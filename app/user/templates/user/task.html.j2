@@ -19,7 +19,7 @@
                             </div>
 
                             <div class=" modal-body ">
-                                {% include "task_form.html" %}
+                                {% include "forms/task_form.html.j2" %}
                             </div>
                         </div>
                     </div>
@@ -28,11 +28,9 @@
 
             {# Nav for task table #}
             <nav class="navbar navbar-light bg-light float-right">
-                {% if num_task != 0 %}
-                    <form class="form-inline">
-                            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='30'>
-                    </form>
-                {% endif %}
+                <form class="form-inline">
+                    <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='30'>
+                </form>
             </nav>
 
             {# visualize each task #}

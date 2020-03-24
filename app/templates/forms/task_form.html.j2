@@ -1,25 +1,32 @@
-<form action="{{ url_for( 'auth.register_task') }}" autocomplete="off"
-    method="POST">
+<form action="{{ url_for( 'auth.register_task') }}" autocomplete="off" method="POST">
     {{ task_form.hidden_tag() }}
 
     <div class="form-group">
-        {{ Form_off_label(task_form.name.label) }}
+        <label for="name ">Nombre 
+            <strong style="color: red; ">*</strong>
+        </label>
         {{ Form_off_label(task_form.name, class="form-control") }}
     </div>
 
     <div class="form-group">
-        {{ Form_off_label(task_form.materia.label) }}
+        <label for="materia ">Asignatura 
+            <strong style="color: red; ">*</strong>
+        </label>
         {{ Form_off_label(task_form.materia, class="form-control") }}
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-6">
-            {{ Form_off_label(task_form.asignada_en.label) }}
+            <label for="asignada_en ">Fecha de Asignacion 
+                <strong style="color: red; ">*</strong>
+            </label>
             {{ Form_off_label(task_form.asignada_en, class="form-control") }}
         </div>
 
         <div class="form-group col-md-6">
-            {{ Form_off_label(task_form.dia_entrega.label) }}
+            <label for="dia_entrega ">Fecha de Entrega 
+                <strong style="color: red; ">*</strong>
+            </label>
             {{ Form_off_label(task_form.dia_entrega, class="form-control") }}
         </div>
     </div>
@@ -29,6 +36,5 @@
         {{ Form_off_label(task_form.nota, class="form-control", id="exampleFormControlTextarea1", rows="3") }}
     </div>
 
-    {{Form_off_label(task_form.submit, class="btn btn-primary form-control",
-    value="Guardar")}}
+    {{Form_off_label(task_form.submit, class="btn btn-primary form-control", value="Guardar")}}
 </form>

@@ -19,6 +19,8 @@ DEBUG = False
 TESTING = False
 ENV = ''
 
+MAIL_SENDER = ''
+
 SERVER_NAME = 'localhost:5000'
 PRODUCTION_DOMAIN = 'https:/taskbook.com/'
 DEVELOPMENT_DOMAIN = 'taskbook.com:5555'
