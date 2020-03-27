@@ -72,6 +72,10 @@ class User(Base, UserMixin):
     @staticmethod
     def get_by_phone(phone):
         return User.query.filter_by(phone_number=phone).first()
+    
+    @staticmethod
+    def get_by_name(name):
+        return User.query.filter_by(first_name=name).first()
 
     @property
     def object_id(self):
@@ -219,44 +223,56 @@ class DetalleTarea(Base):
 
 class Eventos(Base):
 
-    __tablename__ = 'evento'
+    __tablename__ = 'event'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='evento')
-    detalle = relationship('DetalleEvento', back_populates='evento')
-    name = Column(String(150), nullable=False)
-    estado = Column(Boolean(), default=True)
-
+    creada_en = Column(DateTime(), default=func.now())
+    title = Column(String(150), nullable=False)
+    lugar = Column(String(100), nullable=False)
+    url = Column(URLType)
+    fecha = Column(Date(), nullable=False)
+    start_date = Column(Time(), nullable=False)
+    end_date = Column(Time(), nullable=False)
+    comentario = Column(String(100))
+    realizada_en = Column(DateTime())
+    clase = Column('class', String(50), default='event-info')
+    estado = Column(Boolean(), default=True) 
+    
     def __repr__(self):
 
-        return '{}'.format(self.name)
+        return '{}'.format(self.title)
 
     @staticmethod
     def get_by_id(id):
 
         return User.query.get(id)
+    
+    @staticmethod
+    def update_class(clase):
+        pass
 
 
-class DetalleEvento(Base):
+# class DetalleEvento(Base):
 
-    __tablename__ = 'detalle_evento'
+#     __tablename__ = 'detalle_evento'
 
-    id = Column(Integer, primary_key=True)
-    evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
-    evento = relationship('Eventos', back_populates='detalle')
-    creada_en = Column(DateTime(), default=func.now())
-    lugar = Column(String(100), nullable=False)
-    dia = Column(String(3), nullable=False)
-    hora_inicio = Column(Time(), nullable=False)
-    hora_fin = Column(Time(), nullable=False)
-    comentario = Column(String(100))
-    realizada_en = Column(DateTime())
-    estado = Column(Boolean(), default=True)
+#     id = Column(Integer, primary_key=True)
+#     evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
+#     evento = relationship('Eventos', back_populates='detalle')
+#     creada_en = Column(DateTime(), default=func.now())
+#     lugar = Column(String(100), nullable=False)
+#     fecha = Column(Date(), nullable=False)
+#     hora_inicio = Column(Time(), nullable=False)
+#     hora_fin = Column(Time(), nullable=False)
+#     comentario = Column(String(100))
+#     realizada_en = Column(DateTime())
+#     estado = Column(Boolean(), default=True)
 
-    def __repr__(self):
+#     def __repr__(self):
 
-        return '{}'.format(self.lugar)
+#         return '{}'.format(self.lugar)
 
 
 class PlanEstudio(Base):
@@ -283,6 +299,8 @@ class DetallePlan(Base):
     plan_id = Column(Integer, ForeignKey('plan_estudio.id', ondelete='CASCADE'))
     plan = relationship('PlanEstudio', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
+    title = Column(String(255), nullable=False)
+    url = Column(URLType)
     dia = Column(String(3), nullable=False)
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)

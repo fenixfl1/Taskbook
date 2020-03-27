@@ -75,19 +75,21 @@ class Queries():
 
     # get the next activities to perform
     @staticmethod
-    def get_most_recent(result):
+    def get_most_recent(result, num, entity, user):
 
         date = []
 
-        # num_activity = contador(result)
+        for i in range(num):
 
-        for i in range(2):
+            date.append(result[i].detalle[0].dia_endrega)
+            
+        m = max(date)
+        
+        r = db.query(entity).filter(entity.user_id==user.id).\
+            options(contains_eager(entity.user)).\
+                filter(entity.detalle.dia_endrega==m).first()
 
-            date.append(result[i].detalle[i].dia)
-
-            print(date)
-
-        return max(date)
+        return r
 
     @staticmethod
     def get_query(entity, user):

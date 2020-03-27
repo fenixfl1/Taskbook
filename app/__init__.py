@@ -64,6 +64,9 @@ def creatre_app(setting_module):
     from .admin import admin_view
     app.register_blueprint(admin_view)
     
+    from .notify import notify
+    app.register_blueprint(notify)
+    
     register_error_handlers(app)
     all_request._(app, db)
     # create_user(app, user_datastore, db, Role)

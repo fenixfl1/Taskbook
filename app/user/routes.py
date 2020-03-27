@@ -1,16 +1,16 @@
 from . import user_view
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from flask_restful import Resource
 from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
+from sqlalchemy import select, func
 from datetime import datetime, date
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
     AssingForm
-from app.database.models import Eventos, Tarea, PlanEstudio, DetalleEvento, DetalleTarea, \
+from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
     Materias, Profesor
 from app.database.queries import Queries
-import requests
 
 
 # this is the index mfunction
@@ -19,23 +19,25 @@ import requests
 def index():
         
     event = Queries.queries(Eventos, current_user, order_by="name")
-
-    task = Queries.queries(Tarea, current_user, order_by="date1")
-
+    task = Queries.queries(Tarea, current_user, order_by="name")
     plan = Queries.queries(PlanEstudio, current_user, order_by="name")
-    
+    subject = Queries.queries(Materias, current_user, order_by="name")
     count_task = Queries.contador(Tarea, current_user)
-
-    fecha = Queries.literal_time(task)
+    
+    _task = db.query(Tarea, DetalleTarea).filter(Tarea.user_id==current_user.id).\
+        filter(DetalleTarea.dia_endrega).first()
+        
+    next_task = _task
+    
 
     return render_template(
         'user/index.html.j2',
         title='Index -',
         event_user=event,
         task_user=task,
-        fecha=fecha,
-        num_task=count_task,
+        next_task=next_task,
         stady_plan=plan,
+        subject_user=subject,
         year=datetime.now()
     )
     
@@ -126,16 +128,6 @@ def tasks(order_by='id'):
     task = Queries.queries(Tarea, current_user, order_by=order_by)
         
     num_task = Queries.contador(Tarea, current_user)
-       
-    for i in range(num_task):
-        
-        index = task[i].id
-    
-        num = db.query(DetalleTarea).filter(DetalleTarea.tarea_id ==\
-             index and index.user_id == current_user.id).\
-                 filter(DetalleEvento.estado==True).count()
-        
-        num_details.append(num)
     
     return render_template(
         'user/task.html.j2',
@@ -208,9 +200,21 @@ def eventos():
         year=datetime.now()
     )
     
-@user_view.route('/test')
-def test():
     
-    r = requests.get('https://google.com')
+@user_view.route('/calendar-events')
+@login_required
+def calendar_events():
     
-    return r.json()
+    try:
+        event = Queries.queries(Eventos, current_user)
+        response = jsonify({
+            'success': 1,
+            'result': event
+        })
+        
+        response.status_code = 200
+        
+        return response
+    except Exception as e:
+        print(e)
+        raise e

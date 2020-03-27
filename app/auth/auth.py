@@ -8,9 +8,10 @@ from datetime import datetime
 from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm, AssingForm
 from app.database import db
 from app.database.queries import Queries
-from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor
+from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor, User
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
+import json
 
 
 def allowed_image(filename):
@@ -18,8 +19,6 @@ def allowed_image(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in IMAGE_SET_EXT
 
-messages = ''
-category = ''
 
 # function to upload profile image
 @auth_view.route('/uploads', methods=['GET', 'POST'])
@@ -197,8 +196,8 @@ def register_task():
             messages = 'No fue posible guardar los cambios!'
             category = 'error'
 
-    flash(messages, category)
-    return redirect(url_for('users.tasks'))
+        flash(messages, category)
+        return redirect(url_for('users.tasks'))
     
     
 # this function is to authenticate events and events-details
@@ -266,3 +265,20 @@ def edit(id):
         flash('No fue posible modificar los datos!', category='danger')
         
     return redirect(url_for('users.tasks'))
+
+@auth_view.route('/ajax-login', methods=['GET', 'POST'])
+def ajax_login():
+    
+    print(request.form)
+    name = request.form['username']
+    
+    user = User.get_by_name(name)
+    id = User.get_by_id(user.id)
+    
+    response = {
+        'status': 200,
+        'username': user,
+        'id': id
+    }
+    
+    return json.dumps(response)

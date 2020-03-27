@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired
 from app.database import db
 from app.database.models import (User, Role, Eventos, Tarea,
                                  PlanEstudio, HorarioClases, Materias,
-                                 Profesor, DetalleEvento, DetallePlan,
+                                 Profesor, DetallePlan,
                                  DetalleTarea, ProfilePicture)
 
 role_name = ['Admin', 'admin', 'administrador']
@@ -127,8 +127,7 @@ class HorarioView(AdminView):
 
 adm.add_view(UserView(User, db, category='User'))
 adm.add_view(AdminView(Role, db, category='User'))
-adm.add_view(UserRelatedView(Eventos, db, category='Events'))
-adm.add_view(DetalleEventView(DetalleEvento, db, category='Events'))
+adm.add_view(UserRelatedView(Eventos, db))
 adm.add_view(UserRelatedView(Tarea, db, category='Task'))
 adm.add_view(DetalleTareaView(DetalleTarea, db, category='Task'))
 adm.add_view(UserRelatedView(PlanEstudio, db, category='Stady plan'))
