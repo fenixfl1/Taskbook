@@ -237,7 +237,7 @@ class Eventos(Base):
     end_date = Column(Time(), nullable=False)
     comentario = Column(String(100))
     realizada_en = Column(DateTime())
-    clase = Column('class', String(50), default='event-info')
+    color = Column(String(50), default='event-info')
     estado = Column(Boolean(), default=True) 
     
     def __repr__(self):
@@ -250,29 +250,8 @@ class Eventos(Base):
         return User.query.get(id)
     
     @staticmethod
-    def update_class(clase):
+    def update_color(color):
         pass
-
-
-# class DetalleEvento(Base):
-
-#     __tablename__ = 'detalle_evento'
-
-#     id = Column(Integer, primary_key=True)
-#     evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
-#     evento = relationship('Eventos', back_populates='detalle')
-#     creada_en = Column(DateTime(), default=func.now())
-#     lugar = Column(String(100), nullable=False)
-#     fecha = Column(Date(), nullable=False)
-#     hora_inicio = Column(Time(), nullable=False)
-#     hora_fin = Column(Time(), nullable=False)
-#     comentario = Column(String(100))
-#     realizada_en = Column(DateTime())
-#     estado = Column(Boolean(), default=True)
-
-#     def __repr__(self):
-
-#         return '{}'.format(self.lugar)
 
 
 class PlanEstudio(Base):
@@ -305,10 +284,33 @@ class DetallePlan(Base):
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     objetivo = Column(String(255))
+    color = Column(String(25), default='text-info')
     realizada_en = Column(DateTime())
     estado = Column(Boolean(), default=True)
 
     def __repr__(self):
 
         return '{}'.format(self.plan)
-    
+
+
+
+
+# class DetalleEvento(Base):
+
+#     __tablename__ = 'detalle_evento'
+
+#     id = Column(Integer, primary_key=True)
+#     evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
+#     evento = relationship('Eventos', back_populates='detalle')
+#     creada_en = Column(DateTime(), default=func.now())
+#     lugar = Column(String(100), nullable=False)
+#     fecha = Column(Date(), nullable=False)
+#     hora_inicio = Column(Time(), nullable=False)
+#     hora_fin = Column(Time(), nullable=False)
+#     comentario = Column(String(100))
+#     realizada_en = Column(DateTime())
+#     estado = Column(Boolean(), default=True)
+
+#     def __repr__(self):
+
+#         return '{}'.format(self.lugar)
