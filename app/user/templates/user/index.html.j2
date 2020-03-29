@@ -14,7 +14,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if task_user != 0 %}
+                                {% if num_task != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p> <i class="fas fa-circle text-info"></i> próxima Tarea.</p>
@@ -28,7 +28,7 @@
                                         
                                         <div class="mb-0 font-weight-bold text-gray-400 float-right">
                                             
-                                            <a href=" {{url_for('users.details_task', id=task_user[0].id)}} " title="Ver detalles">
+                                            <a href=" {{url_for('users.details_task', id=next_task.id)}} " title="Ver detalles">
                                                 {{ next_task[0] }}
                                             </a>
                                         </div>
@@ -44,7 +44,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if stady_plan[0] | length != 0 %}
+                                {% if num_plan != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p><i class="fas fa-circle text-primary"></i> próximo en Plan de Estudio.</p>
@@ -52,13 +52,13 @@
 
                                         <hr class="sidebar-divider">
 
-                                         <span class="mr-2">
+                                        <span class="mr-2">
                                             <i class="fas fa-fw fa-book-reader text-primary"></i>
                                         </span>
                                         
                                         <div class="mb-0 font-weight-bold text-gray-400 float-right">
                                             
-                                            <a href=" {{url_for('users.details_task', id=task_user[0].id)}} " title="Ver detalles">
+                                            <a href="" title="Ver detalles">
                                                 Curso de React JS
                                             </a>
                                         </div>
@@ -74,7 +74,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if event_user[0] | length != 0 %}
+                                {% if num_event != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p><i class="fas fa-circle text-success"></i> próximo Evento.</p>
@@ -88,7 +88,7 @@
                                         
                                         <div class="mb-0 font-weight-bold text-gray-400 float-right">
                                             
-                                            <a href=" {{url_for('users.details_task', id=task_user[0].id)}} " title="Ver detalles">
+                                            <a href="" title="Ver detalles">
                                                 Seminario I
                                             </a>
                                         </div>
@@ -104,7 +104,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if subject_user != 0 %}
+                                {% if num_subject != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p><i class="fas fa-circle text-warning"></i> próxima clase.</p>
@@ -118,7 +118,7 @@
                                         
                                         <div class="mb-0 font-weight-bold text-gray-400 float-right">
                                             
-                                            <a href=" {{url_for('users.details_task', id=task_user[0].id)}} " title="Ver detalles">
+                                            <a href="" title="Ver detalles">
                                                 {{ subject_user[0] }}
                                             </a>
                                         </div>

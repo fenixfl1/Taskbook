@@ -1,0 +1,49 @@
+Taskbook
+├── app
+│   ├── admin
+│   │   ├── __pycache__
+│   │   └── templates
+│   │       └── admin
+│   ├── auth
+│   │   ├── __pycache__
+│   │   └── templates
+│   │       ├── auth
+│   │       └── js
+│   ├── database
+│   │   └── __pycache__
+│   ├── notify
+│   │   ├── __pycache__
+│   │   └── templates
+│   │       └── notify
+│   ├── __pycache__
+│   ├── static
+│   │   ├── calendar
+│   │   ├── css
+│   │   ├── images
+│   │   ├── js
+│   │   │   ├── demo
+│   │   │   ├── jquery
+│   │   │   └── jquery-easing
+│   │   └── scss
+│   │       ├── navs
+│   │       └── utilities
+│   ├── templates
+│   │   ├── admin
+│   │   ├── errors
+│   │   ├── forms
+│   │   └── security
+│   │       └── email
+│   └── user
+│       ├── __pycache__
+│       └── templates
+│           └── user
+├── config
+│   └── __pycache__
+|
+├── instance
+├── migrations
+│   ├── __pycache__
+│   └── versions
+│       └── __pycache__
+└── __pycache__
+

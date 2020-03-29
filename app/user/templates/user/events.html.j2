@@ -26,56 +26,41 @@
                 </div>
             </div>
 
-            <div class="container">
-                <div class="row">
-                    {# <div class="page-header col-md-12">
-
-                        <div class="pull-right form-inline">
-                            <div class="btn-group">
-                                <button class="btn btn-primary" data-calendar-nav="prev">
-                                    <i class="fas fa-angle-double-left"></i>
-                                </button>
-                                <button class="btn" data-calendar-nav="today">Today</button>
-                                <button class="btn btn-primary" data-calendar-nav="next">
-                                    <i class="fas fa-angle-double-right"></i>
-                                </button>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <button class="btn btn-warning" data-calendar-view="year">Year</button>
-                                <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                                <button class="btn btn-warning" data-calendar-view="week">Week</button>
-                                <button class="btn btn-warning" data-calendar-view="day">Day</button>
-                            </div>
-                        </div>
-                    </div> #}
-
+            <nav class="navbar navbar-light bg-light">
+                <div class="page-header mx-2 navbar-brand">
                     <h3></h3>
+                </div>
+                <form class="form-inline">
+                    <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Eventos" aria-label="Search" size='30'>
+                </form>
+            </nav>
 
-                    <hr class="sidebar-divider">
+            <hr class="sidebar-divider">
+
+            <div class="container">
+
+                <div class="row m-auto">
 
                     <div class="row">
+
                         <div class="span9 col-md-8">
                             <div id="calendar"></div>
                         </div>
-                        <div class="span3 col-auto">
+                        <div class="span3">
 
-                            <div class="row">
-                                <div class="pull-right form-inline">
-                                    <div class="btn-group">
-                                        <button class="btn btn-primary" data-calendar-nav="prev">
-                                            <i class="fas fa-angle-double-left"></i>
-                                        </button>
-                                        <button class="btn" data-calendar-nav="today">Today</button>
-                                        <button class="btn btn-primary" data-calendar-nav="next">
-                                            <i class="fas fa-angle-double-right"></i>
-                                        </button>
-                                    </div>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-warning" data-calendar-view="year">Year</button>
-                                        <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                                        <button class="btn btn-warning" data-calendar-view="week">Week</button>
-                                        <button class="btn btn-warning" data-calendar-view="day">Day</button>
-                                    </div>
+                            <div class="pull-right form-inline my-2">
+
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-primary mx-1" data-calendar-nav="prev">
+                                    <i class="fas fa-angle-double-left"></i>
+                                    </button>
+                                    <button class="btn btn-warning" data-calendar-view="year">Year</button>
+                                    <button class="btn btn-warning active" data-calendar-view="month">Month</button>
+                                    <button class="btn btn-warning" data-calendar-view="week">Week</button>
+                                    <button class="btn btn-warning" data-calendar-view="day">Day</button>
+                                    <button class="btn btn-primary mx-1" data-calendar-nav="next">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </button>
                                 </div>
                             </div>
 
@@ -100,6 +85,40 @@
                                 <label class="checkbox">
                                     <input type="checkbox" id="show_wbn" checked> Show week box number
                                 </label>
+                            </div>
+
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center
+                                    justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Recordatorio</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Acciones:</div>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-times fa-sm fa-fw mr-2 text-gray-400"></i> Cancelar
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i> Editar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        {# this box will be container for the details of the next event #}
+                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                                        Consequuntur laudantium accusantium minus deserunt sit ducimus dolorem, 
+                                        saepe qui est, aliquid quod veritatis error facilis rerum quos 
+                                        recusandae illum suscipit aut!</p>
+                                    </div>
+
+                                    <hr class="sidebar-divider">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -133,7 +152,7 @@
                     (function($) {
                         "use strict";
                         var options = {
-                            events_source: 'http://taskbook.com:5555/events',
+                            events_source: 'http://taskbook.com:5555/calendar-events',
                             view: 'month',
                             tmpl_path: '../../static/calendar/',
                             tmpl_cache: false,
@@ -202,8 +221,8 @@
                             calendar.view();
                         });
                         $('#events-modal .modal-header, #events-modal .modal-footer').click(function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            // e.preventDefault();
+                            // e.stopPropagation();
                         });
                     }(jQuery));
                 </script>

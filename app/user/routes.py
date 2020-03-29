@@ -5,7 +5,7 @@ from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from sqlalchemy import select, func
 from datetime import datetime, date
-from app.database import db
+from app.database import db, engne
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
     AssingForm
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
@@ -22,6 +22,10 @@ def index():
     task = Queries.queries(Tarea, current_user, order_by="name")
     plan = Queries.queries(PlanEstudio, current_user, order_by="name")
     subject = Queries.queries(Materias, current_user, order_by="name")
+    
+    count_event = Queries.contador(Eventos, current_user)
+    count_plan = Queries.contador(PlanEstudio, current_user)
+    count_subjects = Queries.contador(Materias, current_user)
     count_task = Queries.contador(Tarea, current_user)
     
     _task = db.query(Tarea, DetalleTarea).filter(Tarea.user_id==current_user.id).\
@@ -29,13 +33,16 @@ def index():
         
     next_task = _task
     
-
     return render_template(
         'user/index.html.j2',
         title='Index -',
         event_user=event,
         task_user=task,
         next_task=next_task,
+        num_task=count_task,
+        num_event=count_event,
+        num_plan=count_plan,
+        num_subject=count_subjects,
         stady_plan=plan,
         subject_user=subject,
         year=datetime.now()
@@ -188,7 +195,6 @@ def eventos():
     form = EventForm(request.form)
 
     event = Queries.queries(Eventos, current_user)
-
     num_event = Queries.contador(Eventos, current_user)
 
     return render_template(
@@ -200,21 +206,29 @@ def eventos():
         year=datetime.now()
     )
     
-    
+
+# function to show all events on the calendar
 @user_view.route('/calendar-events')
 @login_required
 def calendar_events():
     
     try:
-        event = Queries.queries(Eventos, current_user)
-        response = jsonify({
+        result = engne.execute('SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event')
+        
+        resp = jsonify({
             'success': 1,
-            'result': event
-        })
+            'result': [dict(row) for row in result]
+            }
+        )
+        r = (str(row) for row in result)
+        resp.status_code = 200
+        print(r)
+        print("_________________________________")
         
-        response.status_code = 200
-        
-        return response
+        return resp
     except Exception as e:
-        print(e)
         raise e
+    
+    finally:
+        result.close()
