@@ -7,7 +7,7 @@ from sqlalchemy import select, func
 from datetime import datetime, date
 from app.database import db, engne
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
-    AssingForm
+    AssingForm, PlanDetailForm, PlanForm
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
     Materias, Profesor
 from app.database.queries import Queries
@@ -111,7 +111,7 @@ def teachers():
 @login_required
 def horario():
     
-    subjects = Queries.queries(Materias, current_user)
+    subjects = Queries.queries(Materias, current_user, order_by='name')
     count = Queries.contador(Materias, current_user)
 
     return render_template(
@@ -173,6 +173,9 @@ def details_task(id):
 @user_view.route('/studies-plan')
 @login_required
 def plan_de_estudio():
+    
+    plan_form = PlanForm()
+    detail_form = PlanDetailForm()
 
     plan = Queries.queries(PlanEstudio, current_user)
 
@@ -183,6 +186,8 @@ def plan_de_estudio():
         title='Studies plan -',
         stady_plan=plan,
         num_plan=num_plan,
+        plan_form=plan_form,
+        detail_plan_form=detail_form,
         year=datetime.now()
     )
 
@@ -206,29 +211,3 @@ def eventos():
         year=datetime.now()
     )
     
-
-# function to show all events on the calendar
-@user_view.route('/calendar-events')
-@login_required
-def calendar_events():
-    
-    try:
-        result = engne.execute('SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
-            UNIX_TIMESTAMP(end_date)*1000 as end FROM event')
-        
-        resp = jsonify({
-            'success': 1,
-            'result': [dict(row) for row in result]
-            }
-        )
-        r = (str(row) for row in result)
-        resp.status_code = 200
-        print(r)
-        print("_________________________________")
-        
-        return resp
-    except Exception as e:
-        raise e
-    
-    finally:
-        result.close()

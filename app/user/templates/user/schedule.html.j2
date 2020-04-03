@@ -2,46 +2,101 @@
 
 <div class="container">
     <div class="row">
-        <form action='' method="POST">
-            <div class="form-row">
-                <div class="form-group">
-
+        <div id="schedule">
+            <div class="cal-row-fluid cal-row-head"></div>
+            <div class="cal-month-box">
+                {% for i in subjects_user%}
+                <div class="cal-row-fluid cal-before-eventlist">
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day1"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day2"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day3"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day4"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day5"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day6"></div>
+                    <div class="cal-cell1 cal-cell" data-cal-row="-day7"></div>
                 </div>
+                {% endfor %}
             </div>
-        </form>
+        </div>
     </div>
-
-    <table class="table table-striped table-bordered table-hover model-list p-3 mb-5 bg-white rounded">
-        <thead>
-            <tr class="table-head">
-                <th></th>
-                <th>Domingo</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miercoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-                <th>Sabado</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for i in range(num_subjects) %}
-                <tr>
-                    <th>{{subjects_user[i].name}}</th>
-                    {% if subjects_user[i].horario | length > 0 %}
-                        {% if subjects_user[i].horario[i].dia == i %}
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                            <td> {{ subjects_user[i].horario[i].dia }} </td>
-                        {% endif %}
-                    {% endif %}
-                </tr>        
-            {% endfor %}
-        </tbody>
-    </table>
 </div>
+
+<script>
+    (function($) {
+        "use strict";
+        var options = {
+            events_source: 'http://taskbook.com:5555/schedule-list',
+            view: 'subject',
+            tmpl_path: '../../static/templates/schedule/',
+            tmpl_cache: false,
+            onAfterViewLoad: function(view) {
+                $('.page-header h3').text(this.getTitle());
+                $('.btn-group button').removeClass('active');
+                $('button[data-calendar-view="' + view + '"]').addClass('active');
+            },
+            classes: {
+                subjects: {
+                    general: 'label'
+                }
+            }
+        };
+
+        var schedule = $('#schedule').schedule(options);
+
+        $('.btn-group button[data-calendar-nav]').each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.navigate($this.data('calendar-nav'));
+            });
+        });
+
+        $('.btn-group button[data-calendar-view]').each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.view($this.data('calendar-view'));
+            });
+        });
+
+        $('#first_day').change(function() {
+            var value = $(this).val();
+            value = value.length ? parseInt(value) : null;
+            calendar.setOptions({
+                first_day: value
+            });
+            calendar.view();
+        });
+
+        $('#events-in-modal').change(function() {
+            var val = $(this).is(':checked') ? $(this).val() : null;
+            calendar.setOptions({
+                modal: val
+            });
+        });
+        $('#format-12-hours').change(function() {
+            var val = $(this).is(':checked') ? true : false;
+            calendar.setOptions({
+                format12: val
+            });
+            calendar.view();
+        });
+        $('#show_wbn').change(function() {
+            var val = $(this).is(':checked') ? true : false;
+            calendar.setOptions({
+                display_week_numbers: val
+            });
+            calendar.view();
+        });
+        $('#show_wb').change(function() {
+            var val = $(this).is(':checked') ? true : false;
+            calendar.setOptions({
+                weekbox: val
+            });
+            calendar.view();
+        });
+        $('#events-modal .modal-header, #events-modal .modal-footer').click(function(e) {
+            // e.preventDefault();
+            // e.stopPropagation();
+        });
+    }(jQuery));
+</script>
 {% endblock %}

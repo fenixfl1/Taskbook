@@ -1,6 +1,6 @@
 /*! bootstrap-calendar - v0.2.4 - 2016-05-01 - https://github.com/Serhioromano/bootstrap-calendar */
 "use strict";
-Date.prototype.getWeek = function(t) {
+Date.prototype.getWeek = function(t) {event
         if (t) {
             var e = new Date(this.valueOf()),
                 a = (this.getDay() + 6) % 7;
@@ -83,7 +83,6 @@ Date.prototype.getWeek = function(t) {
         function n(e, a) { return this.options = t.extend(!0, { position: { start: new Date, end: new Date } }, l, e), this.setLanguage(this.options.language), this.context = a, a.css("width", this.options.width).addClass("cal-context"), this.view(), this }
 
         function s(e, a, o, i) {
-            e.stopPropagation();
             var a = t(a),
                 n = a.closest(".cal-cell"),
                 s = n.closest(".cal-before-eventlist"),

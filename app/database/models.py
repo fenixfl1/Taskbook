@@ -232,9 +232,8 @@ class Eventos(Base):
     title = Column(String(150), nullable=False)
     lugar = Column(String(100), nullable=False)
     url = Column(URLType)
-    fecha = Column(Date(), nullable=False)
-    start_date = Column(Time(), nullable=False)
-    end_date = Column(Time(), nullable=False)
+    start_date = Column(DateTime(), nullable=False)
+    end_date = Column(DateTime(), nullable=False)
     comentario = Column(String(100))
     realizada_en = Column(DateTime())
     color = Column(String(50), default='event-info')
@@ -280,7 +279,7 @@ class DetallePlan(Base):
     creada_en = Column(DateTime(), default=func.now())
     title = Column(String(255), nullable=False)
     url = Column(URLType)
-    dia = Column(String(3), nullable=False)
+    dia = Column(Integer, nullable=False)
     hora_inicio = Column(Time(), nullable=False)
     hora_fin = Column(Time(), nullable=False)
     objetivo = Column(String(255))
@@ -290,7 +289,7 @@ class DetallePlan(Base):
 
     def __repr__(self):
 
-        return '{}'.format(self.plan)
+        return '{0} => {1}'.format(self.plan, self.title)
 
 
 

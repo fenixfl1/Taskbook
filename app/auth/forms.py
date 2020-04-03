@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, TextAreaField, SelectField
-from wtforms.fields.html5 import DateField, TimeField, EmailField
+from wtforms.fields.html5 import DateField, TimeField, EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
 from app.database.models import Materias, Profesor
@@ -26,13 +26,16 @@ weekdays = [(1, 'Sunday'),
             (7, 'Saturday')]
 
 
-class LoadForm(FlaskForm):
+class Default(FlaskForm):
+    
+    submit = SubmitField()
+
+
+class LoadForm(Default):
 
     picture = FileField(id='file', _name='file')
-
-    submit = SubmitField(id='publish')
     
-class AssingForm(FlaskForm):
+class AssingForm(Default):
     
     subjects = QuerySelectField(
         'Asignatura', validators=[DataRequired()], query_factory=subject_query,
@@ -44,19 +47,17 @@ class AssingForm(FlaskForm):
         allow_blank=True
     )
     
-    submit = SubmitField()
 
 
-class SubjectsForm(FlaskForm):
+class SubjectsForm(Default):
 
     name = StringField(
         'Nombre', validators=[DataRequired()]
     )
 
-    submit = SubmitField()
 
 
-class ProfeForm(FlaskForm):
+class ProfeForm(Default):
 
     subjects = QuerySelectField(
         'Asignaturas', validators=[DataRequired()], query_factory=subject_query,
@@ -79,10 +80,9 @@ class ProfeForm(FlaskForm):
         'Telefono'
     )
 
-    submit = SubmitField()
 
 
-class TaskForm(FlaskForm):
+class TaskForm(Default):
 
     name = StringField(
         'Tarea', validators=[DataRequired()])
@@ -103,7 +103,7 @@ class TaskForm(FlaskForm):
     submit = SubmitField('')
 
 
-class EventForm(FlaskForm):
+class EventForm(Default):
 
     name = StringField(
         'Nombre', validators=[DataRequired(), Length(max=80)])
@@ -111,15 +111,43 @@ class EventForm(FlaskForm):
     lugar = StringField(
         'Lugar', validators=[DataRequired(), Length(max=100)])
 
-    dia = SelectField('Dia', choices=weekdays,
-                      validators=[DataRequired()])
+    url = URLField('Url')
 
-    hora_inicio = TimeField(
-        'Hora de Inicio', validators=[DataRequired()])
+    start_date = DateTimeField(
+        'Inicio', validators=[DataRequired()])
 
-    hora_fin = TimeField(
-        'Finaliza en', validators=[DataRequired()])
+    end_date = DateTimeField(
+        'Fin', validators=[DataRequired()])
 
-    nota = StringField('Nota')
+    nota = TextAreaField(
+        'Comentario', validators=[Length(max=150)])
 
-    submit = SubmitField('')
+    
+class PlanForm(Default):
+    
+    name = StringField(
+        'Nombre', validators=[DataRequired(), Length(max=80)]
+    )
+    
+    
+class PlanDetailForm(Default):
+    
+    title = StringField(
+        'Titulo', validators=[DataRequired(), Length(max=80)]
+    )
+    
+    dia = SelectField(
+        'Dia', choices=weekdays, validators=[DataRequired()]
+    )
+    
+    start = TimeField(
+        'Desde', validators=[DataRequired()]
+    )
+    
+    end = TimeField(
+        'Hasta', validators=[DataRequired()]
+    )
+    
+    objetivo = TextAreaField(
+        'Objetivo', validators=[Length(max=255)]
+    )

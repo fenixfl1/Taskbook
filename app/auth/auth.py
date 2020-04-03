@@ -1,14 +1,15 @@
 from . import auth_view
-from flask import render_template, flash, request, redirect, url_for
+from flask import render_template, flash, request, redirect, jsonify, url_for, abort
 from flask_login import login_required, current_user
 from flask_security import user_registered
 from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm, AssingForm
-from app.database import db
+from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm, AssingForm,\
+    PlanForm, PlanDetailForm
+from app.database import db, engne
 from app.database.queries import Queries
-from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor, User
+from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor, User, Eventos
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 import json
@@ -102,6 +103,14 @@ def register_subjects():
     flash(messages, category)
     return redirect(url_for('users.subjects'))
 
+# endpoint rest to get schedules
+@auth_view.route('/schedule-list')
+def schedule_list():
+    
+    resp = jsonify({'success':1, 'result': 'It is Ok!'})
+    
+    return resp
+
 
 # function to assing teacher to subjects
 @auth_view.route('/assing-teacher', methods=['POST'])
@@ -157,6 +166,9 @@ def register_profesor():
 # this function is to authenticate task and task-details
 @auth_view.route('/register_task', methods=['POST'])
 def register_task():
+    
+    messages = ''
+    category = ''
 
     form = TaskForm()
 
@@ -187,14 +199,16 @@ def register_task():
             )
 
             db.add(task_detail)
-            db.commit()
-            message = 'Tarea guardada con exito!'
+            messages = 'Tarea guardada con exito!'
             category = 'success'
 
         except:
             db.delete(task)
             messages = 'No fue posible guardar los cambios!'
             category = 'error'
+            
+        finally:
+            db.commit()
 
         flash(messages, category)
         return redirect(url_for('users.tasks'))
@@ -208,10 +222,83 @@ def register_event():
     
     if form.validate_on_submit():
         
+        title = form.name.data
+        lugar = form.lugar.data
+        url = form.url.data
+        start = form.start_date.data
+        end = form.end_date.data
+        comment = form.nota.data
+        
+        try:
+            event = Eventos(
+                user_id=current_user.id,
+                title=title,
+                lugar=lugar,
+                url=url,
+                start_date=start,
+                end_date=end,
+                comentario=comment
+            )
+            
+            db.add(event)
+            db.commit()
+            
+            messages = 'Evento creado exitosamente!'
+            category = 'success'
+            
+        except ValueError as e:
+            
+            messages = 'No fue posible crear el evento!'
+            category = 'error'
+            raise e
+        
+        finally:
+            flash(messages, category)
+        
+    return redirect(url_for('users.eventos'))
+
+
+# endpoint rest to send events to the client
+@auth_view.route('/calendar-events')
+@login_required
+def calendar_events():
+    
+    try:
+        result = engne.execute('SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event')
+        
+        resp = jsonify({
+            'success': 1,
+            'result': [dict(row) for row in result]
+            }
+        )
+        
+        resp.status_code = 200
+        
+        return resp
+    except Exception as e:
+        raise e
+    
+    finally:
+        result.close()
+        
+        
+# function to register studies plan 
+@auth_view.route('/register-study-plan', methods=['POST'])
+def register_study_plan():
+    
+    plan_form = PlanForm()
+    details_plan = PlanDetailForm()
+    
+    if plan_form.validate_on_submit():
+        
         pass
     
-    return redirect(url_for('users.events'))
+    if details_plan.validate_on_submit():
+        
+        pass
     
+    return redirect(url_for('users.plan_de_estudio'))
  
 # this function is to delete records in any antity   
 @auth_view.route('/delete/<string:id>')

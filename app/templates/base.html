@@ -4,13 +4,14 @@
 {% block head %} {% block meta %}
 <meta charset="UTF-8">
 <meta name="Description" content="Edcation Web">
-<meta name="viewport" content="width=devic-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="Author" content="Benjamin Rosario --Rainsoft--"> {% endblock %} {% block title %}
 <title class="notranslate"> {{ title }} Taskbook</title>
 {% endblock %} {{ fontawesome_html() }} {{ bootstrap.load_css() }}
 <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/calendar.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/tinycolorpicker.css') }}" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> {% endblock %}
 {% block scripts %}
@@ -203,8 +204,11 @@
             </div>
         </div>
     </div>
-</body>
 
-{% include 'scripts.html' %}
+    {% include 'scripts.html' %}
+    {% block _scripts %}
+
+    {% endblock %}
+</body>
 
 </html>

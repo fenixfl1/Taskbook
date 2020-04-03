@@ -2,13 +2,8 @@
 {% from 'macro.html' import Form_off_label %}
 
     <nav class="navbar navbar-light bg-light float-right">
-
-        <form action=" {{url_for('auth.register_subjects')}} " method="POST" autocomplete="off" class="form-inline">
-            {{ subject_form.hidden_tag() }}
-
-            {{ Form_off_label(subject_form.name, class="form-control mr-sm-2 col-xs-8", placeholder="Registar Asignaturas", size='30px') }}
-
-            {{ Form_off_label(subject_form.submit, class="btn btn-primary my-2 my-sm-0 col-xs-4", value="Registrar") }}
+        <form class="form-inline">
+            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Asignaturas" aria-label="Search" onkeyup="myFunction()" size='30'>
         </form>
     </nav>
 
@@ -57,9 +52,10 @@
                                     <h3>
                                         <h3 style="color: white;">Nuevo Profesor/a</h3>
                                     </h3>
-                                    <a href="teachers" class="btn btn-circle" data-dissmis="modal" style="color: white;">
+
+                                    <button type="button" class="btn btn-circle" data-dismiss="modal" style="color: white;">
                                         <i class="fas fa-times"></i>
-                                    </a>
+                                    </button>
                                 </div>
 
                                 {# modal for register teacher form #}
@@ -90,10 +86,37 @@
                                             {{ Form_off_label(profe_form.phone.label) }}
                                             {{ Form_off_label(profe_form.phone, class="form-control") }}
                                         </div>
-
-                                        {{ Form_off_label(profe_form.submit, class="form-control btn btn-primary") }}
+                                        
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        {{ Form_off_label(profe_form.submit, class="btn btn-primary", value="Guardar") }}
                                     </form>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="subjects" tabindex="-1" role="dialog" aria-labelledby="studyPlanTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-body">
+                                    
+                                    <h3 class="modal-title text-center my-4" id="studyPlanTitle">Agregar Asignatura</h3>
+
+                                    <form action="" method="POST" autocomplete="off">
+                                        {{ subject_form.hidden_tag() }}
+                                        <div class="form-group my-4">
+                                            <!-- {{ Form_off_label(subject_form.name.label) }} -->
+                                            {{ Form_off_label(subject_form.name, class="form-control", placeholder="Nombre de la Asignatura") }}
+                                        </div>
+                                        
+                                        <div class="text-center my-4">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            {{ Form_off_label(subject_form.submit, class="btn btn-primary", value="Guardar") }}
+                                        </div>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -101,7 +124,7 @@
 
                 <div class="row">
                     <div class="table-responsive">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             {% include 'messages.html' %}
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
@@ -117,6 +140,12 @@
                                 <li class="nav-item">
                                     <a href="/subjects/teachers" class="nav-link">
                                         Profesores({{ 3 }})
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="modal" data-target="#subjects">
+                                        Agregar
                                     </a>
                                 </li>
                             </ul>

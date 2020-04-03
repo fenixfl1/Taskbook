@@ -1,0 +1,64 @@
+<form action="/register-study-plan" method="post" autocomplete="off">
+    <div class="form-group">
+        <label for="name ">Titulo 
+             <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(detail_plan_form.title, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ Form_off_label(detail_plan_form.objetivo.label) }}
+        {{ Form_off_label(detail_plan_form.objetivo, class="form-control") }}
+    </div>
+
+    <hr class="sidebar-divider my-0">
+
+    <div class="form-group">
+        <label for="name ">Dia 
+             <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(detail_plan_form.dia, class="form-control") }}
+    </div>
+
+    <div action="" method="post" class="form-row">
+        
+        <div class="form-group col-md-6">
+            <label for="name ">Desde 
+             <strong style="color: red; ">*</strong>
+        </label>
+            {{ Form_off_label(detail_plan_form.start, class="form-control") }}
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="name ">Hasta 
+             <strong style="color: red; ">*</strong>
+        </label>
+            {{ Form_off_label(detail_plan_form.end, class="form-control") }}
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="color">Color</label>
+        <input type="color" name="color" id="color" class="form-control p-0" list='list-color' value="#ffffff">
+    </div> 
+
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    {{ Form_off_label(detail_plan_form.submit, class="btn btn-primary", value="Submit") }}
+
+</form>
+
+<!-- <datalist id="listacoloresperfil">
+
+    <option value="#23fd5d">
+
+    <option value="#f8c255">
+
+    <option value="#3f2ac3">
+
+    <option value="#adeb63">
+
+    <option value="#3A2096">
+
+    <option value="#57C8B9">
+
+</datalist> -->

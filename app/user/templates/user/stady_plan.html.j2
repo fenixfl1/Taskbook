@@ -1,34 +1,62 @@
-{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %} {% block content %}
+{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %}
+{% block content %}
     <div id="content-wrapper" class="d-flex flex-column">
         <div class="content">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            <h6>  </h6>
-                                        </div>
+                <!-- modal to details of the studies plan -->
+                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary">
+                                <h3>
+                                    <h3 style="color: white;">Plan de Estudio</h3>
+                                </h3>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: white;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
 
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-auto dropdown no-arrow mx-1">
-                                        <button class="btn btn-circle btn-primary" id="alertsDropdown" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                                            <i class="fas fa-plus"></i>
-                                            <!-- Counter - Alerts -->
-                                            <!-- <span class="badge badge-danger badge-counter"></span> -->
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="modal-body">
+                                {% include 'forms/stady_plan_form.html.j2' %}
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- modal to create studies plan -->
+
+                <div class="modal fade" id="studyPlan" tabindex="-1" role="dialog" aria-labelledby="studyPlanTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-body">
+                                
+                                <h3 class="modal-title text-center my-4" id="studyPlanTitle">Crear Plan De Estudio</h3>
+
+                                <form action="" method="POST" autocomplete="off">
+                                    <div class="form-group my-4">
+                                        <!-- {{ Form_off_label(plan_form.name.label) }} -->
+                                        {{ Form_off_label(plan_form.name, class="form-control", placeholder="Nombre Del Plan De Estudio") }}
+                                    </div>
+                                    
+                                    <div class="text-center my-4">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        {{ Form_off_label(plan_form.submit, class="btn btn-primary", value="Guardar") }}
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- body of this view -->
+                <div class="row">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studyPlan">
+                       Crear Plan de Estudio
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-{% endblock  %}
+{% endblock %}

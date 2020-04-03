@@ -1,85 +1,46 @@
 <form action="{{ url_for( 'auth.register_event') }}" method="POST">
     {{ event_form.hidden_tag() }}
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="name ">Nombre 
+    <div class="form-group">
+        <label for="name ">Nombre 
+             <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(event_form.name, class='form-control') }}
+    </div>
+
+    <div class="form-group">
+        <label for="lugar ">Lugar 
+            <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(event_form.lugar, class='form-control') }}
+    </div>
+
+    <div class="form-group">
+        {{ Form_off_label(event_form.url.label) }}
+        {{ Form_off_label(event_form.url, class='form-control') }}
+    </div>
+
+    <div class="form-row">
+        <div class="form-groupcol-md-6">
+            <label for="estart_date ">Inicio 
+                <strong style="color: red; ">*</strong>
+            </label>
+            {{ Form_off_label(event_form.start_date, class='form-control') }}
+        </div>
+
+        <div class="form-groupcol-md-6">
+            <label for="end_date ">Fin
                     <strong style="color: red; ">*</strong>
             </label>
-        </div>
-        <div class="controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.name, class='form-control') }}
-            </div>
+            {{ Form_off_label(event_form.end_date, class='form-control') }}
         </div>
     </div>
 
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="lugar ">Lugar 
-                    <strong style="color: red; ">*</strong>
-            </label>
-        </div>
-        <div class="controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.lugar, class='form-control') }}
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="nota">Comentario</label>
+        {{ Form_off_label(event_form.nota, class='form-control', rows="3") }}
     </div>
 
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="dia ">Dia 
-                    <strong style="color: red; ">*</strong>
-            </label>
-        </div>
-        <div class="controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.dia, class='form-control') }}
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="hora_inicio ">Hora de inicio 
-                    <strong style="color: red; ">*</strong>
-            </label>
-        </div>
-        <div class="controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.hora_inicio, class='form-control') }}
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="hora_fin ">Hora limite 
-                    <strong style="color: red; ">*</strong>
-            </label>
-        </div>
-        <div class="controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.hora_fin, class='form-control') }}
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group ">
-        <div class="control-label ">
-            <label for="no</label>
-        </div>
-        <div class=" controls ">
-            <div class="from-control ">
-                {{ Form_off_label(event_form.nota, class='form-control') }}
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-footer ">
-        <div class="controls ">
-            {{ Form_off_label(event_form.submit, class='btn btn-primary', value='Guardar') }}
-            <a href="/events " class="btn btn-danger " data-dissmis="modal ">Cancelar</a>
-        </div>
-    </div>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    {{ Form_off_label(event_form.submit, class='btn btn-primary', value='Guardar') }}
+    
 </form>

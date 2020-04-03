@@ -7,16 +7,18 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            {% include 'messages.html' %}
 
-            <div id="events-modal" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+            <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-gradient-primary">
                             <h3>
                                 <h3 style="color: white;">New Event</h3>
                             </h3>
-                            <a href="/events" class="btn btn-circle" data-dissmis="modal" style="color: white;">X</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: white;">
+                                <i class="fas fa-times"></i>
+                            </button>
+    
                         </div>
 
                         <div class="modal-body">
@@ -38,6 +40,7 @@
             <hr class="sidebar-divider">
 
             <div class="container">
+                {% include 'messages.html' %}
 
                 <div class="row m-auto">
 
@@ -46,7 +49,7 @@
                         <div class="span9 col-md-8">
                             <div id="calendar"></div>
                         </div>
-                        <div class="span3">
+                        <div class="span3 border-white">
 
                             <div class="pull-right form-inline my-2">
 
@@ -87,26 +90,11 @@
                                 </label>
                             </div>
 
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center
-                                    justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Recordatorio</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Acciones:</div>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="fas fa-times fa-sm fa-fw mr-2 text-gray-400"></i> Cancelar
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i> Editar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <a class="btn btn-primary form-control my-4 text-white cursor" data-toggle="modal" data-target="#staticBackdrop">
+                                Crear un Nuevo evento
+                            </a>
+
+                            <div class="card mb-4">
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
@@ -116,8 +104,6 @@
                                         saepe qui est, aliquid quod veritatis error facilis rerum quos 
                                         recusandae illum suscipit aut!</p>
                                     </div>
-
-                                    <hr class="sidebar-divider">
                                 </div>
                             </div>
                         </div>
@@ -141,10 +127,8 @@
 
                 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-                
-                <!--<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>-->
-                <!--<script type="text/javascript" src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>-->
+               
+                <script type="text/javascript" src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/calendar.min.js') }}"></script>
 
@@ -154,7 +138,7 @@
                         var options = {
                             events_source: 'http://taskbook.com:5555/calendar-events',
                             view: 'month',
-                            tmpl_path: '../../static/calendar/',
+                            tmpl_path: '../../static/templates/calendar/',
                             tmpl_cache: false,
                             onAfterViewLoad: function(view) {
                                 $('.page-header h3').text(this.getTitle());
