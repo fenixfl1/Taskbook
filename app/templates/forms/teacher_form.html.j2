@@ -1,0 +1,35 @@
+<form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
+    {{ profe_form.hidden_tag() }}
+    <div class="form-group">
+        <label for="asignada_en ">Asignatura 
+            <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(profe_form.subjects, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        <label for="asignada_en ">Nombre 
+            <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(profe_form.name, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        <label for="asignada_en ">Apellido 
+            <strong style="color: red; ">*</strong>
+        </label>
+        {{ Form_off_label(profe_form.last_name, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ Form_off_label(profe_form.email.label) }}
+        {{ Form_off_label(profe_form.email, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ Form_off_label(profe_form.phone.label) }}
+        {{ Form_off_label(profe_form.phone, class="form-control") }}
+    </div>
+                                        
+    {{ Form_off_label(profe_form.submit, class="btn btn-primary form-control btn-sm", value="Guardar") }}
+</form>

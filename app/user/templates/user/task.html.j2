@@ -10,11 +10,11 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-primary">
-                                <h3>
-                                    <h3 style="color: white;">Nueva Tarea</h3>
+                                <h3 class="m-auto">
+                                    <h3 class="m-auto text-white">Nueva Tarea</h3>
                                 </h3>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: white;">
-                                    <i class="fas fa-times"></i>
+                                <button type="button" class="close btn btn-sm text-white" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
 
@@ -42,7 +42,7 @@
                         </li>
                         {% if num_task != 0 %}
                             <li class="nav-item dropdown">
-                                <a class="nav-link cursor" dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a href="" class="nav-link cursor" dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     Ordenar <i class="fas fa-sort-down"></i>
                                 </a>
                                 <div class="dropdown-menu">
@@ -56,7 +56,7 @@
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link cursor" data-toggle="modal" data-target="#staticBackdrop">
+                            <a href="" class="nav-link cursor" data-toggle="modal" data-target="#staticBackdrop">
                                 Crear
                             </a>
                         </li>

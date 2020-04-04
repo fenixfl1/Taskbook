@@ -30,18 +30,22 @@
                         <div class="modal-content">
 
                             <div class="modal-body">
-                                
-                                <h3 class="modal-title text-center my-4" id="studyPlanTitle">Crear Plan De Estudio</h3>
+                                <div class="modal-header border-bottom-0">
+                                    <h3 class="m-auto">
+                                        <h3 class="modal-title m-auto text-primary" id="studyPlan">Crear Plan De Estudio</h3>
+                                    </h3>
+                                    <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
 
                                 <form action="" method="POST" autocomplete="off">
                                     <div class="form-group my-4">
-                                        <!-- {{ Form_off_label(plan_form.name.label) }} -->
-                                        {{ Form_off_label(plan_form.name, class="form-control", placeholder="Nombre Del Plan De Estudio") }}
+                                        {{ Form_off_label(plan_form.name, class="form-control form-control-lg text-center", placeholder="Nombre Del Plan De Estudio") }}
                                     </div>
                                     
-                                    <div class="text-center my-4">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                        {{ Form_off_label(plan_form.submit, class="btn btn-primary", value="Guardar") }}
+                                    <div class="text-center form-group">
+                                        {{ Form_off_label(plan_form.submit, class="btn btn-lg btn-primary", value="Guardar") }}
                                     </div>
                                 </form>
                             </div>

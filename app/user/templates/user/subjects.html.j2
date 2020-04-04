@@ -11,108 +11,87 @@
         <div id="content">
             <div class="container-fluid">
                 <div class="row">
-
                     {# modal for assing teacher to  the Subjects #}
-                    <div class="modal fade hide in" id="assingTeacher" tabindex="-1" role="dialog" aria-labelledby="assingTeacher" aria-hidden="false">
-                        <div class="modal-dialog" role="document">
+                    <div class="modal fade" id="assingTeacher" tabindex="-1" role="dialog" aria-labelledby="assingTeacher" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <h3>
-                                        <h3 style="color: white;">Asignar Profesor/a</h3>
-                                    </h3>
-
-                                    <a href="/subjects/teachers" class="btn btn-circle" data-dissmis="modal" style="color: white;">
-                                        <i class="fas fa-times"></i>
-                                    </a>
-                                </div>
 
                                 <div class="modal-body">
+                                    <div class="modal-header border-bottom-0">
+                                        <h3 class="m-auto">
+                                            <h3 class="modal-title m-auto text-primary" id="assingTeacher">Agregar Asignatura</h3>
+                                        </h3>
+                                        <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
                                     <form action=" {{url_for('auth.assing_teacher')}} " method="POST">
                                         {{ form.hidden_tag() }}
                                         <div class="form-group">
                                             {{ Form_off_label(form.subjects.label) }}
-                                            {{ Form_off_label(form.subjects, class="form-control") }}
+                                            {{ Form_off_label(form.subjects, class="form-control form-control-lg") }}
                                         </div>
 
                                         <div class="form-group">
                                             {{ Form_off_label(form.profe.label) }}
-                                            {{ Form_off_label(form.profe, class="form-control") }}
+                                            {{ Form_off_label(form.profe, class="form-control form-control-lg") }}
                                         </div>
 
-                                        {{ Form_off_label(form.submit, class="btn form-control btn-primary", value="Asignar") }}
-                                    </form>     
+                                        <div class="text-center form-group">
+                                            {{ Form_off_label(form.submit, class="btn btn-lg btn-primary", value="Asignar") }}
+                                        </div>
+                                    </form>
                                 </div>
-                            </div>        
+
+                            </div>
                         </div>
                     </div> 
+
+                    {# modal to add new teacher #}
                     <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
-                                    <h3>
-                                        <h3 style="color: white;">Nuevo Profesor/a</h3>
+                                    <h3 class="m-auto">
+                                        <h3 class="modal-title m-auto text-white" id="staticBackdrop">Nuevo Profesot/a</h3>
                                     </h3>
 
-                                    <button type="button" class="btn btn-circle" data-dismiss="modal" style="color: white;">
-                                        <i class="fas fa-times"></i>
+                                    <button type="button" class="close btn btn-sm text-white" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
 
-                                {# modal for register teacher form #}
                                 <div class=" modal-body ">
-                                    <form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
-                                        {{ profe_form.hidden_tag() }}
-                                        <div class="form-group">
-                                            {{ Form_off_label(profe_form.subjects.label) }}
-                                            {{ Form_off_label(profe_form.subjects, class="form-control") }}
-                                        </div>
-
-                                        <div class="form-group">
-                                            {{ Form_off_label(profe_form.name.label) }}
-                                            {{ Form_off_label(profe_form.name, class="form-control") }}
-                                        </div>
-
-                                        <div class="form-group">
-                                            {{ Form_off_label(profe_form.last_name.label) }}
-                                            {{ Form_off_label(profe_form.last_name, class="form-control") }}
-                                        </div>
-
-                                        <div class="form-group">
-                                            {{ Form_off_label(profe_form.email.label) }}
-                                            {{ Form_off_label(profe_form.email, class="form-control") }}
-                                        </div>
-
-                                        <div class="form-group">
-                                            {{ Form_off_label(profe_form.phone.label) }}
-                                            {{ Form_off_label(profe_form.phone, class="form-control") }}
-                                        </div>
-                                        
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        {{ Form_off_label(profe_form.submit, class="btn btn-primary", value="Guardar") }}
-                                    </form>
+                                    {% include "forms/teacher_form.html.j2" %}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal fade" id="subjects" tabindex="-1" role="dialog" aria-labelledby="studyPlanTitle" aria-hidden="true">
+                    {# Modal to add new subject #}
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
 
                                 <div class="modal-body">
-                                    
-                                    <h3 class="modal-title text-center my-4" id="studyPlanTitle">Agregar Asignatura</h3>
+                                    <div class="modal-header border-bottom-0">
+                                        <h3 class="m-auto">
+                                            <h3 class="modal-title m-auto text-primary" id="exampleModalCenter">Agregar Asignatura</h3>
+                                        </h3>
+                                        <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
 
-                                    <form action="" method="POST" autocomplete="off">
+                                    <form action="/register-subjects" method="POST" autocomplete="off">
                                         {{ subject_form.hidden_tag() }}
                                         <div class="form-group my-4">
-                                            <!-- {{ Form_off_label(subject_form.name.label) }} -->
-                                            {{ Form_off_label(subject_form.name, class="form-control", placeholder="Nombre de la Asignatura") }}
+                                            {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center", placeholder="Nombre de la Asignatura") }}
                                         </div>
                                         
-                                        <div class="text-center my-4">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                            {{ Form_off_label(subject_form.submit, class="btn btn-primary", value="Guardar") }}
+                                        <div class="text-center form-group">
+                                            {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
                                         </div>
                                     </form>
                                 </div>
@@ -144,7 +123,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="modal" data-target="#subjects">
+                                    <a href='' class="nav-link" data-toggle="modal" data-target="#exampleModalCenter">
                                         Agregar
                                     </a>
                                 </li>
@@ -175,7 +154,7 @@
                                                 {% if subjects_user[i].profesor | length > 0 %}
                                                     {{ subjects_user[i].profesor[0] }}
                                                 {% else %}
-                                                    <a class="nav-link cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    <a href="" class="nav-link cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                         Asignar
                                                     </a>
                                                     <div class="dropdown-menu">
