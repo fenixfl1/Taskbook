@@ -1,5 +1,12 @@
 {% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %}
 {% block content %}
+
+    <nav class="navbar navbar-light bg-light float-right">
+        <form class="form-inline">
+            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar plan de estudio" aria-label="Search" onkeyup="myFunction()" size='30'>
+        </form>
+    </nav>
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div class="content">
             <div class="container-fluid">
@@ -54,11 +61,82 @@
                     </div>
                 </div>
 
-                <!-- body of this view -->
-                <div class="row">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studyPlan">
-                       Crear Plan de Estudio
-                    </button>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active">
+                        <a aria-current="page" href="/subjects/" class="active">Actividades(0) </a>
+                    </li>
+                                    
+                    <li class="breadcrumb-item">
+                        <a href="/subjects/finished" class="">
+                            Cursadas(0)
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="/subjects/teachers" class="">
+                            Profesores({{ 3 }})
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href='' class="" data-toggle="modal" data-target="#studyPlan">
+                            Agregar
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="row m-auto shadow-lg">
+                    
+                    <div class="table-responsive">
+                        {% include 'messages.html' %}
+                            
+                        <table class="table table-stripe table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                            
+                            <thead class="bordes>
+                                <tr">
+                                    <th></th>
+                                    <th class="text-primary column-header cursor" onclick="sortTable(0)">Titulo</th>
+                                    <th class="text-primary column-header cursor" onclick="sortTable(1)">Dia</th>
+                                    <th class="text-primary column-header cursor" onclick="sortTable(2)">Hora de Inicio</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                                    
+                            <tbody>
+                                {% for i in range(num_plan)  %}
+                                    <tr>
+                                        <td class="list-buttons-column">
+                                            <a href="{{ url_for('auth.edit', id=stady_plan[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
+                                                <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                            </a>
+                                            <a href=" {{ url_for('auth.delete', id=stady_plan[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
+                                                <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                        <td> {{ stady_plan[i].name }} </td>
+                                        <td>
+                                            {% if stady_plan[i].detalle | length > 0 %}
+                                                {{ stady_plan[i].detalle[0] }}
+                                            {% else %}
+                                                <a href="" class=" cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    Asignar
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
+                                                    <a href="#" data-toggle="modal" data-target="#assingTeacher" class="dropdown-item dropright cursor" >Existente</a>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="#" class="btn-outline text-success my-2 my-ms-0">
+                                                <span title="Marcar como cursada" class="fas fa-check glyphicon glyphicon-check"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

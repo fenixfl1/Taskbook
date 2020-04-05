@@ -1,3 +1,15 @@
 .color {
     outline: hidden;
 }
+
+.absolute {
+    height: 85vh;
+}
+
+.bordes {
+    border-bottom: 1px;
+}
+
+.cursor {
+    cursor: pointer;
+}
