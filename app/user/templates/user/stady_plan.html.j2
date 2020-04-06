@@ -1,7 +1,10 @@
 {% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %}
 {% block content %}
 
-    <nav class="navbar navbar-light bg-light float-right">
+    <nav class="navbar navbar-light bg-light">
+        <a title="Crear plan de estudio" href='' class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#studyPlan">
+            Crear
+        </a>
         <form class="form-inline">
             <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar plan de estudio" aria-label="Search" onkeyup="myFunction()" size='30'>
         </form>
@@ -61,36 +64,25 @@
                     </div>
                 </div>
 
-                <ul class="breadcrumb">
+                <ol class="breadcrumb">
                     <li class="breadcrumb-item active">
-                        <a aria-current="page" href="/subjects/" class="active">Actividades(0) </a>
+                        Actividades(0)
                     </li>
                                     
                     <li class="breadcrumb-item">
                         <a href="/subjects/finished" class="">
-                            Cursadas(0)
+                            Objetivos completados(0)
                         </a>
                     </li>
+                </ol>
 
-                    <li class="breadcrumb-item">
-                        <a href="/subjects/teachers" class="">
-                            Profesores({{ 3 }})
-                        </a>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <a href='' class="" data-toggle="modal" data-target="#studyPlan">
-                            Agregar
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="row m-auto shadow-lg">
+                {% if num_plan > 0 %}
+                <div class="row m-auto margenes">
                     
                     <div class="table-responsive">
                         {% include 'messages.html' %}
                             
-                        <table class="table table-stripe table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                        <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
                             
                             <thead class="bordes>
                                 <tr">
@@ -107,10 +99,10 @@
                                     <tr>
                                         <td class="list-buttons-column">
                                             <a href="{{ url_for('auth.edit', id=stady_plan[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
-                                                <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                                <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                             </a>
                                             <a href=" {{ url_for('auth.delete', id=stady_plan[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
-                                                <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                                <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                             </a>
                                         </td>
                                         <td> {{ stady_plan[i].name }} </td>
@@ -138,6 +130,7 @@
                         </table>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

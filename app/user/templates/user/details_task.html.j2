@@ -1,5 +1,13 @@
-{% extends "base.html" %} {% from 'macro.html' import Form_off_label %}
-{% block content %}
+{% extends "base.html" %} {% from 'macro.html' import Form_off_label %} {% block content %} {# Nav for task table #}
+<nav class="navbar navbar-light bg-light">
+    <a title="Crear tareas" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
+        Crear
+    </a>
+    <form class="form-inline">
+        <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='30'>
+    </form>
+</nav>
+
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid ">
@@ -25,59 +33,71 @@
                 </div>
             </div>
 
-            <ul class="nav nav-tab">
-
-                <li class="nav-item">
-                    <a href="/tasks"  style="color: #858796;" class="nav-link">Tareas({{ num_task }})</a>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="/tasks">Tareas({{ num_task }})</a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="" style="color: #858796;" class="nav-link">Detalles</a>
+                <li class="breadcrumb-item active">
+                    Detalles
                 </li>
+            </ol>
 
-                <li class="nav-item">
-                    <a href="" style="color: #858796;" class="nav-link" data-toggle="modal" data-target="#staticBackdrop">
-                       <p>Crear</p>
-                    </a>
-                </li>
-            </ul>
+            <div class="row m-auto margenes">
 
-            <div class="row">
+                <div class="table-responsive">
 
-                <div class="col-xl-8 col-lg-7">
+                    <table class="table table-striped table-bordered table-hover model-list bg-white rounded-lg" id="mytable">
 
-                    <div class="card shadow mb-4">
-
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <div class="text-xs text-primary text-center font-weight-bold text-segundary text-uppercase mb-1">
-                                    <p class="h5">{{details.name}} </p>
-                                </div>
-
-                                 <hr class="sidebar-divider">
-
-                                <div class="mb-4 font-weight-bold">
-                                    <p style="color: #000;">Asignatura: <span  style="color: #858796;">{{ details.detalle[0].materia }}</span></p>
-
-                                    <p style="color: #000;">Fecha de Asignación: <span  style="color: #858796;">{{ details.detalle[0].asignada_en }}</span></p>
-
-                                    <p style="color: #000;">Fecha de Entrega: <span  style="color: #858796;">{{ details.detalle[0].dia_endrega }}</span></p>
-
-                                    <p style="color: #000;">Comentario: <span  style="color: #858796;">{{ details.detalle[0].comentario }}</span></p>
-
-                                    {% if details.detalle[0].dia_endrega < hoy %}
-                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Fuera de la Fecha de Entrega</span></p>
-                                    {% elif details.detalle[0].dia_endrega > hoy %}
-                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Por Entrega</span></p>
-                                    {% elif details.detalle[0].dia_endrega == hoy %}
-                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Pendiente para Entregar Hoy</span></p>
+                        <tbody>
+                            <tr>
+                                <th>Nombre</th>
+                                <td class="col-md-7">{{ details.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Asignatura</th>
+                                <td class="col-md-7">{{ details.detalle[0].materia }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Asignación</th>
+                                <td class="col-md-7">{{ details.detalle[0].asignada_en }}</td>
+                            </tr>
+                                                        <tr>
+                                <th>Fecha de Entrega</th>
+                                <td class="col-md-7">{{ details.detalle[0].dia_endrega }}</td>
+                            </tr>
+                            <tr>
+                                <th>Comentario</th>
+                                <td class="col-md-7">{{ details.detalle[0].comentario }}</td>
+                            </tr>
+                            <tr>
+                                <th>Realizada en</th>
+                                <td class="col-md-7">
+                                    {% if details.detalle[0].realizada_en == None %}
+                                        Aun no a completado la tarea
                                     {% else %}
-                                        <p style="color: #000;">Estado: <span  style="color: #858796;">Entregada</span></p>
+                                        {{ details.detalle[0].realizada_en }}
                                     {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Estado</th>
+                                <td class="col-md-7">
+                                    {% if details.detalle[0].dia_endrega < hoy %}
+                                            Fuera de la Fecha de Entrega
+                                        {% elif details.detalle[0].dia_endrega > hoy %}
+                                            Por Entrega
+                                        {% elif details.detalle[0].dia_endrega == hoy %}
+                                            Pendiente para Entregar Hoy
+                                        {% else %}
+                                            Entregada
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
                 </div>
             </div>
         </div>

@@ -1,15 +1,19 @@
 {% extends 'base.html' %} {% block content %} {% from 'macro.html' import Form, Form_off_label %}
 
 {# Nav for task table #}
-<nav class="navbar navbar-light bg-light float-right">
+<nav class="navbar navbar-light bg-light">
+    <a title="Crear tareas" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
+        Crear
+    </a>
     <form class="form-inline">
         <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='30'>
     </form>
 </nav>
+
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-
+            {% include 'messages.html' %}
             <div class="row">
                 <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
                     <div class="modal-dialog" role="document">
@@ -31,29 +35,21 @@
                 </div>
             </div>
 
-            <ul class="breadcrumb">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item active">
-                    <a href="/tasks" class="">Tareas({{ num_task }}) </a>
+                    Tareas({{ num_task }})
                 </li>
 
-                {% if num_task != 0 %}
                 <li class="breadcrumb-item">
                     <a href=""> Realizadas(0)</a>
                 </li>
-                {% endif %}
-                <li class="breadcrumb-item">
-                    <a href="" class="or" data-toggle="modal" data-target="#staticBackdrop">
-                         Crear
-                    </a>
-                </li>
-            </ul>
+            </ol>
 
             {# visualize each task #}
-            <div class="row m-auto shadow-lg">
+            <div class="row m-auto margenes bg-white">
                 <div class="table-responsive">
-                    {% include 'messages.html' %}
 
-                    <table class="table table-stripe table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                    <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
 
                         <thead>
                             <tr>
@@ -71,11 +67,11 @@
                                 <td class="list-buttons-column">
                                     <div class="col-auto">
                                         <a href="{{ url_for('auth.edit', id=task_user[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
-                                            <span title="Edit" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                            <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                         </a>
 
                                         <a href=" {{ url_for('auth.delete', id=task_user[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
-                                            <span title="Delete" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                            <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                         </a>
                                     </div>
                                 </td>

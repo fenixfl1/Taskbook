@@ -8,6 +8,7 @@ from datetime import datetime, date
 from app.database import db, engne
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
     AssingForm, PlanDetailForm, PlanForm
+from app.database import engne
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
     Materias, Profesor
 from app.database.queries import Queries
@@ -72,6 +73,7 @@ def subjects():
     
     subjects = Queries.queries(Materias, current_user)
     count = Queries.contador(Materias, current_user)
+    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
     
     sform = SubjectsForm()
     pform = ProfeForm()
@@ -85,6 +87,26 @@ def subjects():
         profe_form=pform,
         num_subjects=count,
         form=aform,
+        num_teacher=teacher,
+        year=datetime.now()
+    )
+    
+
+@user_view.route('/subjects/finished')
+@login_required
+def subjects_finished():
+    
+    form = SubjectsForm()
+    
+    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
+    count = Queries.contador(Materias, current_user)
+    
+    return render_template(
+        'user/subjects_finished.html.j2',
+        title='Subjects finished -',
+        subject_form=form,
+        num_teacher=teacher,
+        num_subjects=count,
         year=datetime.now()
     )
 
@@ -96,12 +118,17 @@ def teachers():
     
     form = ProfeForm()
     count = Queries.contador(Materias, current_user)
+    num_teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
+    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
+        filter(Profesor.estado==True).all()
     
     return render_template(
         'user/teachers.html.j2',
         title="teachers -",
         profe_form=form,
+        teachers=teacher,
         num_subjects=count,
+        num_teacher=num_teacher,
         year=datetime.now()
     )
 
@@ -142,6 +169,23 @@ def tasks(order_by='id'):
         task_user=task,
         num_task=num_task,
         num_details=num_details,
+        task_form=form,
+        year=datetime.now()
+    )
+    
+    
+@user_view.route('/tasks/compleds')
+def task_completed():
+    
+    form = TaskForm()
+    
+    task =  task = Queries.queries(Tarea, current_user)
+    num_task = Queries.contador(Tarea, current_user)
+    
+    return render_template(
+        'user/task_completed.html',
+        title='Tasks completed -',
+        num_task=num_task,
         task_form=form,
         year=datetime.now()
     )
