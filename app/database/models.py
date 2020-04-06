@@ -133,6 +133,7 @@ class Profesor(Base):
     last_name = Column(String(80))
     email = Column(String(100))
     phone_number = Column(String(22))
+    estado = Column(Boolean(), default=True)
 
     def __repr__(self):
 

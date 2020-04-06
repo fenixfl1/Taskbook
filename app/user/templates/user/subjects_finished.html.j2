@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block content %} {% from 'macro.html' import Form_off_label %}
+{# modals #}
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-header border-bottom-0">
+                    <h3 class="m-auto">
+                        <h3 class="modal-title m-auto text-primary" id="exampleModalCenter">Agregar Asignatura</h3>
+                    </h3>
+                    <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="/register-subjects" method="POST" autocomplete="off">
+                    {{ subject_form.hidden_tag() }}
+                    <div class="form-group my-4">
+                        {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center", placeholder="Nombre de la Asignatura") }}
+                    </div>
+                                        
+                    <div class="text-center form-group">
+                        {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{# button to create and imput search #}
+<nav class="navbar navbar-light bg-light">
+    <a title="Agregar asignatura" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Agregar
+    </a>
+    <form class="form-inline">
+        <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Asignaturas cursada" aria-label="Search" onkeyup="myFunction()" size='30'>
+    </form>
+</nav>
+
+{# body of the page #}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid">
+
+            <ol class="breadcrumb" aria-label="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/subjects">Materias({{ num_subjects }})</a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Cursadas(0)
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a href="/subjects/teachers" class="">
+                        Profesores({{ num_teacher }})
+                    </a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}
