@@ -92,6 +92,26 @@ def subjects():
     )
     
 
+@user_view.route('/subjects/edit/<id>')
+@login_required
+def edit_subjects(id):
+    
+    form=SubjectsForm()
+    
+    count = Queries.contador(Materias, current_user)
+    data = db.query(Materias).filter(Materias.user_id==current_user.id).\
+        filter(Materias.id==id).one()
+    
+    return render_template(
+        'user/edit/edit_subjects.html.j2',
+        title='Edit subject -',
+        num_subjects=count,
+        subject_form=form,
+        edit_data=data,
+        year=datetime.now()
+    )
+    
+
 @user_view.route('/subjects/finished')
 @login_required
 def subjects_finished():
@@ -129,6 +149,26 @@ def teachers():
         teachers=teacher,
         num_subjects=count,
         num_teacher=num_teacher,
+        year=datetime.now()
+    )
+    
+    
+@user_view.route('/subjects/teachers/edit/<id>')
+@login_required
+def edit_teachers(id):
+    
+    form = ProfeForm()
+    
+    num_teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
+    data = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
+        filter(Profesor.id==id).one()
+    
+    return render_template(
+        'user/edit/edit_teacher.html.j2',
+        title='Edit teacher -',
+        num_teacher=num_teacher,
+        edit_data=data,
+        profe_form=form,
         year=datetime.now()
     )
 

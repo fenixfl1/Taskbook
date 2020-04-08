@@ -120,66 +120,61 @@
                             Profesores({{ num_teacher }})
                         </a>
                     </li>
-
-                    {# <li class="breadcrumb-item">
-                        <a href='' class="" data-toggle="modal" data-target="#exampleModalCenter">
-                            Agregar
-                        </a>
-                    </li> #}
                 </ol>
-
-                <div class="row m-auto">
-                    
-                    <div class="table-responsive">
-                        {% include 'messages.html' %}
-                            
-                        <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
-                            
-                            <thead class="thead-light>
-                                <tr">
-                                    <th></th>
-                                    <th class="text-primary column-header cursor" onclick="sortTable(0)">Asignatura</th>
-                                    <th class="text-primary column-header cursor" onclick="sortTable(1)">Profesor</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                                    
-                            <tbody>
-                                {% for i in range(num_subjects)  %}
-                                    <tr>
-                                        <td class="list-buttons-column">
-                                            <a href="{{ url_for('auth.edit', id=subjects_user[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
-                                                <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
-                                            </a>
-                                            <a href=" {{ url_for('auth.delete', id=subjects_user[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
-                                                <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
-                                            </a>
-                                        </td>
-                                        <td> {{ subjects_user[i].name }} </td>
-                                        <td>
-                                            {% if subjects_user[i].profesor | length > 0 %}
-                                                {{ subjects_user[i].profesor[0] }}
-                                            {% else %}
-                                                <a href="" class=" cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    Asignar
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
-                                                    <a href="#" data-toggle="modal" data-target="#assingTeacher" class="dropdown-item dropright cursor" >Existente</a>
-                                                </div>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="#" class="btn-outline text-success my-2 my-ms-0">
-                                                <span title="Marcar como cursada" class="fas fa-check glyphicon glyphicon-check"></span>
-                                            </a>
-                                        </td>
+                {% if num_subjects > 0 %}
+                    <div class="row m-auto">
+                        
+                        <div class="table-responsive">
+                            {% include 'messages.html' %}
+                                
+                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                                
+                                <thead class="thead-light>
+                                    <tr">
+                                        <th></th>
+                                        <th class="text-primary column-header cursor" onclick="sortTable(0)">Asignatura</th>
+                                        <th class="text-primary column-header cursor" onclick="sortTable(1)">Profesor</th>
+                                        <th></th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                        
+                                <tbody>
+                                    {% for i in range(num_subjects)  %}
+                                        <tr>
+                                            <td class="list-buttons-column">
+                                                <a href="{{ url_for('users.edit_subjects', id=subjects_user[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
+                                                    <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                                <a href=" {{ url_for('auth.delete', id=subjects_user[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
+                                                    <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                                </a>
+                                            </td>
+                                            <td> {{ subjects_user[i].name }} </td>
+                                            <td>
+                                                {% if subjects_user[i].profesor | length > 0 %}
+                                                    {{ subjects_user[i].profesor[0] }}
+                                                {% else %}
+                                                    <a href="" class=" cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                        Asignar
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
+                                                        <a href="#" data-toggle="modal" data-target="#assingTeacher" class="dropdown-item dropright cursor" >Existente</a>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn-outline text-success my-2 my-ms-0">
+                                                    <span title="Marcar como cursada" class="fas fa-check glyphicon glyphicon-check"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>

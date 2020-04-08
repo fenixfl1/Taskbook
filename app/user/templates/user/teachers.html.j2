@@ -73,17 +73,17 @@
                                     {% for i in range(num_teacher) %}
                                         <tr>
                                             <td class="list-buttons-column">
-                                                <a href="" class="btn-outline text-info m-2 my-sm-0">
+                                                <a href=" {{ url_for('users.edit_teachers', id=teachers[i].id) }} " class="btn-outline text-info m-2 my-sm-0">
                                                     <span title="Editar informacion" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                                 </a>
 
-                                                <a href="" class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
+                                                <a href="{{ url_for('auth.delete', id=teachers[i].id) }}" class="btn-outline text-danger m-2 my-sm-0 btn-delete" onclick="try_delete()">
                                                     <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                                 </a>
                                             </td>
                                             <th>{{teachers[i].name }}</th>
                                             <td>{{teachers[i].last_name }}</td>
-                                            <td>{{teachers[i].email }}</td>
+                                            <td><a href="#">{{teachers[i].email }}</a></td>
                                             <td>{{teachers[i].phone_number }}</td>
                                         </tr>
                                     {% endfor %}

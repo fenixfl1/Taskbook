@@ -60,7 +60,7 @@ class SubjectsForm(Default):
 class ProfeForm(Default):
 
     subjects = QuerySelectField(
-        'Asignaturas', validators=[DataRequired()], query_factory=subject_query,
+        'Asignaturas', query_factory=subject_query,
         allow_blank=True
     )
 

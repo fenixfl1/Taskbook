@@ -1,3 +1,19 @@
+function try_delete() {
+
+    const btnDelete = document.querySelector('.btn-delete');
+
+    if (btnDelete) {
+        const btnArray = Array.from(btnDelete);
+        btnArray.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                if (!confirm("¿Estas seguro de que deseas eliminar el registro?")) {
+                    e.preventDefault();
+                }
+            });
+        });
+    }
+}
+
 function mostrar() {
     var archivo = document.getElementById("file").files[0];
     var reader = new FileReader();
@@ -9,14 +25,6 @@ function mostrar() {
     }
 }
 
-function try_delete() {
-    var opt = confirm('¿Seguro de que quieres eliminar el registro?');
-
-    if (opt == false) {
-        window.location.href = 'http:taskbook.com:5555/profile/benjamin'
-        console.log(opt)
-    }
-}
 
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
