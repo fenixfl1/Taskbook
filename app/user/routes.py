@@ -7,7 +7,7 @@ from sqlalchemy import select, func
 from datetime import datetime, date
 from app.database import db, engne
 from app.auth.forms import LoadForm, EventForm, TaskForm, ProfeForm, SubjectsForm, ProfeForm, \
-    AssingForm, PlanDetailForm, PlanForm
+    AssingForm, PlanForm
 from app.database import engne
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
     Materias, Profesor
@@ -24,10 +24,10 @@ def index():
     plan = Queries.queries(PlanEstudio, current_user, order_by="name")
     subject = Queries.queries(Materias, current_user, order_by="name")
     
-    count_event = Queries.contador(Eventos, current_user)
-    count_plan = Queries.contador(PlanEstudio, current_user)
-    count_subjects = Queries.contador(Materias, current_user)
-    count_task = Queries.contador(Tarea, current_user)
+    count_event = Queries.contador(Eventos, current_user, 1)
+    count_plan = Queries.contador(PlanEstudio, current_user, 1)
+    count_subjects = Queries.contador(Materias, current_user, 1)
+    count_task = Queries.contador(Tarea, current_user, 1)
     
     _task = db.query(Tarea, DetalleTarea).filter(Tarea.user_id==current_user.id).\
         filter(DetalleTarea.dia_endrega).first()
@@ -71,8 +71,13 @@ def profile(user):
 @login_required
 def subjects():
     
-    subjects = Queries.queries(Materias, current_user)
-    count = Queries.contador(Materias, current_user)
+    subjects = db.query(Materias).filter(Materias.user_id==current_user.id).\
+        filter(Materias.estado==1)
+        
+    count = Queries.contador(Materias, current_user, 1)
+        
+    count_complet = Queries.contador(Materias, current_user, 0)
+    
     teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
     
     sform = SubjectsForm()
@@ -86,6 +91,7 @@ def subjects():
         subjects_user=subjects,
         profe_form=pform,
         num_subjects=count,
+        num_completed=count_complet,
         form=aform,
         num_teacher=teacher,
         year=datetime.now()
@@ -98,9 +104,8 @@ def edit_subjects(id):
     
     form=SubjectsForm()
     
-    count = Queries.contador(Materias, current_user)
-    data = db.query(Materias).filter(Materias.user_id==current_user.id).\
-        filter(Materias.id==id).one()
+    count = Queries.contador(Materias, current_user, 1)
+    data = Queries.queries(Materias, current_user).one()
     
     return render_template(
         'user/edit/edit_subjects.html.j2',
@@ -118,13 +123,24 @@ def subjects_finished():
     
     form = SubjectsForm()
     
-    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
-    count = Queries.contador(Materias, current_user)
+    try:
+        subjects = db.query(Materias).filter(Materias.user_id==current_user.id).\
+            filter(Materias.estado==1)
+    except ValueError as e:
+        raise e
+    
+    teacher = Queries.contador(Materias, current_user, 1)
+    
+    count = Queries.contador(Materias, current_user, 1)
+    
+    completed = Queries.contador(Materias, current_user, 0)
     
     return render_template(
         'user/subjects_finished.html.j2',
         title='Subjects finished -',
         subject_form=form,
+        subjects_user=subjects,
+        num_completed=completed,
         num_teacher=teacher,
         num_subjects=count,
         year=datetime.now()
@@ -137,10 +153,13 @@ def subjects_finished():
 def teachers():
     
     form = ProfeForm()
-    count = Queries.contador(Materias, current_user)
-    num_teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
-    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
-        filter(Profesor.estado==True).all()
+    count = Queries.contador(Materias, current_user, 1)
+    
+    num_teacher = Queries.contador(Materias, current_user, 1)
+    
+    teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).all()
+        
+    count_complet = Queries.contador(Materias, current_user, 0)
     
     return render_template(
         'user/teachers.html.j2',
@@ -148,6 +167,7 @@ def teachers():
         profe_form=form,
         teachers=teacher,
         num_subjects=count,
+        num_completed=count_complet,
         num_teacher=num_teacher,
         year=datetime.now()
     )
@@ -159,7 +179,7 @@ def edit_teachers(id):
     
     form = ProfeForm()
     
-    num_teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).count()
+    num_teacher = Queries.contador(Materias, current_user, 1)
     data = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
         filter(Profesor.id==id).one()
     
@@ -179,7 +199,7 @@ def edit_teachers(id):
 def horario():
     
     subjects = Queries.queries(Materias, current_user, order_by='name')
-    count = Queries.contador(Materias, current_user)
+    count = Queries.contador(Materias, current_user, 1)
 
     return render_template(
         'user/schedule.html.j2',
@@ -201,7 +221,7 @@ def tasks(order_by='id'):
 
     task = Queries.queries(Tarea, current_user, order_by=order_by)
         
-    num_task = Queries.contador(Tarea, current_user)
+    num_task = Queries.contador(Tarea, current_user, 1)
     
     return render_template(
         'user/task.html.j2',
@@ -220,7 +240,7 @@ def task_completed():
     form = TaskForm()
     
     task =  task = Queries.queries(Tarea, current_user)
-    num_task = Queries.contador(Tarea, current_user)
+    num_task = Queries.contador(Tarea, current_user, 1)
     
     return render_template(
         'user/task_completed.html',
@@ -238,7 +258,7 @@ def details_task(id):
     
     form = TaskForm()
     
-    num_task = Queries.contador(Tarea, current_user)
+    num_task = Queries.contador(Tarea, current_user, 1)
     
     details = db.query(Tarea).filter(Tarea.id==id).\
         options(contains_eager(Tarea.user)).one()
@@ -259,11 +279,10 @@ def details_task(id):
 def plan_de_estudio():
     
     plan_form = PlanForm()
-    detail_form = PlanDetailForm()
 
     plan = Queries.queries(PlanEstudio, current_user)
 
-    num_plan = Queries.contador(PlanEstudio, current_user)
+    num_plan = Queries.contador(PlanEstudio, current_user, 1)
 
     return render_template(
         'user/stady_plan.html.j2',
@@ -271,7 +290,6 @@ def plan_de_estudio():
         stady_plan=plan,
         num_plan=num_plan,
         plan_form=plan_form,
-        detail_plan_form=detail_form,
         year=datetime.now()
     )
 
@@ -284,7 +302,7 @@ def eventos():
     form = EventForm(request.form)
 
     event = Queries.queries(Eventos, current_user)
-    num_event = Queries.contador(Eventos, current_user)
+    num_event = Queries.contador(Eventos, current_user, 1)
 
     return render_template(
         'user/events.html.j2',
