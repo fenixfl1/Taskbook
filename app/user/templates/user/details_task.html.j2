@@ -1,10 +1,10 @@
 {% extends "base.html" %} {% from 'macro.html' import Form_off_label %} {% block content %} {# Nav for task table #}
-<nav class="navbar navbar-light bg-light">
-    <a title="Crear tareas" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
+<nav class="navbar navbar-light shadow-none">
+    <a title="Crear tareas" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
         Crear
     </a>
     <form class="form-inline">
-        <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='30'>
+        <input type="search" class="form-control" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='40'>
     </form>
 </nav>
 

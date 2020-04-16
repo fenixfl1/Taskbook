@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, String, ForeignKey,\
-    Column, DateTime, Boolean, Time, Date
+    Column, DateTime, Boolean, Time, Date, CHAR
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from flask_security import RoleMixin, UserMixin
@@ -9,8 +9,6 @@ from sqlalchemy_utils.types.url import URLType
 import hashlib
 from . import Base
 
-from sqlalchemy_utils.types.weekdays import WeekDaysType
-from sqlalchemy_utils.types.weekdays import WeekDaysType
 
 class RolesUsers(Base):
 
@@ -18,7 +16,7 @@ class RolesUsers(Base):
 
     id = Column(Integer(), primary_key=True)
     user_id = Column('user_id', Integer, ForeignKey('user.id'))
-    role_id = Column('role_id', Integer, ForeignKey('role.id')) 
+    role_id = Column('role_id', Integer, ForeignKey('role.id'))
 
 
 class Role(Base, RoleMixin):
@@ -51,7 +49,8 @@ class User(Base, UserMixin):
     current_login_ip = Column(String(100))
     login_count = Column(Integer)
     confirmed_at = Column(DateTime(timezone=True))
-    picture = relationship('ProfilePicture', uselist=False, back_populates='user')
+    picture = relationship(
+        'ProfilePicture', uselist=False, back_populates='user')
     materia = relationship('Materias', back_populates='user')
     profesor = relationship('Profesor', back_populates='user')
     evento = relationship('Eventos', back_populates='user')
@@ -72,7 +71,7 @@ class User(Base, UserMixin):
     @staticmethod
     def get_by_phone(phone):
         return User.query.filter_by(phone_number=phone).first()
-    
+
     @staticmethod
     def get_by_name(name):
         return User.query.filter_by(first_name=name).first()
@@ -150,18 +149,19 @@ class Materias(Base):
     tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
     profesor = relationship('Profesor', back_populates='materia')
-    name = Column(String(80), nullable=False, unique=True)
-    estado = Column(Boolean(), default=True)
-    
+    name = Column(String(80), nullable=False)
+    calificacion = Column(CHAR(3), default=None)
+    estado = Column(Boolean(), nullable=False, default=1)
+
     def __init__(self, name, user_id):
-        
+
         self.name = name
         self.user_id = user_id
 
     def __repr__(self):
 
         return '{}'.format(self.name)
-    
+
     @staticmethod
     def get_by_name(name):
         return User.query.filter_by(name=name).first()
@@ -238,8 +238,8 @@ class Eventos(Base):
     comentario = Column(String(100))
     realizada_en = Column(DateTime())
     color = Column(String(50), default='event-info')
-    estado = Column(Boolean(), default=True) 
-    
+    estado = Column(Boolean(), default=True)
+
     def __repr__(self):
 
         return '{}'.format(self.title)
@@ -248,7 +248,7 @@ class Eventos(Base):
     def get_by_id(id):
 
         return User.query.get(id)
-    
+
     @staticmethod
     def update_color(color):
         pass
@@ -275,7 +275,8 @@ class DetallePlan(Base):
     __tablename__ = 'detalle_plan'
 
     id = Column(Integer, primary_key=True)
-    plan_id = Column(Integer, ForeignKey('plan_estudio.id', ondelete='CASCADE'))
+    plan_id = Column(Integer, ForeignKey(
+        'plan_estudio.id', ondelete='CASCADE'))
     plan = relationship('PlanEstudio', back_populates='detalle')
     creada_en = Column(DateTime(), default=func.now())
     title = Column(String(255), nullable=False)
@@ -291,8 +292,6 @@ class DetallePlan(Base):
     def __repr__(self):
 
         return '{0} => {1}'.format(self.plan, self.title)
-
-
 
 
 # class DetalleEvento(Base):

@@ -1,0 +1,27 @@
+<form action="/register-subjects" method="POST" autocomplete="off" id="actualidarDatos">
+    {{ subject_form.hidden_tag() }}
+    <div class="modal fade" id="editSubjects" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-header border-bottom-0">
+                        <h3 class="m-auto">
+                            <h3 class="modal-title m-auto text-primary" id="exampleModalCenter">Agregar Asignatura</h3>
+                        </h3>
+                        <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="form-group my-4">
+                        {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center") }}
+                    </div>
+
+                    <div class="text-center form-group">
+                        {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

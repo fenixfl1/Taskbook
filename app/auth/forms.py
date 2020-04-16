@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
-from wtforms import SubmitField, FileField, StringField, TextAreaField, SelectField
-from wtforms.fields.html5 import DateField, TimeField, EmailField, URLField, DateTimeField
+from wtforms import SubmitField, FileField, StringField, \
+    TextAreaField, SelectField, BooleanField
+from wtforms.fields.html5 import DateField, TimeField, \
+    EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
 from app.database.models import Materias, Profesor
@@ -12,9 +14,11 @@ from flask_security import current_user
 def subject_query():
     return db.query(Materias).filter(Materias.user_id == current_user.id).\
         order_by(Materias.name)
-        
+
+
 def profesor_query():
-    return db.query(Profesor).filter(Profesor.id, Profesor.name).order_by(Profesor.name)
+    return db.query(Profesor).filter(Profesor.user_id == current_user.id)\
+        .order_by(Profesor.name)
 
 
 weekdays = [(1, 'Sunday'),
@@ -27,26 +31,27 @@ weekdays = [(1, 'Sunday'),
 
 
 class Default(FlaskForm):
-    
+
     submit = SubmitField()
 
 
 class LoadForm(Default):
 
     picture = FileField(id='file', _name='file')
-    
+
+
 class AssingForm(Default):
-    
+
     subjects = QuerySelectField(
         'Asignatura', validators=[DataRequired()], query_factory=subject_query,
         allow_blank=True
     )
-    
+
     profe = QuerySelectField(
-        'Profesores', validators=[DataRequired()], query_factory=profesor_query,
+        'Profesores', validators=[DataRequired()],
+        query_factory=profesor_query,
         allow_blank=True
     )
-    
 
 
 class SubjectsForm(Default):
@@ -55,6 +60,7 @@ class SubjectsForm(Default):
         'Nombre', validators=[DataRequired()]
     )
 
+    estado = BooleanField('Marcar como cursada',)
 
 
 class ProfeForm(Default):
@@ -73,13 +79,12 @@ class ProfeForm(Default):
     )
 
     email = EmailField(
-        'Email',  validators=[Length(max=80)]
+        'Email', validators=[Length(max=80)]
     )
 
     phone = PhoneNumberField(
         'Telefono'
     )
-
 
 
 class TaskForm(Default):
@@ -122,32 +127,21 @@ class EventForm(Default):
     nota = TextAreaField(
         'Comentario', validators=[Length(max=150)])
 
-    
+
 class PlanForm(Default):
-    
+
     name = StringField(
         'Nombre', validators=[DataRequired(), Length(max=80)]
     )
-    
-    
-class PlanDetailForm(Default):
-    
-    title = StringField(
-        'Titulo', validators=[DataRequired(), Length(max=80)]
-    )
-    
-    dia = SelectField(
-        'Dia', choices=weekdays, validators=[DataRequired()]
-    )
-    
+
     start = TimeField(
         'Desde', validators=[DataRequired()]
     )
-    
+
     end = TimeField(
         'Hasta', validators=[DataRequired()]
     )
-    
+
     objetivo = TextAreaField(
         'Objetivo', validators=[Length(max=255)]
     )

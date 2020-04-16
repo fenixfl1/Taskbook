@@ -1,108 +1,30 @@
 {% extends "base.html" %}{% block content %}
 {% from 'macro.html' import Form_off_label %}
 
-    <nav class="navbar navbar-light bg-light">
-        <a title="Agregar asignatura" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    <nav class="navbar navbar-light shadow-none">
+        <a title="Agregar asignatura" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
             Agregar
         </a>
         <form class="form-inline">
-            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Asignaturas" aria-label="Search" onkeyup="myFunction()" size='30'>
+            <input type="search" class="form-control" id="search" placeholder="Buscar Asignaturas" 
+                        aria-label="Search" onkeyup="myFunction()" size='40'>
         </form>
     </nav>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-                <div class="row">
-                    {# modal for assing teacher to  the Subjects #}
-                    <div class="modal fade" id="assingTeacher" tabindex="-1" role="dialog" aria-labelledby="assingTeacher" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
+                {# modal alert #}
+                {% include "forms/form_alerts.html" %}
 
-                                <div class="modal-body">
-                                    <div class="modal-header bg-primary">
-                                        <h3 class="m-auto">
-                                            <h3 class="m-auto text-white">Nuevo Profesor/a</h3>
-                                        </h3>
-                                        <button type="button" class="close btn btn-sm text-white" data-dismiss="modal">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                {# modal for assing teacher to  the Subjects #}
+                {% include "forms/form_assing_teacher.html.j2" %} 
 
-                                    <form action=" {{url_for('auth.assing_teacher')}} " method="POST">
-                                        {{ form.hidden_tag() }}
-                                        <div class="form-group">
-                                            {{ Form_off_label(form.subjects.label) }}
-                                            {{ Form_off_label(form.subjects, class="form-control form-control-lg") }}
-                                        </div>
+                {# modal to add new teacher #}
+                {% include "forms/teacher_form.html.j2" %}
 
-                                        <div class="form-group">
-                                            {{ Form_off_label(form.profe.label) }}
-                                            {{ Form_off_label(form.profe, class="form-control form-control-lg") }}
-                                        </div>
-
-                                        <div class="text-center form-group">
-                                            {{ Form_off_label(form.submit, class="btn btn-lg btn-primary", value="Asignar") }}
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div> 
-
-                    {# modal to add new teacher #}
-                    <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <h3 class="m-auto">
-                                        <h3 class="modal-title m-auto text-white" id="staticBackdrop">Nuevo Profesot/a</h3>
-                                    </h3>
-
-                                    <button type="button" class="close btn btn-sm text-white" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class=" modal-body ">
-                                    {% include "forms/teacher_form.html.j2" %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {# Modal to add new subject #}
-                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-
-                                <div class="modal-body">
-                                    <div class="modal-header border-bottom-0">
-                                        <h3 class="m-auto">
-                                            <h3 class="modal-title m-auto text-primary" id="exampleModalCenter">Agregar Asignatura</h3>
-                                        </h3>
-                                        <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <form action="/register-subjects" method="POST" autocomplete="off">
-                                        {{ subject_form.hidden_tag() }}
-                                        <div class="form-group my-4">
-                                            {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center", placeholder="Nombre de la Asignatura") }}
-                                        </div>
-                                        
-                                        <div class="text-center form-group">
-                                            {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {# Modal to add new subject #}
+                {% include "forms/form_subjects.html.j2" %}
 
                 <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item active">
@@ -111,7 +33,7 @@
                                     
                     <li class="breadcrumb-item">
                         <a href="/subjects/finished" class="">
-                            Cursadas(0)
+                            Cursadas({{ num_completed }})
                         </a>
                     </li>
 
@@ -129,7 +51,7 @@
                                 
                             <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
                                 
-                                <thead class="thead-light>
+                                <thead class="thead-light">
                                     <tr">
                                         <th></th>
                                         <th class="text-primary column-header cursor" onclick="sortTable(0)">Asignatura</th>
@@ -142,14 +64,14 @@
                                     {% for i in range(num_subjects)  %}
                                         <tr>
                                             <td class="list-buttons-column">
-                                                <a href="{{ url_for('users.edit_subjects', id=subjects_user[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
+                                                <a href="{{ url_for('users.edit_subjects', id=subjects_user[i].id) }}" class="btn shadow-none btn-outlne text-info my-sm-0">
                                                     <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                                 </a>
-                                                <a href=" {{ url_for('auth.delete', id=subjects_user[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
+                                                <a href=" {{ url_for('auth.delete_subjects', id=subjects_user[i].id) }} " class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
                                                     <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                                 </a>
                                             </td>
-                                            <td> {{ subjects_user[i].name }} </td>
+                                            <td class="name"> {{ subjects_user[i].name }} </td>
                                             <td>
                                                 {% if subjects_user[i].profesor | length > 0 %}
                                                     {{ subjects_user[i].profesor[0] }}
@@ -164,7 +86,7 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <a href="#" class="btn-outline text-success my-2 my-ms-0">
+                                                <a href=" {{ url_for('auth.subject_completed', id=subjects_user[i].id) }} " class="btn-outline btn-lg text-success my-ms-0">
                                                     <span title="Marcar como cursada" class="fas fa-check glyphicon glyphicon-check"></span>
                                                 </a>
                                             </td>
@@ -178,5 +100,4 @@
             </div>
         </div>
     </div>
-
 {% endblock  %}

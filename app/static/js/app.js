@@ -1,3 +1,15 @@
+$(document).ready(function() {
+    $('#editSubjects').on('show.bs.modal', function(event) {
+        var info = $(event.relatedTarget);
+        var data = info.data('name');
+        var modal = $(this);
+
+        modal.find('.modal-body #name').val(data);
+        $('.alert').hide();
+        console.log("Esto funciona!!!")
+    });
+});
+
 function try_delete() {
 
     const btnDelete = document.querySelector('.btn-delete');

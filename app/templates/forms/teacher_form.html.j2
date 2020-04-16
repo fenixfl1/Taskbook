@@ -1,35 +1,55 @@
-<form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
-    {{ profe_form.hidden_tag() }}
-    <div class="form-group">
-        <label for="asignada_en ">Asignatura 
-            <strong style="color: red; ">*</strong>
-        </label>
-        {{ Form_off_label(profe_form.subjects, class="form-control") }}
-    </div>
+<div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: none;">
+                <h3 class="m-auto">
+                    <h3 class="modal-title m-auto text-primary">Nuevo Profesor/a</h3>
+                </h3>
+                <button type="button" class="close btn-sm" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-    <div class="form-group">
-        <label for="asignada_en ">Nombre 
-            <strong style="color: red; ">*</strong>
-        </label>
-        {{ Form_off_label(profe_form.name, class="form-control") }}
-    </div>
+            <div class="modal-body">
+                <form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
+                    {{ profe_form.hidden_tag() }}
+                    <div class="form-group">
+                        <label for="asignada_en">Asignatura</label>
+                        {{ Form_off_label(profe_form.subjects, class="form-control") }}
+                    </div>
 
-    <div class="form-group">
-        <label for="asignada_en ">Apellido 
-            <strong style="color: red; ">*</strong>
-        </label>
-        {{ Form_off_label(profe_form.last_name, class="form-control") }}
-    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="asignada_en ">Nombre 
+                                <strong style="color: red; ">*</strong>
+                            </label>
+                            {{ Form_off_label(profe_form.name, class="form-control") }}
+                        </div>
 
-    <div class="form-group">
-        {{ Form_off_label(profe_form.email.label) }}
-        {{ Form_off_label(profe_form.email, class="form-control") }}
-    </div>
+                        <div class="form-group col-md-6">
+                            <label for="asignada_en ">Apellido 
+                                <strong style="color: red; ">*</strong>
+                            </label>
+                            {{ Form_off_label(profe_form.last_name, class="form-control") }}
+                        </div>
+                    </div>
 
-    <div class="form-group">
-        {{ Form_off_label(profe_form.phone.label) }}
-        {{ Form_off_label(profe_form.phone, class="form-control") }}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ Form_off_label(profe_form.email.label) }}
+                            {{ Form_off_label(profe_form.email, class="form-control") }}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            {{ Form_off_label(profe_form.phone.label) }}
+                            {{ Form_off_label(profe_form.phone, class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="text-center form-group">                             
+                        {{ Form_off_label(profe_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-                                        
-    {{ Form_off_label(profe_form.submit, class="btn btn-primary form-control btn-sm", value="Guardar") }}
-</form>
+</div>

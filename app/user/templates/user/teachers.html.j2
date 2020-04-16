@@ -1,11 +1,11 @@
 {% extends "base.html" %}{% block content %}
 {% from 'macro.html' import Form_off_label %}
-    <nav class="navbar navbar-light bg-light">
-        <a title="Agregar Profesor/a" href="" class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
+    <nav class="navbar navbar-light shadow-none">
+        <a title="Agregar Profesor/a" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
             Agregar
         </a>
         <form class="form-inline">
-            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar Profesores" aria-label="Search" onkeyup="myFunction()" size='30'>
+            <input type="search" class="form-control" id="search" placeholder="Buscar Profesores" aria-label="Search" onkeyup="myFunction()" size='40'>
         </form>
     </nav>
 
@@ -15,27 +15,7 @@
 
                 {% include 'messages.html' %}
 
-                <div class="row">
-                    <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <h3 class="m-auto">
-                                        <h3 class="m-auto text-white">Nuevo Profesor/a</h3>
-                                    </h3>
-                                    <button type="button" class="close btn btn-sm text-white" data-dismiss="modal">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                {# modal for register teacher form #}
-                                <div class=" modal-body ">
-                                    {% include "forms/teacher_form.html.j2" %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "forms/teacher_form.html.j2" %}
 
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item active">
@@ -44,7 +24,7 @@
                                 
                     <li class="breadcrumb-item">
                         <a href="/subjects/finished" class="">
-                            Cursadas(0)
+                            Cursadas({{ num_completed }})
                         </a>
                     </li>
 
@@ -58,26 +38,26 @@
 
                         <div class="table-responsive">
 
-                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                            <table class="table table-striped table-borderless table-hover bg-white rounded-lg" id="mytable">
                                 <thead>
                                     <tr>
-                                        <th class=""></th>
-                                        <th class="text-primary column-header">Nombre</th>
-                                        <th class="text-primary column-header">Apellido</th>
-                                        <th class="text-primary column-header">Email</th>
-                                        <th class="text-primary column-header">Nummer de Contacto</th>
+                                        <th scope="col" class=""></th>
+                                        <th scope="col" class="text-primary column-header">Nombre</th>
+                                        <th scope="col" class="text-primary column-header">Apellido</th>
+                                        <th scope="col" class="text-primary column-header">Email</th>
+                                        <th scope="col" class="text-primary column-header">Nummer de Contacto</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     {% for i in range(num_teacher) %}
                                         <tr>
-                                            <td class="list-buttons-column">
-                                                <a href=" {{ url_for('users.edit_teachers', id=teachers[i].id) }} " class="btn-outline text-info m-2 my-sm-0">
+                                            <td scope="row" class="list-buttons-column">
+                                                <a href=" {{ url_for('users.edit_teachers', id=teachers[i].id) }} " class="btn shadow-none btn-outlne text-info my-sm-0">
                                                     <span title="Editar informacion" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                                 </a>
 
-                                                <a href="{{ url_for('auth.delete', id=teachers[i].id) }}" class="btn-outline text-danger m-2 my-sm-0 btn-delete" onclick="try_delete()">
+                                                <a href="{{ url_for('auth.delete_teachers', id=teachers[i].id) }}" class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
                                                     <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                                 </a>
                                             </td>

@@ -1,12 +1,12 @@
 {% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %}
 {% block content %}
 
-    <nav class="navbar navbar-light bg-light">
-        <a title="Crear plan de estudio" href='' class="btn mx-2 btn-outline-primary" data-toggle="modal" data-target="#studyPlan">
+    <nav class="navbar navbar-light shadow-none">
+        <button id="crear" title="Crear plan de estudio" class="btn btn-outline-primary">
             Crear
-        </a>
+        </button>
         <form class="form-inline">
-            <input type="search" class="form-control mr-sm-2" id="search" placeholder="Buscar plan de estudio" aria-label="Search" onkeyup="myFunction()" size='30'>
+            <input type="search" class="form-control" id="search" placeholder="Buscar plan de estudio" aria-label="Search" onkeyup="myFunction()" size='40'>
         </form>
     </nav>
 
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="modal-body">
-                                {% include 'forms/stady_plan_form.html.j2' %}
+                                {# {% include 'forms/stady_plan_form.html.j2' %} #}
                             </div>
                         </div>
                     </div>
@@ -50,13 +50,13 @@
                                 </div>
 
                                 <form action="" method="POST" autocomplete="off">
-                                    <div class="form-group my-4">
+                                    {# <div class="form-group my-4">
                                         {{ Form_off_label(plan_form.name, class="form-control form-control-lg text-center", placeholder="Nombre Del Plan De Estudio") }}
                                     </div>
                                     
                                     <div class="text-center form-group">
                                         {{ Form_off_label(plan_form.submit, class="btn btn-lg btn-primary", value="Guardar") }}
-                                    </div>
+                                    </div> #}
                                 </form>
                             </div>
 
@@ -98,10 +98,10 @@
                                 {% for i in range(num_plan)  %}
                                     <tr>
                                         <td class="list-buttons-column">
-                                            <a href="{{ url_for('auth.edit', id=stady_plan[i].id) }}" class="btn-outline text-info m-2 my-sm-0">
+                                            <a href="{{ url_for('auth.edit', id=stady_plan[i].id) }}" class="btn shadow-none btn-outlne text-info my-sm-0">
                                                 <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
                                             </a>
-                                            <a href=" {{ url_for('auth.delete', id=stady_plan[i].id) }} " class="btn-outline text-danger m-2 my-sm-0" onclick="try_delete()">
+                                            <a href=" {{ url_for('auth.delete', id=stady_plan[i].id) }} " class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
                                                 <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                             </a>
                                         </td>
@@ -120,7 +120,7 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a href="#" class="btn-outline text-success my-2 my-ms-0">
+                                            <a href="#" class="btn-outline btn-lg text-success my-2 my-ms-0">
                                                 <span title="Marcar como cursada" class="fas fa-check glyphicon glyphicon-check"></span>
                                             </a>
                                         </td>

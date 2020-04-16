@@ -1,48 +1,72 @@
 <form action="/register-study-plan" method="post" autocomplete="off">
     <div class="form-group">
-        <label for="name ">Titulo 
-             <strong style="color: red; ">*</strong>
-        </label>
-        {{ Form_off_label(detail_plan_form.title, class="form-control") }}
+        <label for="name">Titulo
+            <strong style="color: red;">*</strong>
+        </label> {{ Form_off_label(plan_form.name, class="form-control") }}
     </div>
 
-    <div class="form-group">
-        {{ Form_off_label(detail_plan_form.objetivo.label) }}
-        {{ Form_off_label(detail_plan_form.objetivo, class="form-control") }}
-    </div>
+    <label for="group">Selecciona los dias que vas a estudiar
+        <strong style="color: red;">*</strong>
+    </label>
 
-    <hr class="sidebar-divider my-0">
-
-    <div class="form-group">
-        <label for="name ">Dia 
-             <strong style="color: red; ">*</strong>
+    <div id="group" class="btn-group">
+        <label for="sun" class="btn btn-sm btn-info">Sun
+            <input type="checkbox" id="sun" class="badgebox"><span
+                class="badge">&check;</span>
         </label>
-        {{ Form_off_label(detail_plan_form.dia, class="form-control") }}
+
+        <label for="mon" class="btn btn-info btn-sm">Mon
+            <input type="checkbox" id="mon" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
+
+        <label for="tue" class="btn btn-info btn-sm">Tue
+            <input type="checkbox" id="tue" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
+
+        <label for="wed" class="btn btn-info btn-sm">Wed
+            <input type="checkbox" id="wed" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
+
+        <label for="thu" class="btn btn-info btn-sm">Thu
+            <input type="checkbox" id="thu" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
+
+        <label for="fri" class="btn btn-info btn-sm">Fri
+            <input type="checkbox" id="fri" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
+
+        <label for="sat" class="btn btn-info btn-sm">Sat
+            <input type="checkbox" id="sat" class="badgebox"><span
+                class="badge">&check;</span>
+        </label>
     </div>
 
     <div action="" method="post" class="form-row">
-        
+
         <div class="form-group col-md-6">
-            <label for="name ">Desde 
-             <strong style="color: red; ">*</strong>
-        </label>
-            {{ Form_off_label(detail_plan_form.start, class="form-control") }}
+            <label for="name">Hora
+                <strong style="color: red;">*</strong>
+            </label> {{ Form_off_label(plan_form.start, class="form-control") }}
         </div>
 
         <div class="form-group col-md-6">
-            <label for="name ">Hasta 
-             <strong style="color: red; ">*</strong>
-        </label>
-            {{ Form_off_label(detail_plan_form.end, class="form-control") }}
+            <label for="name">Duración
+                <strong style="color: red;">*</strong>
+            </label> {{ Form_off_label(plan_form.end, class="form-control") }}
         </div>
     </div>
-    
-    <div class="form-group">
-        <label for="color">Color</label>
-        <input type="color" name="color" id="color" class="form-control p-0" list='list-color' value="#ffffff">
-    </div> 
 
-    {{ Form_off_label(detail_plan_form.submit, class="btn btn-primary form-control btn-sm", value="Submit") }}
+    <div class="form-group">
+        {{ Form_off_label(plan_form.objetivo.label) }} 
+        {{ Form_off_label(plan_form.objetivo, class="form-control") }}
+    </div>
+
+    {{ Form_off_label(plan_form.submit, class="btn btn-primary form-controlbtn-sm", value="Submit") }}
 
 </form>
 

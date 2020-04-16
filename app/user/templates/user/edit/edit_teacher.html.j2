@@ -13,48 +13,53 @@
                     </li>
                 </ol>
 
-                <div class="row">
-                    <div class="jumbotron jumbotron-fluid m-auto col-md-7">
+                <div class="row" style="height: 75vh;">
+                    <div class="card m-auto">
                         <div class="container">
-                            <h3 class="my-3">
-                                <h2 class="text-center">Editar información</h2>
-                            </h3>
-                            <form action=" {{url_for('auth.update_teacher', id=edit_data.id)}} " method="POST">
-                                {{ profe_form.hidden_tag() }}
-                                <div class="form-group">
-                                    <label>Asignatura</label>
-                                    <p class="form-control">{{ edit_data.materia }}</p> 
-                                </div>
+                            <div class="card-header bg-white">
+                                <h3 class="my-3">
+                                    <h2 class="text-center">Editar información</h2>
+                                </h3>
+                            </div>
 
-                                <div class="form-row">
-                                    <div class="col">
-                                        <label for="asignada_en ">Nombre 
-                                            <strong style="color: red; ">*</strong>
-                                        </label>
-                                        {{ form(profe_form.name, class="form-control", value=edit_data.name) }}
+                            <div class="card-body">
+                                <form action=" {{url_for('auth.update_teacher', id=edit_data.id)}} " method="POST">
+                                    {{ profe_form.hidden_tag() }}
+                                    <div class="form-group">
+                                        <label>Asignatura</label>
+                                        <p class="form-control">{{ edit_data.materia }}</p> 
                                     </div>
 
-                                    <div class="col">
-                                        <label for="asignada_en ">Apellido 
-                                            <strong style="color: red; ">*</strong>
-                                        </label>
-                                        {{ form(profe_form.last_name, class="form-control", value=edit_data.last_name) }}
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <label for="asignada_en ">Nombre 
+                                                <strong style="color: red; ">*</strong>
+                                            </label>
+                                            {{ form(profe_form.name, class="form-control", value=edit_data.name) }}
+                                        </div>
+
+                                        <div class="col">
+                                            <label for="asignada_en ">Apellido 
+                                                <strong style="color: red; ">*</strong>
+                                            </label>
+                                            {{ form(profe_form.last_name, class="form-control", value=edit_data.last_name) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group">
-                                    {{ form(profe_form.email.label) }}
-                                    {{ form(profe_form.email, class="form-control", value=edit_data.email) }}
-                                </div>
+                                    <div class="form-group">
+                                        {{ form(profe_form.email.label) }}
+                                        {{ form(profe_form.email, class="form-control", value=edit_data.email) }}
+                                    </div>
 
-                                <div class="form-group">
-                                    {{ form(profe_form.phone.label) }}
-                                    {{ form(profe_form.phone, class="form-control", value=edit_data.phone_number) }}
-                                </div>
-                                                                    
-                                {{ form(profe_form.submit, class="btn btn-primary", value="Guardar cambios") }}
-                                <a href="/subjects/teachers" class="btn btn-secondary">Cancelar</a>
-                            </form>
+                                    <div class="form-group">
+                                        {{ form(profe_form.phone.label) }}
+                                        {{ form(profe_form.phone, class="form-control", value=edit_data.phone_number) }}
+                                    </div>
+                                                                        
+                                    {{ form(profe_form.submit, class="btn btn-primary", value="Guardar cambios") }}
+                                    <a href="/subjects/teachers" class="btn btn-secondary">Cancelar</a>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

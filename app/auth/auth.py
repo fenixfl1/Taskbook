@@ -1,15 +1,16 @@
 from . import auth_view
-from flask import render_template, flash, request, redirect, jsonify, url_for, abort
+from flask import render_template, flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 from flask_security import user_registered
 from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from .forms import LoadForm, TaskForm, EventForm, SubjectsForm, ProfeForm, AssingForm,\
-    PlanForm, PlanDetailForm
+from .forms import LoadForm, TaskForm, EventForm, \
+    SubjectsForm, ProfeForm, AssingForm, PlanForm
 from app.database import db, engne
 from app.database.queries import Queries
-from app.database.models import ProfilePicture, Tarea, DetalleTarea, Materias, Profesor, User, Eventos
+from app.database.models import ProfilePicture, Tarea, \
+    DetalleTarea, Materias, Profesor, User, Eventos
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 import json
@@ -96,12 +97,59 @@ def register_subjects():
             messages = 'Asignatura registrada con exito!'
             category = 'success'
 
-        except:
-            messages = '{0} ya fue registrada!'.format(name)
+        except ValueError as e:
+
+            raise e
+            messages = '{0} ya fue registrada! {1}'.format(name, e)
             category = 'error'
 
     flash(messages, category)
     return redirect(url_for('users.subjects'))
+
+
+@auth_view.route('/subjects/completed/<id>')
+def subject_completed(id):
+
+    try:
+        data = engne.execute(
+            """UPDATE materias SET estado=0
+                WHERE id=%s""", (id))
+
+        messages = 'Nueva asignatura marcada como cursada!'
+        category = 'success'
+
+    except ValueError as e:
+
+        raise e
+
+        messages = 'No fue posible completar la operacion!'
+        category = 'error'
+
+    flash(messages, category)
+    return redirect(url_for('users.subjects_finished'))
+
+
+@auth_view.route('/delete/subject/<id>')
+def delete_subjects(id):
+
+    dato = db.query(Materias).filter(Materias.user_id == current_user.id).\
+        filter(Materias.id == id).one()
+
+    try:
+        db.delete(dato)
+        db.commit()
+
+        messages = 'Registro eliminado con exito!'
+        category = 'success'
+    except ValueError as e:
+
+        messages = 'No fue posible eliminar el registro!'
+        category = 'error'
+        raise e
+
+    flash(messages, category)
+    return redirect(url_for('users.subjects'))
+
 
 # endpoint rest to get schedules
 @auth_view.route('/schedule-list')
@@ -118,15 +166,21 @@ def assing_teacher():
 
     form = AssingForm()
 
-    id = form.profe.data
-    print('Esto es lo que Busco:', id)
-
     if form.validate_on_submit():
+        profe = form.profe.data
+        materia = form.subjects.data
 
-        profe = db.query(Profesor).filter(Profesor.id == id)
+        try:
+            profe = data = engne.execute(
+                f"UPDATE materias SET profesor={profe} WHERE name={materia}")
 
-        db.query(Materias).filter(Materias.user_id == current_user.id).\
-            update({Materias.profesor: profe}, synchronize_session=False)
+            messages = 'La operacion se realizo con exito!'
+            category = 'success'
+        except ValueError as e:
+            raise e
+
+        messages = 'Ocurrio un error!'
+        category = 'error'
 
     return redirect(url_for('users.subjects'))
 
@@ -145,22 +199,44 @@ def register_profesor():
                         email=form.email.data,
                         phone_number=form.phone.data,
                         user_id=current_user.id)
-
         try:
-
             db.add(user)
             db.commit()
 
             messages = 'Registro guardado con exito!'
             category = 'success'
-        except:
 
+        except ValueError as e:
             messages = '{0} ya esta en tu lista de Profesores!'.format(
                 form.name.data)
             category = 'error'
 
+            raise e
+
     flash(messages, category)
     return redirect(url_for('users.subjects'))
+
+
+@auth_view.route('/delete/teachers/<id>')
+def delete_teachers(id):
+
+    dato = db.query(Profesor).filter(Profesor.user_id == current_user.id).\
+        filter(Profesor.id == id).one()
+
+    try:
+        db.delete(dato)
+        db.commit()
+
+        messages = 'Registro eliminado con exito!'
+        category = 'success'
+    except ValueError as e:
+
+        messages = 'No fue posible eliminar el registro!'
+        category = 'error'
+        raise e
+
+    flash(messages, category)
+    return redirect(url_for('users.teachers'))
 
 
 # this function is to authenticate task and task-details
@@ -203,6 +279,7 @@ def register_task():
             category = 'success'
 
         except:
+
             db.delete(task)
             messages = 'No fue posible guardar los cambios!'
             category = 'error'
@@ -287,22 +364,19 @@ def calendar_events():
 @auth_view.route('/register-study-plan', methods=['POST'])
 def register_study_plan():
 
-    plan_form = PlanForm()
-    details_plan = PlanDetailForm()
+    form = PlanForm()
 
-    if plan_form.validate_on_submit():
-
-        pass
-
-    if details_plan.validate_on_submit():
+    if form.validate_on_submit():
 
         pass
 
     return redirect(url_for('users.plan_de_estudio'))
 
 # this function is to delete records in any antity
-@auth_view.route('/delete/<string:id>')
-def delete(id):
+
+
+@auth_view.route('/delete/tasks/<string:id>')
+def delete_tasks(id):
 
     task = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
         filter(Tarea.id == id).one()
@@ -329,7 +403,9 @@ def update_subjects(id):
 
     try:
         data = engne.execute(
-            "UPDATE materias SET name=%s WHERE id=%s", request.form["name"], id)
+            """UPDATE materias SET name=%s 
+            WHERE id=%s""",
+            (request.form["name"], id))
 
         messages = 'Registro actualizado con exito!'
         category = 'success'
@@ -346,7 +422,7 @@ def update_subjects(id):
 
 @auth_view.route('/update-teacher/<id>', methods=['POST'])
 def update_teacher(id):
-    
+
     messages = ''
     category = ''
 
@@ -382,6 +458,8 @@ def update_teacher(id):
     return redirect(url_for('users.teachers'))
 
 # this function is to obtain the datas of the entity you want edit
+
+
 @auth_view.route('/edit/<string:id>')
 def get_edit(id):
 
@@ -392,8 +470,8 @@ def get_edit(id):
 
 
 # this function edit any entity selected in the previus function
-@auth_view.route('/edit/<string:id>')
-def edit(id):
+@auth_view.route('/edit/task/<string:id>')
+def edit_tasks(id):
 
     try:
         task = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
@@ -409,21 +487,3 @@ def edit(id):
         flash('No fue posible modificar los datos!', category='danger')
 
     return redirect(url_for('users.tasks'))
-
-
-@auth_view.route('/ajax-login', methods=['GET', 'POST'])
-def ajax_login():
-
-    print(request.form)
-    name = request.form['username']
-
-    user = User.get_by_name(name)
-    id = User.get_by_id(user.id)
-
-    response = {
-        'status': 200,
-        'username': user,
-        'id': id
-    }
-
-    return json.dumps(response)

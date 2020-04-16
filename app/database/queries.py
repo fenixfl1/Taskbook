@@ -47,11 +47,17 @@ class Queries():
                 pass
 
     @staticmethod
-    def contador(entity, user):
+    def contador(entity, user, n):
+        """
+            this function is to count the number of rows in any table.
+            :entity reference to the table to want count.
+            :user the current user
+            :n is the state of the column estado
+        """
 
         try:
             return db.query(entity).filter(entity.user_id == user.id).\
-                filter(entity.estado==True).count()
+                filter(entity.estado==n).count()
 
         except:
             pass
