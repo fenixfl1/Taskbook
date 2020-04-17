@@ -17,16 +17,10 @@
                         {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center", placeholder="Asignatura") }}
                     </div>
 
-                    {# <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            {{ Form_off_label(subject_form.estado, class="input-group-t") }}
-                        </div>
-                        {{ Form_off_label(subject_form.estado.label, class="form-control") }}
-                    </div> #}
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="optionsCheckboxes">
-                            Unchecked
+                    <div class="form-group text-center">
+                        <label for="estado" class="btn btn-white btn-sm">Marcar como cursada
+                            {{ Form_off_label(subject_form.estado, class="badgebox") }}
+                            <span class="badge">&check;</span>
                         </label>
                     </div>
 

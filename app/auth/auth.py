@@ -85,9 +85,13 @@ def register_subjects():
 
     if form.validate_on_submit():
 
+        estado = True
         name = form.name.data
 
-        user = Materias(name=name,
+        if form.estado.data:
+            estado = False
+
+        user = Materias(name=name, estado=estado,
                         user_id=current_user.id)
 
         try:

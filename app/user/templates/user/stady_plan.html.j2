@@ -2,7 +2,7 @@
 {% block content %}
 
     <nav class="navbar navbar-light shadow-none">
-        <button id="crear" title="Crear plan de estudio" class="btn btn-outline-primary">
+        <button type="button" title="Nuevo plan" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
             Crear
         </button>
         <form class="form-inline">
@@ -14,55 +14,8 @@
         <div class="content">
             <div class="container-fluid">
                 <!-- modal to details of the studies plan -->
-                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-gradient-primary">
-                                <h3>
-                                    <h3 style="color: white;">Plan de Estudio</h3>
-                                </h3>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: white;">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+                {% include 'forms/stady_plan_form.html.j2' %}
 
-                            <div class="modal-body">
-                                {# {% include 'forms/stady_plan_form.html.j2' %} #}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- modal to create studies plan -->
-
-                <div class="modal fade" id="studyPlan" tabindex="-1" role="dialog" aria-labelledby="studyPlanTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-
-                            <div class="modal-body">
-                                <div class="modal-header border-bottom-0">
-                                    <h3 class="m-auto">
-                                        <h3 class="modal-title m-auto text-primary" id="studyPlan">Crear Plan De Estudio</h3>
-                                    </h3>
-                                    <button type="button" class="close btn btn-sm" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <form action="" method="POST" autocomplete="off">
-                                    {# <div class="form-group my-4">
-                                        {{ Form_off_label(plan_form.name, class="form-control form-control-lg text-center", placeholder="Nombre Del Plan De Estudio") }}
-                                    </div>
-                                    
-                                    <div class="text-center form-group">
-                                        {{ Form_off_label(plan_form.submit, class="btn btn-lg btn-primary", value="Guardar") }}
-                                    </div> #}
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
 
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active">

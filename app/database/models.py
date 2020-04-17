@@ -136,7 +136,7 @@ class Profesor(Base):
 
     def __repr__(self):
 
-        return '{0} {1}'.format(self.name, self.last_name)
+        return '{0}'.format(self.name)
 
 
 class Materias(Base):
@@ -153,9 +153,10 @@ class Materias(Base):
     calificacion = Column(CHAR(3), default=None)
     estado = Column(Boolean(), nullable=False, default=1)
 
-    def __init__(self, name, user_id):
+    def __init__(self, name, estado, user_id):
 
         self.name = name
+        self.estado = estado
         self.user_id = user_id
 
     def __repr__(self):
