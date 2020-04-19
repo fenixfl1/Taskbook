@@ -1,37 +1,17 @@
-{% extends "base.html" %} {% from 'macro.html' import Form_off_label %} {% block content %} {# Nav for task table #}
-<nav class="navbar navbar-light shadow-none">
-    <a title="Crear tareas" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
-        Crear
-    </a>
-    <form class="form-inline">
-        <input type="search" class="form-control" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='40'>
-    </form>
-</nav>
+{% extends "base.html" %} {% from 'macro.html' import Form_off_label, navbar %} 
+{% block content %} 
+
+{# Nav to task table #}
+{{ navbar(name="Agregar", holder="Buscar Tareas", title="Agregar tareas", modal_id="#staticBackdrop") }}
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid ">
-            {% include 'messages.html' %}
-            <div class="row mx-auto">
-                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <h3>
-                                    <h3 style="color: white;">Nueva Tarea</h3>
-                                </h3>
-                                <a href="/tasks" class="btn btn-circle" data-dissmis="modal" style="color: white;">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </div>
 
-                            <div class=" modal-body ">
-                                {% include 'forms/task_form.html.j2' %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'messages.html' %}
+
+            {# modal to task form #}
+            {% include 'forms/task_form.html.j2' %}
 
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">

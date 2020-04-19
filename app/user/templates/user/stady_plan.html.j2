@@ -1,14 +1,8 @@
-{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form %}
+{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, Form, navbar %}
 {% block content %}
 
-    <nav class="navbar navbar-light shadow-none">
-        <button type="button" title="Nuevo plan" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-            Crear
-        </button>
-        <form class="form-inline">
-            <input type="search" class="form-control" id="search" placeholder="Buscar plan de estudio" aria-label="Search" onkeyup="myFunction()" size='40'>
-        </form>
-    </nav>
+    {# navbar to study plan #}
+    {{ navbar(name="Agregar", holder="Buscar plan de estudio", title="Agregar plan de estudio", modal_id="#exampleModal") }}
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div class="content">

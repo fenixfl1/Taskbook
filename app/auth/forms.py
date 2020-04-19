@@ -13,7 +13,7 @@ from flask_security import current_user
 
 def subject_query():
     return db.query(Materias).filter(Materias.user_id == current_user.id).\
-        order_by(Materias.id)
+        filter(Materias.estado == True).order_by(Materias.id)
 
 
 def profesor_query():

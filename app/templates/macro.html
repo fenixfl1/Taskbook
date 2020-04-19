@@ -26,3 +26,14 @@
 {% macro input() -%}
     <input {{ kwargs }}>
 {%- endmacro %}
+
+{% macro navbar(name, holder, title, modal_id) %}
+    <nav class="navbar navbar-light shadow-none">
+        <button type="button" title="{{title}}" class="btn btn-outline-primary" data-toggle="modal" data-target="{{modal_id}}">
+            {{name}}
+        </button>
+        <form class="form-inline">
+            <input type="search" class="form-control" id="search" placeholder="{{holder}}" aria-label="Search" onkeyup="myFunction()" size='40'>
+        </form>
+    </nav>
+{% endmacro %}

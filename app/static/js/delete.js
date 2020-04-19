@@ -22,7 +22,7 @@ $(document).ready(function() {
                     }).then((result) => {
 
                         if (result.value) {
-                            window.location = this.href;
+                            location = this.href;
                         }
                     });
                 });

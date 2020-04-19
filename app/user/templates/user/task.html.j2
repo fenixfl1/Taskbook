@@ -1,39 +1,14 @@
-{% extends 'base.html' %} {% block content %} {% from 'macro.html' import Form, Form_off_label %}
+{% extends 'base.html' %} {% block content %} {% from 'macro.html' import Form, Form_off_label, navbar %}
 
 {# Nav for task table #}
-<nav class="navbar navbar-light shadow-none">
-    <a title="Crear tareas" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
-        Crear
-    </a>
-    <form class="form-inline">
-        <input type="search" class="form-control" id="search" placeholder="Buscar Tareas" aria-label="Search" onkeyup="myFunction()" size='40'>
-    </form>
-</nav>
+{{ navbar(name="Agregar", holder="Buscar Tareas", title="Agregar tareas", modal_id="#staticBackdrop") }}
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             {% include 'messages.html' %}
-            <div class="row">
-                <div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <h3 class="m-auto">
-                                    <h3 class="m-auto text-white">Nueva Tarea</h3>
-                                </h3>
-                                <button type="button" class="close btn btn-sm text-white" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
-                            <div class=" modal-body ">
-                                {% include "forms/task_form.html.j2" %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+            {% include "forms/task_form.html.j2" %}
 
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">

@@ -1,16 +1,10 @@
-{% extends "base.html" %} {% block content %} {% from 'macro.html' import Form_off_label %}
+{% extends "base.html" %} {% block content %} {% from 'macro.html' import Form_off_label, navbar %}
     {# Modal to add new subject #}
     {% include "forms/form_subjects.html.j2" %}
     
     {# button to create and imput search #}
-    <nav class="navbar navbar-light shadow-none">
-        <a title="Agregar asignatura" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Agregar
-        </a>
-        <form class="form-inline">
-            <input type="search" class="form-control" id="search" placeholder="Buscar Asignaturas cursada" aria-label="Search" size='40'>
-        </form>
-    </nav>
+    {{ navbar(name="Agregar", holder="Buscar Asignaturas cursada", title="Agregar asignaturas", modal_id="#exampleModalCenter") }}
+
 
     {# body of the page #}
     <div id="content-wrapper" class="d-flex flex-column">
@@ -45,7 +39,7 @@
                                         <th class="text-primary column-header cursor">Calificación</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="table">
                                     {% for i in range(num_completed) %}
                                         <tr>
                                             <td>
@@ -78,4 +72,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block _scripts %}
+
+    
 {% endblock %}

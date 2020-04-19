@@ -1,15 +1,8 @@
 {% extends "base.html" %}{% block content %}
-{% from 'macro.html' import Form_off_label %}
-
-    <nav class="navbar navbar-light shadow-none">
-        <a title="Agregar asignatura" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Agregar
-        </a>
-        <form class="form-inline">
-            <input type="search" class="form-control" id="search" placeholder="Buscar Asignaturas" 
-                        aria-label="Search" onkeyup="myFunction()" size='40'>
-        </form>
-    </nav>
+{% from 'macro.html' import Form_off_label, navbar %}
+    
+    {# menu de navegacion #}
+    {{ navbar(name="Agregar", holder="Agregar asignatura", title="Agregar asignaturas", modal_id="#exampleModalCenter") }}
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -60,7 +53,7 @@
                                     </tr>
                                 </thead>
                                         
-                                <tbody>
+                                <tbody id="table">
                                     {% for i in range(num_subjects)  %}
                                         <tr>
                                             <td class="list-buttons-column">
@@ -101,3 +94,18 @@
         </div>
     </div>
 {% endblock  %}
+{% block _scripts %}
+
+<script>
+    
+    $(document).ready(function() {
+        $('#table').pageMe({
+            pagerSelector: '#developer_page',
+            showPrevNext: true,
+            hidePageNumbers: false,
+            perPage: 3
+        });
+    });
+</script>
+    
+{% endblock %}

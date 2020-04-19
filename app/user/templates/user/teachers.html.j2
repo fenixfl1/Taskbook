@@ -1,13 +1,8 @@
 {% extends "base.html" %}{% block content %}
-{% from 'macro.html' import Form_off_label %}
-    <nav class="navbar navbar-light shadow-none">
-        <a title="Agregar Profesor/a" href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticBackdrop">
-            Agregar
-        </a>
-        <form class="form-inline">
-            <input type="search" class="form-control" id="search" placeholder="Buscar Profesores" aria-label="Search" onkeyup="myFunction()" size='40'>
-        </form>
-    </nav>
+{% from 'macro.html' import Form_off_label, navbar %}
+    
+    {# navbar to teachers #}
+    {{ navbar(name="Agregar", holder="Buscar Profesores", title="Agregar Profesor/a", modal_id="#staticBackdrop") }}
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
