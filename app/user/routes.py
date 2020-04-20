@@ -79,7 +79,6 @@ def subjects():
 
     sform = SubjectsForm()
     pform = ProfeForm()
-    aform = AssingForm()
 
     return render_template(
         'user/subjects.html.j2',
@@ -89,7 +88,6 @@ def subjects():
         profe_form=pform,
         num_subjects=count,
         num_completed=count_complet,
-        form=aform,
         num_teacher=teacher,
         year=datetime.now()
     )
@@ -142,6 +140,33 @@ def subjects_finished():
         num_completed=completed,
         num_teacher=teacher,
         num_subjects=count,
+        year=datetime.now()
+    )
+
+
+@user_view.route('/subjects/assing-teachers/<id>')
+@login_required
+def assing_teachers(id):
+
+    form = AssingForm()
+    pform = ProfeForm()
+
+    data = db.query(Materias).filter(Materias.user_id == current_user.id).\
+        filter(Materias.id == id).one()
+
+    teacher = db.query(Profesor).filter(
+        Profesor.user_id == current_user.id).count()
+
+    subjects = Queries.contador(Materias, current_user, 1)
+
+    return render_template(
+        'user/assing_teacher.html.j2',
+        title='Assing teacher -',
+        profe_form=pform,
+        form=form,
+        edit_data=data,
+        num_teacher=teacher,
+        num_subjects=subjects,
         year=datetime.now()
     )
 

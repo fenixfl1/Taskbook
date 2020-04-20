@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
-    TextAreaField, SelectField, BooleanField
+    TextAreaField, BooleanField
 from wtforms.fields.html5 import DateField, TimeField, \
     EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
@@ -42,9 +42,8 @@ class LoadForm(Default):
 
 class AssingForm(Default):
 
-    subjects = QuerySelectField(
-        'Asignatura', validators=[DataRequired()], query_factory=subject_query,
-        allow_blank=True
+    subjects = StringField(
+        'Asignatura', validators=[DataRequired()]
     )
 
     profe = QuerySelectField(

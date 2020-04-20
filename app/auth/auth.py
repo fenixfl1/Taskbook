@@ -1,10 +1,7 @@
 from . import auth_view
 from flask import render_template, flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
-from flask_security import user_registered
-from flask_security.datastore import UserDatastore
 from werkzeug.utils import secure_filename
-from datetime import datetime
 from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssingForm, PlanForm
 from app.database import db, engne
@@ -13,7 +10,6 @@ from app.database.models import ProfilePicture, Tarea, \
     DetalleTarea, Materias, Profesor, User, Eventos
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
-import json
 
 
 def allowed_image(filename):
@@ -165,27 +161,36 @@ def schedule_list():
 
 
 # function to assing teacher to subjects
-@auth_view.route('/assing-teacher', methods=['POST'])
-def assing_teacher():
+@auth_view.route('/assing-teacher/<id>', methods=['POST'])
+def assing_teacher(id):
 
     form = AssingForm()
 
     if form.validate_on_submit():
-        profe = form.profe.data
-        materia = form.subjects.data
+
+        name = form.profe.data
+
+        print(request.form['profe'])
+        print("__________________________________")
+        print(name)
 
         try:
-            profe = data = engne.execute(
-                f"UPDATE materias SET profesor={profe} WHERE name={materia}")
+
+            update = db.query(Materias).filter(Materias.id == id)
+            new_teacher = update.one()
+            new_teacher.profesor = [name]
+            db.commit()
 
             messages = 'La operacion se realizo con exito!'
             category = 'success'
+
         except ValueError as e:
             raise e
 
-        messages = 'Ocurrio un error!'
-        category = 'error'
+            messages = 'Ocurrio un error!'
+            category = 'error'
 
+    flash(messages, category)
     return redirect(url_for('users.subjects'))
 
 

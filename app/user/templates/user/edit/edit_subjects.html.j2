@@ -2,6 +2,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
+
             <ol class="breadcrumb" aria-label="breadcrumb">
                 <li class="breadcrumb-item active">
                     <a href="/subjects/"> Materias({{ num_subjects }})</a>
@@ -12,27 +13,21 @@
                 </li>
             </ol>
 
-            <div class="row" style="height: 60vh;">
-                <div class="card m-auto">
-                    <div class="container">
-                        <div class="card-header bg-white my-3">
-                            <h3 class="m-auto">
-                                <h3 class="text-center">Editar información</h3>
-                            </h3>
+            <div class="row m-auto" style="height: 60vh;">
+                <div class="col-md-6 m-auto">
+                    <form action=" {{url_for('auth.update_subjects', id=edit_data.id)}} " method="POST" class="card card-body">
+                        <h3 class="m-auto my-5">
+                            <h3 class="m-auto text-primary">Editar información.</h3>
+                        </h3>
+                        {{ subject_form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form(subject_form.name, class="form-control form-control-lg", value=edit_data.name) }}
                         </div>
-                        <div class="card-body">
-                            <form action=" {{url_for('auth.update_subjects', id=edit_data.id)}} " method="POST">
-                                {{ subject_form.hidden_tag() }}
-                                <div class="form-group">
-                                    {{ form(subject_form.name, class="form-control form-control-lg", value=edit_data.name) }}
-                                </div>
 
-                                <div class="form-group my-3">
-                                    {{ form(subject_form.submit, class="btn btn-primary form-control", value="Actualizar") }}
-                                </div>
-                            </form>
+                        <div class="text-center form-group">
+                            {{ form(subject_form.submit, class="btn btn-primary btn-lg", value="Actualizar") }}
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

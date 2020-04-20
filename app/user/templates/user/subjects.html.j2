@@ -4,24 +4,22 @@
     {# menu de navegacion #}
     {{ navbar(name="Agregar", holder="Agregar asignatura", title="Agregar asignaturas", modal_id="#exampleModalCenter") }}
 
+    {# Alerts#}
+    {% include 'messages.html' %}
+
+    {# modal to add new teacher #}
+    {% include "forms/teacher_form.html.j2" %}
+
+    {# Modal to add new subject #}
+    {% include "forms/form_subjects.html.j2" %}
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-                {# modal alert #}
-                {% include "forms/form_alerts.html" %}
-
-                {# modal for assing teacher to  the Subjects #}
-                {% include "forms/form_assing_teacher.html.j2" %} 
-
-                {# modal to add new teacher #}
-                {% include "forms/teacher_form.html.j2" %}
-
-                {# Modal to add new subject #}
-                {% include "forms/form_subjects.html.j2" %}
 
                 <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item active">
-                        Materias({{ num_subjects }})
+                        Asignaturas({{ num_subjects }})
                     </li>
                                     
                     <li class="breadcrumb-item">
@@ -36,11 +34,11 @@
                         </a>
                     </li>
                 </ol>
+
                 {% if num_subjects > 0 %}
                     <div class="row m-auto">
                         
                         <div class="table-responsive">
-                            {% include 'messages.html' %}
                                 
                             <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
                                 
@@ -74,7 +72,7 @@
                                                     </a>
                                                     <div class="dropdown-menu">
                                                         <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
-                                                        <a href="#" data-toggle="modal" data-target="#assingTeacher" class="dropdown-item dropright cursor" >Existente</a>
+                                                        <a href=" {{url_for('users.assing_teachers', id=subjects_user[i].id)}} " class="dropdown-item dropright cursor" >Existente</a>
                                                     </div>
                                                 {% endif %}
                                             </td>

@@ -3,69 +3,56 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
+
                 <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item active">
                         <a href="/subjects/teachers"> Profesores({{ num_teacher }})</a>
                     </li>
-                                                
+                    
                     <li class="breadcrumb-item">
                         Edición
                     </li>
                 </ol>
 
-                <div class="row" style="height: 75vh;">
-                    <div class="card m-auto">
-                        <div class="container">
-                            <div class="card-header bg-white">
-                                <h3 class="my-3">
-                                    <h2 class="text-center">Editar información</h2>
-                                </h3>
+                <div class="row m-auto" style="height: 70vh;">
+
+                    <div class="col-md-6 m-auto">
+                        <form class="card card-body" action="{{ url_for('auth.update_teacher', id=edit_data.id) }}" method="POST">
+                            {{ profe_form.hidden_tag() }}
+                            <div class="form-group">
+                                <label>Asignatura</label>
+                                <p class="form-control">{{ edit_data.materia }}</p>
                             </div>
-
-                            <div class="card-body">
-                                <form action=" {{url_for('auth.update_teacher', id=edit_data.id)}} " method="POST">
-                                    {{ profe_form.hidden_tag() }}
-                                    <div class="form-group">
-                                        <label>Asignatura</label>
-                                        <p class="form-control">{{ edit_data.materia }}</p> 
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <label for="asignada_en ">Nombre 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                            {{ form(profe_form.name, class="form-control", value=edit_data.name) }}
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="asignada_en ">Apellido 
-                                                <strong style="color: red; ">*</strong>
-                                            </label>
-                                            {{ form(profe_form.last_name, class="form-control", value=edit_data.last_name) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        {{ form(profe_form.email.label) }}
-                                        {{ form(profe_form.email, class="form-control", value=edit_data.email) }}
-                                    </div>
-
-                                    <div class="form-group">
-                                        {{ form(profe_form.phone.label) }}
-                                        {{ form(profe_form.phone, class="form-control", value=edit_data.phone_number) }}
-                                    </div>
-                                                                        
-                                    {{ form(profe_form.submit, class="btn btn-primary", value="Guardar cambios") }}
-                                    <a href="/subjects/teachers" class="btn btn-secondary">Cancelar</a>
-                                </form>
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="asignada_en ">Nombre
+                                        <strong style="color: red; ">*</strong>
+                                    </label>
+                                    {{ form(profe_form.name, class="form-control", value=edit_data.name) }}
+                                </div>
+                                <div class="col">
+                                    <label for="asignada_en ">Apellido
+                                        <strong style="color: red; ">*</strong>
+                                    </label>
+                                    {{ form(profe_form.last_name, class="form-control", value=edit_data.last_name) }}
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                {{ form(profe_form.email.label) }}
+                                {{ form(profe_form.email, class="form-control", value=edit_data.email) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form(profe_form.phone.label) }}
+                                {{ form(profe_form.phone, class="form-control", value=edit_data.phone_number) }}
+                            </div>
+                            
+                            <div class="text-center form-group">
+                                {{ form(profe_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock  %}
-                        
