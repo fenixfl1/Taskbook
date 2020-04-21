@@ -5,9 +5,8 @@ from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssingForm, PlanForm
 from app.database import db, engne
-from app.database.queries import Queries
 from app.database.models import ProfilePicture, Tarea, \
-    DetalleTarea, Materias, Profesor, User, Eventos
+    DetalleTarea, Materias, Profesor, Eventos
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 
@@ -79,6 +78,9 @@ def register_subjects():
 
     form = SubjectsForm()
 
+    messages = 'No agrego ninguna calificacion!'
+    category = 'error'
+
     if form.validate_on_submit():
 
         estado = True
@@ -99,9 +101,10 @@ def register_subjects():
 
         except ValueError as e:
 
-            raise e
-            messages = '{0} ya fue registrada! {1}'.format(name, e)
+            messages = 'No fue posible registrada la asignatura!'
             category = 'error'
+
+            raise e
 
     flash(messages, category)
     return redirect(url_for('users.subjects'))
@@ -111,7 +114,7 @@ def register_subjects():
 def subject_completed(id):
 
     try:
-        data = engne.execute(
+        engne.execute(
             """UPDATE materias SET estado=0
                 WHERE id=%s""", (id))
 
@@ -169,10 +172,6 @@ def assing_teacher(id):
     if form.validate_on_submit():
 
         name = form.profe.data
-
-        print(request.form['profe'])
-        print("__________________________________")
-        print(name)
 
         try:
 
@@ -265,15 +264,11 @@ def register_task():
         dia_entrega = form.dia_entrega.data
         comentario = form.nota.data
 
-        task_id = Queries.queries(Tarea, current_user, order_by='id')
-
         task = Tarea(name=task, user_id=current_user.id)
         db.add(task)
         db.commit()
 
         try:
-
-            id = Queries.get_query(Tarea, current_user)
 
             task_detail = DetalleTarea(
                 tarea=task,
@@ -287,11 +282,13 @@ def register_task():
             messages = 'Tarea guardada con exito!'
             category = 'success'
 
-        except:
+        except ValueError as e:
 
             db.delete(task)
             messages = 'No fue posible guardar los cambios!'
             category = 'error'
+
+            raise e
 
         finally:
             db.commit()
@@ -398,9 +395,11 @@ def delete_tasks(id):
         messages = 'Registro eliminado con exito!'
         category = 'success'
 
-    except:
+    except ValueError as e:
         messages = 'No fue posible eliminar el registro!'
         category = 'error'
+
+        raise e
 
     flash(messages, category)
 
@@ -411,10 +410,9 @@ def delete_tasks(id):
 def update_subjects(id):
 
     try:
-        data = engne.execute(
-            """UPDATE materias SET name=%s 
+        engne.execute("""UPDATE materias SET name=%s 
             WHERE id=%s""",
-            (request.form["name"], id))
+                      (request.form["name"], id))
 
         messages = 'Registro actualizado con exito!'
         category = 'success'
@@ -427,6 +425,31 @@ def update_subjects(id):
 
     flash(messages, category)
     return redirect(url_for('users.subjects'))
+
+
+@auth_view.route('/add_qualification/<id>', methods=['POST'])
+def add_qualification(id):
+
+    try:
+        qualification = db.query(Materias).filter(Materias.id == id)
+
+        new = qualification.one()
+        new.qualification = request.form['calificacion']
+
+        db.commit()
+
+        messages = 'La operacion se realizo con exito!'
+        category = 'success'
+
+    except ValueError as e:
+
+        messages = 'No fue posible completar la operacion!'
+        category = 'error'
+
+        raise e
+
+    flash(messages, category)
+    return redirect(url_for('users.subjects_finished'))
 
 
 @auth_view.route('/update-teacher/<id>', methods=['POST'])

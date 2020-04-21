@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
-    TextAreaField, BooleanField
+    TextAreaField, BooleanField, SelectField
 from wtforms.fields.html5 import DateField, TimeField, \
     EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
@@ -29,12 +29,18 @@ weekdays = [(1, 'Sunday'),
             (6, 'Friday'),
             (7, 'Saturday')]
 
+lista_calificacion = [(None, ' --Selecionar calificación-- '),
+                      ('A', 'A - Muy bien: 90-100%'),
+                      ('B', 'B - Bien: 80-89%'),
+                      ('C', 'C - Suficiente: 70-79%'),
+                      ('D', 'D - Deficiente: 60-69%'),
+                      ('F', 'F - Muy deficiente: 0-50%')]
 
 class Default(FlaskForm):
 
     submit = SubmitField()
 
-
+ 
 class LoadForm(Default):
 
     picture = FileField(id='file', _name='file')
@@ -57,6 +63,15 @@ class SubjectsForm(Default):
 
     name = StringField(
         'Nombre', validators=[DataRequired()]
+    )
+
+    profe = QuerySelectField(
+        'Profesores', query_factory=profesor_query,
+        allow_blank=True
+    )
+
+    calificacion = SelectField('Calificación', 
+        choices=lista_calificacion
     )
 
     estado = BooleanField('Marcar como cursada',)

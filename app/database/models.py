@@ -150,7 +150,7 @@ class Materias(Base):
     horario = relationship('HorarioClases', back_populates='materia')
     profesor = relationship('Profesor', back_populates='materia')
     name = Column(String(80), nullable=False)
-    calificacion = Column(CHAR(3), default=None)
+    qualification = Column(CHAR(3), default=None)
     estado = Column(Boolean(), nullable=False, default=1)
 
     def __init__(self, name, estado, user_id):

@@ -40,7 +40,7 @@
                         
                         <div class="table-responsive">
                                 
-                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="mytable">
+                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="table">
                                 
                                 <thead>
                                     <tr>
@@ -51,7 +51,7 @@
                                     </tr>
                                 </thead>
                                         
-                                <tbody id="table">
+                                <tbody>
                                     {% for i in range(num_subjects)  %}
                                         <tr>
                                             <td class="list-buttons-column">
@@ -92,18 +92,3 @@
         </div>
     </div>
 {% endblock  %}
-{% block _scripts %}
-
-<script>
-    
-    $(document).ready(function() {
-        $('#table').pageMe({
-            pagerSelector: '#developer_page',
-            showPrevNext: true,
-            hidePageNumbers: false,
-            perPage: 3
-        });
-    });
-</script>
-    
-{% endblock %}

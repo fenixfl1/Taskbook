@@ -12,7 +12,7 @@
             <div class="container-fluid">
                 <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/subjects">Materias({{ num_subjects }})</a>
+                        <a href="/subjects">Asignaturas({{ num_subjects }})</a>
                     </li>
                     <li class="breadcrumb-item active">
                         Cursadas({{num_completed}})
@@ -56,10 +56,13 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                {% if subjects_user[i].calificacion == None %}
-                                                    <a href="">Agregar calificación</a>
+                                                {% if subjects_user[i].qualification in ['A', 'B', 'C', 'D', 'F'] %}
+                                                    <p class="notranslate"> {{ subjects_user[i].qualification }}</p>
                                                 {% else %}
-                                                    {{ subjects_user[i].calificación }}
+                                                    <a href="{{url_for('users.add_qualification', 
+                                                    id=subjects_user[i].id)}}">
+                                                        Agregar calificación
+                                                    </a>
                                                 {% endif %}
                                             </td>
                                         </tr>

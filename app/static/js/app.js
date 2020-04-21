@@ -10,22 +10,6 @@ $(document).ready(function() {
     });
 });
 
-function try_delete() {
-
-    const btnDelete = document.querySelector('.btn-delete');
-
-    if (btnDelete) {
-        const btnArray = Array.from(btnDelete);
-        btnArray.forEach((btn) => {
-            btn.addEventListener('click', (e) => {
-                if (!confirm("¿Estas seguro de que deseas eliminar el registro?")) {
-                    e.preventDefault();
-                }
-            });
-        });
-    }
-}
-
 function mostrar() {
     var archivo = document.getElementById("file").files[0];
     var reader = new FileReader();
@@ -92,28 +76,6 @@ function sortTable(n) {
             if (switchcount == 0 && dir == "asc") {
                 dir = "desc";
                 switching = true;
-            }
-        }
-    }
-}
-
-function myFunction() {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("search");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
             }
         }
     }

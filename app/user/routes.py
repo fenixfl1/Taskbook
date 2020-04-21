@@ -144,6 +144,27 @@ def subjects_finished():
     )
 
 
+@user_view.route('/subjects/finished/add-qualification/<id>')
+@login_required
+def add_qualification(id):
+
+    form = SubjectsForm()
+
+    completed = Queries.contador(Materias, current_user, 0)
+
+    data = db.query(Materias).filter(Materias.user_id == current_user.id).\
+        filter(Materias.id == id).one()
+
+    return render_template(
+        'user/add_qualification.html.j2',
+        title='Agregar calificacio -',
+        finished_form=form,
+        data=data,
+        num_completed=completed,
+        year=datetime.now()
+    )
+
+
 @user_view.route('/subjects/assing-teachers/<id>')
 @login_required
 def assing_teachers(id):
@@ -260,6 +281,7 @@ def tasks(order_by='id'):
 
 
 @user_view.route('/tasks/edit/<id>')
+@login_required
 def edit_tasks(id):
 
     form = TaskForm()
@@ -267,16 +289,20 @@ def edit_tasks(id):
     datos = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
         filter(Tarea.id == id).one()
 
+    count = Queries.contador(Tarea, current_user, 1)
+
     return render_template(
         'user/edit/edit_tasks.html.j2',
         title='Edit tasks -',
         task_form=form,
         edit_data=datos,
+        num_task=count,
         year=datetime.now()
     )
 
 
 @user_view.route('/tasks/compleds')
+@login_required
 def task_completed():
 
     form = TaskForm()

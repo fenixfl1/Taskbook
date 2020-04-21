@@ -1,9 +1,7 @@
-from . import admin_view
-from flask import redirect, url_for, render_template, request
+from flask import redirect, url_for
 from app import adm
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
-from werkzeug.exceptions import HTTPException
 from wtforms.validators import DataRequired
 from app.database import db
 from app.database.models import (User, Role, Eventos, Tarea,
@@ -13,6 +11,7 @@ from app.database.models import (User, Role, Eventos, Tarea,
 
 role_name = ['Admin', 'admin', 'administrador']
 
+
 class AdminView(ModelView):
 
     create_modal = True
@@ -21,7 +20,7 @@ class AdminView(ModelView):
     can_view_details = True
 
     def is_accessible(self):
-        
+
         for i in role_name:
 
             if i in current_user.roles:
@@ -30,17 +29,18 @@ class AdminView(ModelView):
 
             else:
                 return False
-            
+
     def inaccessible_callback(self, name, **kwargs):
-        
+
         return redirect(url_for('users.index'))
+
 
 class UserView(AdminView):
 
     column_exclude_list = ['password', 'gender', 'last_login_at',
                            'current_login_at', 'current_login_ip',
                            'login_count', 'confirmed_at']
-    
+
     column_searchable_list = ('first_name', 'email', 'country')
     column_filters = ('first_name', 'email')
     can_export = True
@@ -67,7 +67,7 @@ class Details(AdminView):
 
     column_exclude_list = {
         'asignada_en',
-        'creada_en', 
+        'creada_en',
         'realizada_en'
     }
 
