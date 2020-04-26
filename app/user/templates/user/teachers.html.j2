@@ -14,21 +14,21 @@
 
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item active">
-                        <a href="/subjects/" class="">Asignaturas({{ num_subjects }}) </a>
+                        <a href="/subjects/" class="">Asignaturas({{ conunter | subjects(1) }}) </a>
                     </li>
                                 
                     <li class="breadcrumb-item">
                         <a href="/subjects/finished" class="">
-                            Cursadas({{ num_completed }})
+                            Cursadas({{ conunter | subjects(0) }})
                         </a>
                     </li>
 
                     <li class="breadcrumb-item">
-                        Profesores({{ num_teacher }})
+                        Profesores({{ conunter | teachers(1) }})
                     </li>
                 </ul>
 
-                {% if num_teacher > 0 %}
+                {% if (conunter | teachers(1) ) > 0 %}
                     <div class="row m-auto">
 
                         <div class="table-responsive">
@@ -45,7 +45,7 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for i in range(num_teacher) %}
+                                    {% for i in range( counter |teachers(1)) %}
                                         <tr>
                                             <td scope="row" class="list-buttons-column">
                                                 <a href=" {{ url_for('users.edit_teachers', id=teachers[i].id) }} " class="btn shadow-none btn-outlne text-info my-sm-0">

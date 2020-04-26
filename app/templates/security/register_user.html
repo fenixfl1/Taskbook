@@ -26,42 +26,49 @@
                                         <div class="form-group row">
 
                                             <div class="col-sm-6 mb-3 mb-sm-0">
+                                                {{ Form_off_label(register_user_form.first_name.label) }}
                                                 {{ Form_off_label(register_user_form.first_name, class="form-control ", placeholder="Nombre") }}
                                             </div>
 
                                             <div class="col-sm-6">
+                                                {{ Form_off_label(register_user_form.first_name.label) }}
                                                 {{ Form_off_label(register_user_form.last_name, class="form-control ", placeholder="Apellido") }}
                                             </div>
                                         </div>
 
                                         <div class="form-group">
+                                            {{ Form_off_label(register_user_form.email.label) }}
                                             {{ Form_off_label(register_user_form.email, class="form-control ", placeholder="Direcciion de correo electronico") }}
                                         </div>
 
                                         <div class="form-group row">
 
                                             <div class="col-sm-6 mb-3 mb-sm-0">
+                                                {{ Form_off_label(register_user_form.password.label) }}
                                                 {{ Form_off_label(register_user_form.password, class="form-control ", placeholder="Contraseña") }}
                                             </div>
 
                                             <div class="col-sm-6">
+                                                {{ Form_off_label(register_user_form.password_confirm.label) }}
                                                 {{ Form_off_label(register_user_form.password_confirm, class="form-control ", placeholder="Repite la contraseña") }}
                                             </div>
 
                                         </div>
 
-                                        <div class="form-group">
-                                            {{ Form_off_label(register_user_form.gender, class="form-control ", placeholder="Genero") }}
-                                        </div>
-
                                         <div class="form-group row">
 
-                                            <div class="col-sm-6 mb-3 mb-sm-0 select2-search">
-                                                {{Form_off_label(register_user_form.country, class="form-control select2-input",
-                                                role="combobox", id="s2id_autogen1_search")}}
+                                            <div class="form-group col-md-3">
+                                                {{ Form_off_label(register_user_form.gender.label) }}
+                                                {{ Form_off_label(register_user_form.gender, class="form-control ", placeholder="Genero") }}
                                             </div>
 
-                                            <div class="col-sm-6">
+                                            <div class="col-md-4">
+                                                {{ Form_off_label(register_user_form.country.label) }}
+                                                {{Form_off_label(register_user_form.country, class="form-control")}}
+                                            </div>
+
+                                            <div class="col-md-5">
+                                                {{ Form_off_label(register_user_form.phone_number.label) }}
                                                 {{ Form_off_label(register_user_form.phone_number, class="form-control ", placeholder="Numero de telefono") }}
                                             </div>
                                         </div>

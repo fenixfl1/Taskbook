@@ -14,7 +14,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if num_task != 0 %}
+                                {% if (tareas | tasks(1)) != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p> <i class="fas fa-circle text-info"></i> próxima Tarea.</p>
@@ -44,7 +44,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if num_plan != 0 %}
+                                {% if study_plan | plan(1) != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p><i class="fas fa-circle text-primary"></i> próximo en Plan de Estudio.</p>
@@ -104,7 +104,7 @@
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
-                                {% if num_subject != 0 %}
+                                {% if ( subject | subjects(1)) != 0 %}
                                     <div class="col mr-2">
                                         <div class="text-xs text-center font-weight-bold text-segundary text-uppercase mb-1">
                                             <p><i class="fas fa-circle text-warning"></i> próxima clase.</p>

@@ -29,8 +29,7 @@ weekdays = [(1, 'Sunday'),
             (6, 'Friday'),
             (7, 'Saturday')]
 
-lista_calificacion = [(None, ' --Selecionar calificación-- '),
-                      ('A', 'A - Muy bien: 90-100%'),
+lista_calificacion = [('A', 'A - Muy bien: 90-100%'),
                       ('B', 'B - Bien: 80-89%'),
                       ('C', 'C - Suficiente: 70-79%'),
                       ('D', 'D - Deficiente: 60-69%'),

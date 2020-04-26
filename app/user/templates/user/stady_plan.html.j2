@@ -13,17 +13,17 @@
 
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active">
-                        Actividades(0)
+                        Actividades( {{ study_plan | plan(1) }} )
                     </li>
                                     
                     <li class="breadcrumb-item">
                         <a href="/subjects/finished" class="">
-                            Objetivos completados(0)
+                            Objetivos completados({{ study_plan | plan(0) }})
                         </a>
                     </li>
                 </ol>
 
-                {% if num_plan > 0 %}
+                {% if (study_plan | plan(1)) > 0 %}
                 <div class="row m-auto margenes">
                     
                     <div class="table-responsive">
@@ -42,7 +42,7 @@
                             </thead>
                                     
                             <tbody>
-                                {% for i in range(num_plan)  %}
+                                {% for i in range(study_plan | plan(1))  %}
                                     <tr>
                                         <td class="list-buttons-column">
                                             <a href="{{ url_for('auth.edit', id=stady_plan[i].id) }}" class="btn shadow-none btn-outlne text-info my-sm-0">

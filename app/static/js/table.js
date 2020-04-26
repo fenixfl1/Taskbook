@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+  $('#table').DataTable({
+    searching: false,
+    lengthChange: false,
+    ordering: false,
+    lengthMenu: [8],
+    "info": false
+  });
+
   var $rows = $('#table tr');
   $('#search').keyup(function() {
 

@@ -12,35 +12,36 @@
             <div class="container-fluid">
                 <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/subjects">Asignaturas({{ num_subjects }})</a>
+                        <a href="/subjects">Asignaturas({{ subject | subjects(1) }})</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        Cursadas({{num_completed}})
+                        Cursadas({{ subject | subjects(0) }})
                     </li>
                     <li class="breadcrumb-item">
                         <a href="/subjects/teachers" class="">
-                            Profesores({{ num_teacher }})
+                            Profesores({{ subject | teachers(1) }})
                         </a>
                     </li>
                 </ol>
 
                 {# tabel #}
-                {% if num_completed > 0 %}
+                {% if (counter | subjects(0)) > 0 %}
                     <div class="row m-auto">
                         
                         <div class="table-responsive">
                             {% include 'messages.html' %}
-                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg">
+                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="table">
                                 <thead>
-                                    <tr">
+                                    <tr>
                                         <th></th>
                                         <th class="text-primary column-header cursor">Asignatura</th>
                                         <th class="text-primary column-header cursor">Profesor</th>
                                         <th class="text-primary column-header cursor">Calificación</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table">
-                                    {% for i in range(num_completed) %}
+
+                                <tbody>
+                                    {% for i in range(subject | subjects(0)) %}
                                         <tr>
                                             <td>
                                                 <a href="{{ url_for('auth.delete_subjects', id=subjects_user[i].id) }}" title="Eliminar" class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
@@ -55,9 +56,9 @@
                                                     Sin Asignar
                                                 {% endif %}
                                             </td>
-                                            <td>
+                                            <td class="notranslate">
                                                 {% if subjects_user[i].qualification in ['A', 'B', 'C', 'D', 'F'] %}
-                                                    <p class="notranslate"> {{ subjects_user[i].qualification }}</p>
+                                                    {{ subjects_user[i].qualification }}
                                                 {% else %}
                                                     <a href="{{url_for('users.add_qualification', 
                                                     id=subjects_user[i].id)}}">
@@ -75,8 +76,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block _scripts %}
-
-    
 {% endblock %}

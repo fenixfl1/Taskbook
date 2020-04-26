@@ -13,38 +13,40 @@ class Queries():
         """
         event = Queries.queries(entity, user)
         """
-        
+
         if 'order_by' in kwargs and kwargs['order_by'] == 'name':
-            
+
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\
                     options(contains_eager(entity.user)).older_by(entity.name)
-            except:
-                pass
-            
+            except ValueError as e:
+                raise e
+
         if 'order_by' in kwargs and kwargs['order_by'] == 'date1':
-            
+
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\
-                    order_by(entity.detalle.dia_endrega).one().options(contains_eager(entity.user))
-            except:
-                pass
-            
+                    order_by(entity.detalle.dia_endrega).one().options(
+                        contains_eager(entity.user))
+            except ValueError as e:
+                raise e
+
         if 'order_by' in kwargs and kwargs['order_by'] == 'date2':
-            
+
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\
-                    options(contains_eager(entity.user)).older_by(entity.detalle.hora_fin)
-            except:
-                pass
-        
+                    options(contains_eager(entity.user)).older_by(
+                        entity.detalle.hora_fin)
+            except ValueError as e:
+                raise e
+
         else:
 
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\
                     options(contains_eager(entity.user))
-            except:
-                pass
+            except ValueError as e:
+                raise e
 
     @staticmethod
     def contador(entity, user, n):
@@ -57,10 +59,10 @@ class Queries():
 
         try:
             return db.query(entity).filter(entity.user_id == user.id).\
-                filter(entity.estado==n).count()
+                filter(entity.estado == n).count()
 
-        except:
-            pass
+        except ValueError as e:
+            raise e
 
     # get the time in text formt
     @staticmethod
@@ -76,8 +78,8 @@ class Queries():
 
             return date
 
-        except:
-            pass
+        except ValueError as e:
+            raise e
 
     # get the next activities to perform
     @staticmethod
@@ -88,12 +90,12 @@ class Queries():
         for i in range(num):
 
             date.append(result[i].detalle[0].dia_endrega)
-            
+
         m = max(date)
-        
-        r = db.query(entity).filter(entity.user_id==user.id).\
+
+        r = db.query(entity).filter(entity.user_id == user.id).\
             options(contains_eager(entity.user)).\
-                filter(entity.detalle.dia_endrega==m).first()
+            filter(entity.detalle.dia_endrega == m).first()
 
         return r
 
