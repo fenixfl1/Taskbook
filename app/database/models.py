@@ -126,17 +126,15 @@ class Profesor(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='profesor')
-    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
     materia = relationship('Materias', back_populates='profesor')
-    name = Column(String(80), nullable=False, unique=True)
-    last_name = Column(String(80))
+    full_name = Column(String(80), nullable=False, unique=True)
     email = Column(String(100))
     phone_number = Column(String(22))
     estado = Column(Boolean(), default=True)
 
     def __repr__(self):
 
-        return '{0}'.format(self.name)
+        return '{0}'.format(self.full_name)
 
 
 class Materias(Base):
@@ -148,16 +146,18 @@ class Materias(Base):
     user = relationship('User', back_populates='materia')
     tareas = relationship('DetalleTarea', back_populates='materia')
     horario = relationship('HorarioClases', back_populates='materia')
+    profesor_id = Column(Integer, ForeignKey('profesor.id'))
     profesor = relationship('Profesor', back_populates='materia')
     name = Column(String(80), nullable=False)
     qualification = Column(CHAR(3), default=None)
     estado = Column(Boolean(), nullable=False, default=1)
 
-    def __init__(self, name, estado, user_id):
+    def __init__(self, name, estado, user_id, profesor=None):
 
         self.name = name
         self.estado = estado
         self.user_id = user_id
+        self.profesor = profesor
 
     def __repr__(self):
 

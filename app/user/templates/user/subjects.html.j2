@@ -2,7 +2,7 @@
 {% from 'macro.html' import Form_off_label, navbar %}
     
     {# menu de navegacion #}
-    {{ navbar(name="Agregar", holder="Agregar asignatura", title="Agregar asignaturas", modal_id="#exampleModalCenter") }}
+    {{navbar(name="Agregar", holder="Agregar asignatura",title="Agregar asignaturas",modal_id="#exampleModalCenter")}}
 
     {# Alerts#}
     {% include 'messages.html' %}
@@ -12,6 +12,12 @@
 
     {# Modal to add new subject #}
     {% include "forms/form_subjects.html.j2" %}
+
+    {# modal to edit subjects #}
+    {% include "forms/edit/subjects.html.j2" %}
+
+    {# modal to assing teachers #}
+    {% include "forms/edit/assing_teachers.html.j2" %}
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -53,10 +59,14 @@
                                         
                                 <tbody>
                                     {% for i in range( subject | subjects(1) )  %}
+                                        {% set dato = [subjects_user[i].name, subjects_user[i].id] %}
                                         <tr>
                                             <td class="list-buttons-column">
-                                                <a href="{{ url_for('users.edit_subjects', id=subjects_user[i].id) }}" class="btn shadow-none btn-outlne text-info my-sm-0">
-                                                    <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
+                                                <a href="" class="btn shadow-none btn-outlne text-info my-sm-0"
+                                                 onclick='editSubjects({{ dato | tojson }})'
+                                                 data-toggle="modal" data-target="#editSubject" >
+                                                    <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil">       
+                                                    </span>
                                                 </a>
                                                 <a href=" {{ url_for('auth.delete_subjects', id=subjects_user[i].id) }} " class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
                                                     <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
@@ -64,15 +74,19 @@
                                             </td>
                                             <td class="name"> {{ subjects_user[i].name }} </td>
                                             <td>
-                                                {% if subjects_user[i].profesor | length > 0 %}
-                                                    {{ subjects_user[i].profesor[0] }}
+                                                {% if subjects_user[i].profesor != None %}
+                                                    {{ subjects_user[i].profesor }}
                                                 {% else %}
                                                     <a href="" class=" cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                         Asignar
                                                     </a>
                                                     <div class="dropdown-menu">
                                                         <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
-                                                        <a href=" {{url_for('users.assing_teachers', id=subjects_user[i].id)}} " class="dropdown-item dropright cursor" >Existente</a>
+                                                        <button class="dropdown-item dropright cursor"
+                                                          onclick='assignTeacher({{ dato | tojson }})'
+                                                          data-toggle="modal" data-target="#assingTeachers">
+                                                            Existente
+                                                        </button>
                                                     </div>
                                                 {% endif %}
                                             </td>

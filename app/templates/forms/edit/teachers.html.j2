@@ -1,4 +1,4 @@
-<div id="staticBackdrop" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+<div id="editTeachers" class="modal fade hide in" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="border-bottom: none;">
@@ -11,36 +11,37 @@
             </div>
 
             <div class="modal-body">
-                <form action="{{ url_for( 'auth.register_profesor') }}" autocomplete="off" method="POST">
+                <form action="{{ url_for( 'auth.update_teacher') }}" method="POST" onclick="return editTeacher();">
                     {{ profe_form.hidden_tag() }}
+                    {{ Form_off_label(profe_form.id, class="d-none", id="token") }}
 
                     <div class="form-group">
                         <label for="asignada_en ">Nombre completo
                             <strong style="color: red; ">*</strong>
                         </label>
-                        {{ Form_off_label(profe_form.full_name, class="form-control", id="teacher-name") }}
+                        {{ Form_off_label(profe_form.full_name, class="form-control teacher") }}
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             {{ Form_off_label(profe_form.email.label) }}
-                            {{ Form_off_label(profe_form.email, class="form-control", id="teacher-email") }}
+                            {{ Form_off_label(profe_form.email, class="form-control email") }}
                         </div>
 
                         <div class="form-group col-md-6">
                             {{ Form_off_label(profe_form.phone.label) }}
-                            {{ Form_off_label(profe_form.phone, class="form-control", id="teacher-phone") }}
+                            {{ Form_off_label(profe_form.phone, class="form-control phone") }}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="asignada_en">Asignatura</label>
-                        {{ Form_off_label(profe_form.subjects, class="form-control") }}
+                        {{ Form_off_label(profe_form.subjects, class="form-control subject") }}
                     </div>
 
                     <div class="text-center form-group">                             
-                        {{ Form_off_label(profe_form.submit, class="btn btn-primary btn-lg", value="Guardar", 
-                        id="submitTeacher") }}
+                        {{ Form_off_label(profe_form.submit, class="btn btn-primary btn-lg", value="Editar", 
+                        id="submitEdirTeacher") }}
                     </div>
                 </form>
             </div>

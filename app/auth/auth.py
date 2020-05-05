@@ -3,7 +3,7 @@ from flask import render_template, flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
-    SubjectsForm, ProfeForm, AssingForm, PlanForm
+    SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
 from app.database import db, engne
 from app.database.models import ProfilePicture, Tarea, \
     DetalleTarea, Materias, Profesor, Eventos
@@ -78,33 +78,42 @@ def register_subjects():
 
     form = SubjectsForm()
 
-    messages = 'No agrego ninguna calificacion!'
-    category = 'error'
-
     if form.validate_on_submit():
 
         estado = True
         name = form.name.data
+        profe = form.profe.data
 
         if form.estado.data:
             estado = False
 
-        user = Materias(name=name, estado=estado,
-                        user_id=current_user.id)
+        # check that there's no subject with that name
+        check = db.query(Materias).filter(Materias.user_id==current_user.id).\
+            filter(Materias.name==name).first()
 
-        try:
-            db.add(user)
-            db.commit()
+        if check == None:
 
-            messages = 'Asignatura registrada con exito!'
-            category = 'success'
+            user = Materias(name=name, estado=estado,
+                            user_id=current_user.id,
+                            profesor=profe)
 
-        except ValueError as e:
+            try:
+                db.add(user)
+                db.commit()
 
-            messages = 'No fue posible registrada la asignatura!'
+                messages = 'Asignatura registrada con exito!'
+                category = 'success'
+
+            except ValueError as e:
+
+                messages = 'No fue posible registrada la asignatura!'
+                category = 'error'
+
+                raise e
+
+        else:
+            messages = f'{name} ya esta registrada!'
             category = 'error'
-
-            raise e
 
     flash(messages, category)
     return redirect(url_for('users.subjects'))
@@ -164,20 +173,26 @@ def schedule_list():
 
 
 # function to assing teacher to subjects
-@auth_view.route('/assing-teacher/<id>', methods=['POST'])
-def assing_teacher(id):
+@auth_view.route('/assing-teacher', methods=['POST'])
+def assing_teacher():
 
-    form = AssingForm()
+    form = AssignForm()
 
+    print("_______________________________")
+    print(form.id.data)
     if form.validate_on_submit():
 
         name = form.profe.data
+        id_teacher = request.form['profe']
+        id_subject = form.id.data
 
         try:
 
-            update = db.query(Materias).filter(Materias.id == id)
+            update = db.query(Materias).filter(Materias.user_id==current_user.id)\
+                .filter(Materias.id == id_subject)
+
             new_teacher = update.one()
-            new_teacher.profesor = [name]
+            new_teacher.profesor_id = id_teacher
             db.commit()
 
             messages = 'La operacion se realizo con exito!'
@@ -186,10 +201,11 @@ def assing_teacher(id):
         except ValueError as e:
             raise e
 
-            messages = 'Ocurrio un error!'
+            messages = 'Ha ocurrido un error!'
             category = 'error'
 
-    flash(messages, category)
+        flash(messages, category)
+
     return redirect(url_for('users.subjects'))
 
 
@@ -201,28 +217,50 @@ def register_profesor():
 
     if form.validate_on_submit():
 
-        user = Profesor(name=form.name.data,
-                        materia=form.subjects.data,
-                        last_name=form.last_name.data,
-                        email=form.email.data,
-                        phone_number=form.phone.data,
-                        user_id=current_user.id)
-        try:
-            db.add(user)
-            db.commit()
+        name = form.full_name.data
 
-            messages = 'Registro guardado con exito!'
-            category = 'success'
+        check = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
+            filter(Profesor.full_name==name).first()
 
-        except ValueError as e:
-            messages = '{0} ya esta en tu lista de Profesores!'.format(
-                form.name.data)
+        print("____________________________")
+        print(check)
+
+        if check == None:
+
+            if form.subjects.data is not None:
+
+                user = Profesor(full_name=name,
+                                materia=[form.subjects.data],
+                                email=form.email.data,
+                                phone_number=form.phone.data,
+                                user_id=current_user.id)
+
+            else:
+                user = Profesor(full_name=name,
+                                email=form.email.data,
+                                phone_number=form.phone.data,
+                                user_id=current_user.id)
+
+            try:
+                db.add(user)
+                db.commit()
+
+                messages = 'Registro guardado con exito!'
+                category = 'success'
+
+            except ValueError as e:
+                messages = 'Ha ocurrido un error desconocido!'
+                category = 'error'
+
+                raise e
+
+        else:
+
+            messages = f'{name} ya esta registrado!'
             category = 'error'
 
-            raise e
-
     flash(messages, category)
-    return redirect(url_for('users.subjects'))
+    return redirect(url_for('users.teachers'))
 
 
 @auth_view.route('/delete/teachers/<id>')
@@ -406,13 +444,33 @@ def delete_tasks(id):
     return redirect(url_for('users.tasks'))
 
 
-@auth_view.route('/update-subjects/<id>', methods=['POST'])
-def update_subjects(id):
+@auth_view.route('/update-subjects', methods=['POST'])
+def update_subjects():
+
+    form = SubjectsForm()
+
+    name = form.name.data
+    id = request.form['id']
+    teacher_id = request.form['profe']
 
     try:
-        engne.execute("""UPDATE materias SET name=%s 
-            WHERE id=%s""",
-                      (request.form["name"], id))
+
+        data = db.query(Materias).filter(Materias.user_id==current_user.id).\
+            filter(Materias.id==id)
+
+        new_data = data.one()
+
+        new_data.name = name
+
+        if teacher_id != '__None':
+
+            teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
+                filter(Profesor.id==teacher_id).one()
+
+            new_data.profesor = teacher
+        
+
+        db.commit()
 
         messages = 'Registro actualizado con exito!'
         category = 'success'
@@ -427,55 +485,57 @@ def update_subjects(id):
     return redirect(url_for('users.subjects'))
 
 
-@auth_view.route('/add_qualification/<id>', methods=['POST'])
-def add_qualification(id):
+@auth_view.route('/add_qualification', methods=['POST'])
+def add_qualification():
 
-    try:
-        qualification = db.query(Materias).filter(Materias.id == id)
+    form = QualificationForm()
 
-        new = qualification.one()
-        new.qualification = request.form['calificacion']
+    if form.validate_on_submit():
 
-        db.commit()
+        id = form.id.data
 
-        messages = 'La operacion se realizo con exito!'
-        category = 'success'
+        try:
+            qualification = db.query(Materias).filter(Materias.id == id)
 
-    except ValueError as e:
+            new = qualification.one()
+            new.qualification = request.form['calificacion']
 
-        messages = 'No fue posible completar la operacion!'
-        category = 'error'
+            db.commit()
 
-        raise e
+            messages = 'La operacion se realizo con exito!'
+            category = 'success'
+
+        except ValueError as e:
+
+            messages = 'No fue posible completar la operacion!'
+            category = 'error'
+
+            raise e
 
     flash(messages, category)
     return redirect(url_for('users.subjects_finished'))
 
 
-@auth_view.route('/update-teacher/<id>', methods=['POST'])
-def update_teacher(id):
-
-    messages = ''
-    category = ''
+@auth_view.route('/update-teacher', methods=['POST'])
+def update_teacher():
 
     form = ProfeForm()
 
     if form.validate_on_submit():
-        name = form.name.data
-        last_name = form.last_name.data
+        
+        id = form.id.data
+        name = form.full_name.data
         email = form.email.data
         phone = form.phone.data
 
         try:
             data = engne.execute("""
-                    UPDATE profesor SET name=%s,
-                    last_name=%s,
+                    UPDATE profesor SET 
+                    full_name=%s,
                     email=%s,
                     phone_number=%s
                     WHERE id=%s""",
-                                 (name, last_name,
-                                  email, phone, id)
-                                 )
+                    (name, email, phone, id))
 
             messages = 'Registro actualizado con exito!'
             category = 'success'

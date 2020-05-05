@@ -1,35 +1,33 @@
-from flask import render_template, Flask
+from flask import render_template
 from flask_admin import AdminIndexView, expose
 from flask_security import login_required, roles_required
 from datetime import datetime
 
 
 class all_request(object):
-    
+
     @staticmethod
     def _(app, session):
         """
         _(app, session) for execute before, after and teardown requests
         """
-        
+
         @app.before_request
         def first_request_func():
-            
+
             pass
-        
+
         @app.after_request
         def after_request_func(response):
-            
+
             session.close()
             return response
-        
+
         @app.teardown_request
         def teardown_request_func(exception=None):
-            
+
             session.remove()
             return exception
-        
-        
 
 
 # my own index view in admin panel

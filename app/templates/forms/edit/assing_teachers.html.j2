@@ -1,0 +1,32 @@
+<!-- Modal -->
+<div class="modal fade" id="assingTeachers" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h3 class="m-auto">
+        <h3 class="modal-title m-auto text-primary">Asignar</h3>
+        </h3>
+        <button type="button" class="close btn-sm" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action=" {{url_for('auth.assing_teacher')}} " method="POST">
+          {{ assig_form.hidden_tag() }}
+          {{ Form_off_label(assig_form.id, class="d-none") }}
+          <div class="form-group">
+            {{ Form_off_label(assig_form.subjects.label) }}
+            {{ Form_off_label(assig_form.subjects, class="form-control form-control-lg subjects") }}
+          </div>
+          <div class="form-group">
+            {{ Form_off_label(assig_form.profe.label) }}
+            {{ Form_off_label(assig_form.profe, class="form-control form-control-lg") }}
+          </div>
+          <div class="text-center form-group">
+            {{ Form_off_label(assig_form.submit, class="btn btn-primary btn-lg", value="Asignar") }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

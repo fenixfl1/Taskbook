@@ -5,7 +5,7 @@ from sqlalchemy.orm import contains_eager
 from datetime import datetime, date
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
-    SubjectsForm, ProfeForm, AssingForm, PlanForm
+    SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
 from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
     Materias, Profesor
 from app.database.queries import Queries
@@ -63,6 +63,7 @@ def subjects():
 
     sform = SubjectsForm()
     pform = ProfeForm()
+    aform = AssignForm()
 
     return render_template(
         'user/subjects.html.j2',
@@ -70,24 +71,7 @@ def subjects():
         subject_form=sform,
         subjects_user=subjects,
         profe_form=pform,
-        year=datetime.now()
-    )
-
-
-@user_view.route('/subjects/edit/<id>')
-@login_required
-def edit_subjects(id):
-
-    form = SubjectsForm()
-
-    data = db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.id == id).one()
-
-    return render_template(
-        'user/edit/edit_subjects.html.j2',
-        title='Edit subject -',
-        subject_form=form,
-        edit_data=data,
+        assig_form=aform,
         year=datetime.now()
     )
 
@@ -97,6 +81,7 @@ def edit_subjects(id):
 def subjects_finished():
 
     form = SubjectsForm()
+    formQ = QualificationForm()
 
     try:
         subjects = db.query(Materias).\
@@ -110,45 +95,8 @@ def subjects_finished():
         'user/subjects_finished.html.j2',
         title='Subjects finished -',
         subject_form=form,
+        qualif_form=formQ,
         subjects_user=subjects,
-        year=datetime.now()
-    )
-
-
-@user_view.route('/subjects/finished/add-qualification/<id>')
-@login_required
-def add_qualification(id):
-
-    form = SubjectsForm()
-
-    data = db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.id == id).one()
-
-    return render_template(
-        'user/add_qualification.html.j2',
-        title='Agregar calificacio -',
-        finished_form=form,
-        data=data,
-        year=datetime.now()
-    )
-
-
-@user_view.route('/subjects/assing-teachers/<id>')
-@login_required
-def assing_teachers(id):
-
-    form = AssingForm()
-    pform = ProfeForm()
-
-    data = db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.id == id).one()
-
-    return render_template(
-        'user/assing_teacher.html.j2',
-        title='Assing teacher -',
-        profe_form=pform,
-        form=form,
-        edit_data=data,
         year=datetime.now()
     )
 
@@ -172,30 +120,12 @@ def teachers():
     )
 
 
-@user_view.route('/subjects/teachers/edit/<id>')
-@login_required
-def edit_teachers(id):
-
-    form = ProfeForm()
-
-    data = db.query(Profesor).filter(Profesor.user_id == current_user.id).\
-        filter(Profesor.id == id).one()
-
-    return render_template(
-        'user/edit/edit_teacher.html.j2',
-        title='Edit teacher -',
-        edit_data=data,
-        profe_form=form,
-        year=datetime.now()
-    )
-
-
 # this function is to create and see the schedule
 @user_view.route('/schedule')
 @login_required
 def horario():
 
-    subjects = Queries.queries(Materias, current_user, order_by='name')
+    subjects = Queries.queries(Materias, current_user)
 
     return render_template(
         'user/schedule.html.j2',
@@ -208,11 +138,11 @@ def horario():
 # this function is to see and creat task
 @user_view.route('/tasks', methods=['GET', 'POST'])
 @login_required
-def tasks(order_by='id'):
+def tasks():
 
     form = TaskForm()
 
-    task = Queries.queries(Tarea, current_user, order_by=order_by)
+    task = Queries.queries(Tarea, current_user)
 
     return render_template(
         'user/task.html.j2',

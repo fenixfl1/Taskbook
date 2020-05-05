@@ -1,7 +1,8 @@
 from config.default import *
 from app import mail
 from flask_mail import Message
-from flask import render_template
+from flask import render_template, jsonify
+from . import notify
 
 
 def send_email(subject, sender, recipients, text_body, html_body):
@@ -25,3 +26,14 @@ def notify_tasks(task, user):
                    _current_task=task
                )
                )
+
+
+@notify.route('/notications')
+def notications():
+
+    resp = jsonify(
+        'success': 1,
+        'result': "It's Ok!"
+    )
+
+    return resp

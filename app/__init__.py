@@ -12,7 +12,7 @@ from flask_security import Security, SQLAlchemySessionUserDatastore
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, all_request
+from app.extra import register_error_handlers, MyAdminIndexView, all_request, create_user
 from .extendforms import ExtendRegisterForm
 from .filters import NewFilter
 
@@ -67,12 +67,13 @@ def creatre_app(setting_module):
     from .admin import admin_view
     app.register_blueprint(admin_view)
 
-    from .notify import notify
+    from .notifications import notify
     app.register_blueprint(notify)
 
     # my extentions
     register_error_handlers(app)
     all_request._(app, db)
     NewFilter.counters(app)
+    # create_user(app, user_datastore, db, Role)
 
     return app

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
-    TextAreaField, BooleanField, SelectField
+    TextAreaField, BooleanField, SelectField, HiddenField
 from wtforms.fields.html5 import DateField, TimeField, \
     EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
@@ -18,16 +18,8 @@ def subject_query():
 
 def profesor_query():
     return db.query(Profesor).filter(Profesor.user_id == current_user.id)\
-        .order_by(Profesor.name)
+        .order_by(Profesor.full_name)
 
-
-weekdays = [(1, 'Sunday'),
-            (2, 'Monday'),
-            (3, 'Tuesday'),
-            (4, 'Wednesday'),
-            (5, 'Thursday'),
-            (6, 'Friday'),
-            (7, 'Saturday')]
 
 lista_calificacion = [('A', 'A - Muy bien: 90-100%'),
                       ('B', 'B - Bien: 80-89%'),
@@ -37,6 +29,7 @@ lista_calificacion = [('A', 'A - Muy bien: 90-100%'),
 
 class Default(FlaskForm):
 
+    id = StringField()
     submit = SubmitField()
 
  
@@ -45,7 +38,7 @@ class LoadForm(Default):
     picture = FileField(id='file', _name='file')
 
 
-class AssingForm(Default):
+class AssignForm(Default):
 
     subjects = StringField(
         'Asignatura', validators=[DataRequired()]
@@ -73,7 +66,21 @@ class SubjectsForm(Default):
         choices=lista_calificacion
     )
 
-    estado = BooleanField('Marcar como cursada',)
+    estado = BooleanField('Marcar como cursada')
+
+
+class QualificationForm(Default):
+
+    name = StringField(
+        'Nombre', validators=[DataRequired()]
+    )
+    
+    calificacion = SelectField(
+        'Calificación',
+        validators=[DataRequired()],
+        choices=lista_calificacion
+    )
+
 
 
 class ProfeForm(Default):
@@ -83,12 +90,8 @@ class ProfeForm(Default):
         allow_blank=True
     )
 
-    name = StringField(
+    full_name = StringField(
         'Nombre del Profesor', validators=[DataRequired(), Length(max=80)]
-    )
-
-    last_name = StringField(
-        'Apellido', validators=[Length(max=80)]
     )
 
     email = EmailField(

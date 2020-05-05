@@ -4,13 +4,18 @@
     {# navbar to teachers #}
     {{ navbar(name="Agregar", holder="Buscar Profesores", title="Agregar Profesor/a", modal_id="#staticBackdrop") }}
 
+    {# alerts #}
+    {% include 'messages.html' %}
+
+    {# modal to create new teachers #}
+    {% include "forms/teacher_form.html.j2" %}
+
+    {# modal to edit teachers #}
+    {% include "forms/edit/teachers.html.j2" %}
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-
-                {% include 'messages.html' %}
-
-                {% include "forms/teacher_form.html.j2" %}
 
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item active">
@@ -37,8 +42,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class=""></th>
-                                        <th scope="col" class="text-primary column-header">Nombre</th>
-                                        <th scope="col" class="text-primary column-header">Apellido</th>
+                                        <th scope="col" class="text-primary column-header">Nombre completo</th>
                                         <th scope="col" class="text-primary column-header">Email</th>
                                         <th scope="col" class="text-primary column-header">Nummer de Contacto</th>
                                     </tr>
@@ -46,18 +50,24 @@
 
                                 <tbody>
                                     {% for i in range( counter |teachers(1)) %}
+                                        {% set dato = [
+                                            teachers[i].id, 
+                                            teachers[i].full_name,
+                                            teachers[i].email | default("", False), 
+                                            teachers[i].phone | default("", False)] %}
                                         <tr>
                                             <td scope="row" class="list-buttons-column">
-                                                <a href=" {{ url_for('users.edit_teachers', id=teachers[i].id) }} " class="btn shadow-none btn-outlne text-info my-sm-0">
+                                                <button class="btn shadow-none btn-outlne text-info my-sm-0"
+                                                 onclick='editTeachers({{ dato | tojson }})'
+                                                 data-toggle="modal" data-target="#editTeachers">
                                                     <span title="Editar informacion" class="fas fa-pencil-alt glyphicon glyphicon-pencil"></span>
-                                                </a>
+                                                </button>
 
                                                 <a href="{{ url_for('auth.delete_teachers', id=teachers[i].id) }}" class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
                                                     <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
                                                 </a>
                                             </td>
-                                            <th>{{teachers[i].name }}</th>
-                                            <td>{{teachers[i].last_name }}</td>
+                                            <th>{{teachers[i].full_name }}</th>
                                             <td><a href="#">{{teachers[i].email }}</a></td>
                                             <td>{{teachers[i].phone_number }}</td>
                                         </tr>
