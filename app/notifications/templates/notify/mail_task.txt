@@ -1,9 +1,0 @@
-Dear {{ _current_user.first_name }},
-
-{{ _current_task.name }} is now a follower. Click on the following link to visit {{ _current_task.name }}'s profile page:
-
-{{ url_for('users.details_task', id=_current_task.id, _external=True) }}
-
-Regards,
-
-The Taskbook group

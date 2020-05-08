@@ -67,9 +67,6 @@ def creatre_app(setting_module):
     from .admin import admin_view
     app.register_blueprint(admin_view)
 
-    from .notifications import notify
-    app.register_blueprint(notify)
-
     # my extentions
     register_error_handlers(app)
     all_request._(app, db)
