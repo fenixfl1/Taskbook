@@ -9,12 +9,15 @@ from flask_admin import Admin
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_security import Security, SQLAlchemySessionUserDatastore
+from celery import Celery
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
 from app.extra import register_error_handlers, MyAdminIndexView, all_request, create_user
 from .extendforms import ExtendRegisterForm
 from .filters import NewFilter
+from .celery_utils import init_celery
+import os
 
 
 mail = Mail()
@@ -23,19 +26,35 @@ sql = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 security = Security()
-
+name = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
 
-def creatre_app(setting_module):
+def make_celery(app_name=__name__):
+
+    redis_url = 'redis://localhost:6379'
+
+    return Celery(
+        app_name, 
+        backend=redis_url, 
+        broker=redis_url
+    )
+
+celery = make_celery()
+
+def creatre_app(setting_module, app_name=name, **kwargs):
 
     # application settings
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(app_name, instance_relative_config=True)
+
+    celery = kwargs.get('celery')
 
     app.config.from_object(setting_module)
-
     app.wsgi_app = ProxyFix(app.wsgi_app)
+
+    if celery:
+        init_celery(celery, app)
 
     if app.config.get('TESTING', True):
         app.config.from_envvar('APP_DEVELOPMENT_SETTINGS', silent=False)
