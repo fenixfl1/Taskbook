@@ -1,7 +1,9 @@
 from flask import redirect, url_for
 from app import adm
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib import rediscli
 from flask_login import current_user
+from redis import Redis
 from wtforms.validators import DataRequired
 from app.database import db
 from app.database.models import (User, Role, Eventos, Tarea,
@@ -124,7 +126,12 @@ class HorarioView(AdminView):
         }
     }
 
+redis = Redis(
+    host='localhost',
+    port=6379,
+)
 
+adm.add_view(rediscli.RedisCli(redis))
 adm.add_view(UserView(User, db, category='User'))
 adm.add_view(AdminView(Role, db, category='User'))
 adm.add_view(UserRelatedView(Eventos, db))

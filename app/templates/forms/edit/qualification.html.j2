@@ -13,7 +13,7 @@
       <div class="modal-body">
         <form action=" {{ url_for('auth.add_qualification') }} " method="post">
           {{ qualif_form.hidden_tag() }}
-          {{ Form_off_label(qualif_form.id, class="form-control", id="id") }}
+          {{ Form_off_label(qualif_form.id, class="form-control d-none", id="id") }}
           <div class="form-group">
             {{ Form_off_label(qualif_form.name.label) }} 
             {{ Form_off_label(qualif_form.name, class="form-control", id="subject") }}

@@ -1,4 +1,5 @@
 from . import auth_view
+from app.tasks.tasks import pending_tasks, next_subject, test
 from flask import render_template, flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -100,6 +101,9 @@ def register_subjects():
             try:
                 db.add(user)
                 db.commit()
+
+                result = test.delay(current_user.first_name)
+                result.wait()
 
                 messages = 'Asignatura registrada con exito!'
                 category = 'success'
@@ -245,6 +249,9 @@ def register_profesor():
                 db.add(user)
                 db.commit()
 
+                result = notify_pending_tasks.delay(current_user.email)
+                result.wait()
+
                 messages = 'Registro guardado con exito!'
                 category = 'success'
 
@@ -315,6 +322,9 @@ def register_task():
                 dia_endrega=dia_entrega,
                 comentario=comentario
             )
+
+            result = notify_pending_tasks.delay(current_user.email)
+            result.wait()
 
             db.add(task_detail)
             messages = 'Tarea guardada con exito!'

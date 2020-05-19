@@ -1,6 +1,5 @@
 from app import creatre_app, make_celery
 from app.database import init_db
-from app.celery_utils import init_celery
 from app import celery
 import os
 

@@ -33,12 +33,10 @@ user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
 def make_celery(app_name=__name__):
 
-    redis_url = 'redis://localhost:6379'
-
     return Celery(
         app_name, 
-        backend=redis_url, 
-        broker=redis_url
+        backend='redis://', 
+        broker='redis://localhost:6379'
     )
 
 celery = make_celery()
@@ -48,10 +46,10 @@ def creatre_app(setting_module, app_name=name, **kwargs):
     # application settings
     app = Flask(app_name, instance_relative_config=True)
 
-    celery = kwargs.get('celery')
-
     app.config.from_object(setting_module)
     app.wsgi_app = ProxyFix(app.wsgi_app)
+
+    celery = kwargs.get('celery')
 
     if celery:
         init_celery(celery, app)
