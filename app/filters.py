@@ -1,6 +1,6 @@
 from app.database.queries import Queries
 from flask_security import current_user
-from app.database.models import Tarea, Materias, Profesor, PlanEstudio
+from app.database.models import Tasks, Courses, Teachers, StudyPlan
 
 """
 	In this class each function takes a boolean as parameter
@@ -17,27 +17,27 @@ class NewFilter():
         @app.template_filter('tasks')
         def task(value, n=1):
 
-            filtro = Queries.contador(Tarea, current_user, n)
+            filtro = Queries.contador(Tasks, current_user, n)
 
             return filtro
 
         @app.template_filter('subjects')
         def materias(value, n=1):
 
-            filtro = Queries.contador(Materias, current_user, n)
+            filtro = Queries.contador(Courses, current_user, n)
 
             return filtro
 
         @app.template_filter('teachers')
         def profesores(value, n=1):
 
-            filtro = Queries.contador(Profesor, current_user, n)
+            filtro = Queries.contador(Teachers, current_user, n)
 
             return filtro
 
         @app.template_filter('plan')
         def plan(value, n=1):
 
-            filtro = Queries.contador(PlanEstudio, current_user, n)
+            filtro = Queries.contador(StudyPlan, current_user, n)
 
             return filtro

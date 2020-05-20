@@ -2,11 +2,10 @@ from sqlalchemy import Integer, String, ForeignKey,\
     Column, DateTime, Boolean, Time, Date, CHAR
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
-from flask_security import RoleMixin, UserMixin
+from flask_security import UserMixin, RoleMixin
 from sqlalchemy_utils import CountryType
 from sqlalchemy_utils.types.phone_number import PhoneNumberType
 from sqlalchemy_utils.types.url import URLType
-import hashlib
 from . import Base
 
 
@@ -49,19 +48,16 @@ class User(Base, UserMixin):
     current_login_ip = Column(String(100))
     login_count = Column(Integer)
     confirmed_at = Column(DateTime(timezone=True))
-    picture = relationship(
-        'ProfilePicture', uselist=False, back_populates='user')
-    materia = relationship('Materias', back_populates='user')
-    profesor = relationship('Profesor', back_populates='user')
-    evento = relationship('Eventos', back_populates='user')
-    plan = relationship('PlanEstudio', back_populates='user')
-    tarea = relationship('Tarea', back_populates='user')
+    course = relationship('Courses', back_populates='user')
+    teacher = relationship('Teachers', back_populates='user')
+    event = relationship('Events', back_populates='user')
+    plan = relationship('StudyPlan', back_populates='user')
+    task = relationship('Tasks', back_populates='user')
     active = Column(Boolean(), default=True)
     roles = relationship('Role', secondary='roles_users',
                          backref=backref('user', lazy='dynamic'))
 
     def __repr__(self):
-
         return self.first_name
 
     @staticmethod
@@ -76,91 +72,55 @@ class User(Base, UserMixin):
     def get_by_name(name):
         return User.query.filter_by(first_name=name).first()
 
-    @property
-    def object_id(self):
-
-        key = '<p>{0}</p>'.format(self.id)
-        _key = bytes(key, 'utf-8')
-
-        return int(hashlib.sha1(_key).hexdigest(), 16)
-
     @staticmethod
     def get_by_id(id):
-        """
-            Obtiene el id de un usurio
-        """
-
         return User.query.get(id)
 
-    def get_security_payload(self):
 
-        return {
-            'id': self.id,
-            'first_name': self.first_name,
-            'email': self.email,
-            'country': self.country,
-            'current_login_ip': self.current_login_ip
-        }
+class Teachers(Base):
 
-
-class ProfilePicture(Base):
-
-    __tablename__ = 'profile_picture'
+    __tablename__ = 'teacher'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
-    user = relationship('User', back_populates='picture')
-    picture_url = Column(URLType)
-    name = Column(String(100), nullable=False)
-    estado = Column(Boolean(), default=True)
-
-    def __repr__(self):
-
-        return '{}'.format(self.name)
-
-
-class Profesor(Base):
-
-    __tablename__ = 'profesor'
-
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
-    user = relationship('User', back_populates='profesor')
-    materia = relationship('Materias', back_populates='profesor')
+    user = relationship('User', back_populates='teacher')
+    course = relationship('Courses', back_populates='teacher')
     full_name = Column(String(80), nullable=False, unique=True)
     email = Column(String(100))
     phone_number = Column(String(22))
-    estado = Column(Boolean(), default=True)
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
 
         return '{0}'.format(self.full_name)
 
 
-class Materias(Base):
+class Courses(Base):
 
-    __tablename__ = 'materias'
+    __tablename__ = 'course'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
-    user = relationship('User', back_populates='materia')
-    tareas = relationship('DetalleTarea', back_populates='materia')
-    horario = relationship('HorarioClases', back_populates='materia')
-    profesor_id = Column(Integer, ForeignKey('profesor.id'))
-    profesor = relationship('Profesor', back_populates='materia')
+    user = relationship('User', back_populates='course')
+    task = relationship('Tasks', back_populates='course')
+    class_schedule = relationship('ClassSchedule', back_populates='course')
+    teacher_id = Column(Integer, ForeignKey('teacher.id'))
+    teacher = relationship('Teachers', back_populates='course')
     name = Column(String(80), nullable=False)
-    qualification = Column(CHAR(3), default=None)
-    estado = Column(Boolean(), nullable=False, default=1)
+    finished = Column(Boolean(), default=False)
+    qualification = Column(CHAR(1), default=None)
+    state = Column(Boolean(), default=True)
 
-    def __init__(self, name, estado, user_id, profesor=None):
+    def __init__(self, name, state, user_id, **kwargs):
 
         self.name = name
-        self.estado = estado
+        self.state = state
         self.user_id = user_id
-        self.profesor = profesor
+        self.profesor = kwargs.get('teacher')
+        self.finished = kwargs.get('finished')
+        self.qualification = kwargs.get('qualification')
 
     def __repr__(self):
-
         return '{}'.format(self.name)
 
     @staticmethod
@@ -168,78 +128,60 @@ class Materias(Base):
         return User.query.filter_by(name=name).first()
 
 
-class HorarioClases(Base):
+class ClassSchedule(Base):
 
-    __tablename__ = 'horario_clases'
+    __tablename__ = 'class_schedule'
 
     id = Column(Integer, primary_key=True)
-    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
-    materia = relationship('Materias', back_populates='horario')
-    dia = Column(String(3), nullable=False)
-    hora_inicio = Column(Time(), nullable=False)
-    hora_fin = Column(Time(), nullable=False)
-    aula = Column(String(5), nullable=False)
-    estado = Column(Boolean(), default=True)
+    course_id = Column(Integer, ForeignKey('course.id', ondelete='CASCADE'))
+    course = relationship('Courses', back_populates='class_schedule')
+    day = Column(CHAR(1), nullable=False)
+    start_date = Column(Time(), nullable=False)
+    end_date = Column(Time(), nullable=False)
+    classroom = Column(String(5), nullable=False)
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
+        return '{0} - {1}'.format(self.start_date, self.end_date)
 
-        return '{}'.format(self.hora_inicio)
 
+class Tasks(Base):
 
-class Tarea(Base):
-
-    __tablename__ = 'tarea'
+    __tablename__ = 'task'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
-    user = relationship('User', back_populates='tarea')
-    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
-    detalle = relationship('DetalleTarea', back_populates='tarea')
+    user = relationship('User', back_populates='task')
+    course_id = Column(Integer, ForeignKey('course.id', ondelete='CASCADE'))
+    course = relationship('Courses', back_populates='task')
     name = Column(String(80), nullable=False)
-    estado = Column(Boolean(), default=True)
+    assigned_in = Column(DateTime(timezone=True), default=func.now())
+    delivery_day = Column(Date(), nullable=False)
+    finished_in = Column(DateTime())
+    comment = Column(String(150))
+    done = Column(Boolean(), default=True)
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
-
-        return '{}'.format(self.name)
-
-
-class DetalleTarea(Base):
-
-    __tablename__ = 'detalle_tarea'
-
-    id = Column(Integer, primary_key=True)
-    tarea_id = Column(Integer, ForeignKey('tarea.id', ondelete='CASCADE'))
-    tarea = relationship('Tarea', back_populates='detalle')
-    materia_id = Column(Integer, ForeignKey('materias.id', ondelete='CASCADE'))
-    materia = relationship('Materias', back_populates='tareas')
-    asignada_en = Column(Date(), default=func.now())
-    dia_endrega = Column(Date(), nullable=False)
-    comentario = Column(String(150))
-    realizada_en = Column(DateTime())
-    estado = Column(Boolean(), default=True)
-
-    def __repr__(self):
-
-        return '{0}'.format(self.comentario)
+        return "{}".format(self.name)
 
 
-class Eventos(Base):
+class Events(Base):
 
     __tablename__ = 'event'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
-    user = relationship('User', back_populates='evento')
-    creada_en = Column(DateTime(), default=func.now())
+    user = relationship('User', back_populates='event')
+    date_created = Column(DateTime(), default=func.now())
     title = Column(String(150), nullable=False)
-    lugar = Column(String(100), nullable=False)
+    location = Column(String(100), nullable=False)
     url = Column(URLType)
     start_date = Column(DateTime(), nullable=False)
     end_date = Column(DateTime(), nullable=False)
-    comentario = Column(String(100))
-    realizada_en = Column(DateTime())
-    color = Column(String(50), default='event-info')
-    estado = Column(Boolean(), default=True)
+    comment = Column(String(100))
+    finished_in = Column(DateTime())
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
 
@@ -255,62 +197,41 @@ class Eventos(Base):
         pass
 
 
-class PlanEstudio(Base):
+class StudyPlan(Base):
 
-    __tablename__ = 'plan_estudio'
+    __tablename__ = 'study_plan'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='plan')
-    detalle = relationship('DetallePlan', back_populates='plan')
+    detail = relationship('StudyPlanDetail', back_populates='plan')
     name = Column(String(100), nullable=False)
-    estado = Column(Boolean(), default=True)
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
 
         return '{}'.format(self.name)
 
 
-class DetallePlan(Base):
+class StudyPlanDetail(Base):
 
-    __tablename__ = 'detalle_plan'
+    __tablename__ = 'study_plan_detail'
 
     id = Column(Integer, primary_key=True)
     plan_id = Column(Integer, ForeignKey(
-        'plan_estudio.id', ondelete='CASCADE'))
-    plan = relationship('PlanEstudio', back_populates='detalle')
-    creada_en = Column(DateTime(), default=func.now())
+        'study_plan.id', ondelete='CASCADE'))
+    plan = relationship('StudyPlan', back_populates='detail')
+    date_created = Column(DateTime(), default=func.now())
     title = Column(String(255), nullable=False)
     url = Column(URLType)
-    dia = Column(Integer, nullable=False)
-    hora_inicio = Column(Time(), nullable=False)
-    hora_fin = Column(Time(), nullable=False)
-    objetivo = Column(String(255))
+    day = Column(Integer(), nullable=False)
+    start_time = Column(Time(), nullable=False)
+    end_time = Column(Time(), nullable=False)
+    objective = Column(String(255))
     color = Column(String(25), default='text-info')
-    realizada_en = Column(DateTime())
-    estado = Column(Boolean(), default=True)
+    finished_in = Column(DateTime())
+    done = Column(Boolean(), default=True)
+    state = Column(Boolean(), default=True)
 
     def __repr__(self):
-
-        return '{0} => {1}'.format(self.plan, self.title)
-
-
-# class DetalleEvento(Base):
-
-#     __tablename__ = 'detalle_evento'
-
-#     id = Column(Integer, primary_key=True)
-#     evento_id = Column(Integer, ForeignKey('evento.id', ondelete='CASCADE'))
-#     evento = relationship('Eventos', back_populates='detalle')
-#     creada_en = Column(DateTime(), default=func.now())
-#     lugar = Column(String(100), nullable=False)
-#     fecha = Column(Date(), nullable=False)
-#     hora_inicio = Column(Time(), nullable=False)
-#     hora_fin = Column(Time(), nullable=False)
-#     comentario = Column(String(100))
-#     realizada_en = Column(DateTime())
-#     estado = Column(Boolean(), default=True)
-
-#     def __repr__(self):
-
-#         return '{}'.format(self.lugar)
+        return '{0}'.format(self.title)

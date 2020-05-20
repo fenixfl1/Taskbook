@@ -6,10 +6,9 @@ from flask_login import current_user
 from redis import Redis
 from wtforms.validators import DataRequired
 from app.database import db
-from app.database.models import (User, Role, Eventos, Tarea,
-                                 PlanEstudio, HorarioClases, Materias,
-                                 Profesor, DetallePlan,
-                                 DetalleTarea, ProfilePicture)
+from app.database.models import (User, Role, Events, Tasks,
+                                 StudyPlan, ClassSchedule, Courses,
+                                 Teachers, StudyPlanDetail)
 
 role_name = ['Admin', 'admin', 'administrador']
 
@@ -107,7 +106,7 @@ class DetalleTareaView(Details):
     }
 
 
-class DetallePlanView(Details):
+class StudyPlanDetailView(Details):
 
     form_args = {
         'plan': {
@@ -121,7 +120,7 @@ class HorarioView(AdminView):
 
     form_args = {
         'materia': {
-            'label': 'Materias',
+            'label': 'Courses',
             'validators': [DataRequired()]
         }
     }
@@ -134,12 +133,10 @@ redis = Redis(
 adm.add_view(rediscli.RedisCli(redis))
 adm.add_view(UserView(User, db, category='User'))
 adm.add_view(AdminView(Role, db, category='User'))
-adm.add_view(UserRelatedView(Eventos, db))
-adm.add_view(UserRelatedView(Tarea, db, category='Task'))
-adm.add_view(DetalleTareaView(DetalleTarea, db, category='Task'))
-adm.add_view(UserRelatedView(PlanEstudio, db, category='Stady plan'))
-adm.add_view(DetallePlanView(DetallePlan, db, category='Stady plan'))
-adm.add_view(HorarioView(HorarioClases, db))
-adm.add_view(AdminView(Materias, db))
-adm.add_view(UserRelatedView(Profesor, db))
-adm.add_view(UserRelatedView(ProfilePicture, db))
+adm.add_view(UserRelatedView(Events, db))
+adm.add_view(UserRelatedView(Tasks, db))
+adm.add_view(UserRelatedView(StudyPlan, db, category='Stady plan'))
+adm.add_view(StudyPlanDetailView(StudyPlanDetail, db, category='Stady plan'))
+adm.add_view(HorarioView(ClassSchedule, db))
+adm.add_view(AdminView(Courses, db))
+adm.add_view(UserRelatedView(Teachers, db))

@@ -6,8 +6,7 @@ from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
 from app.database import db, engne
-from app.database.models import ProfilePicture, Tarea, \
-    DetalleTarea, Materias, Profesor, Eventos
+from app.database.models import Tasks, Courses, Teachers, Events
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
 import os
 
@@ -46,15 +45,15 @@ def Uploads():
 
             try:
 
-                picture_url = (UPLOAD_FOLDER_DEST)
-                _picture = ProfilePicture(picture_url=picture_url,
-                                          user_id=current_user.id,
-                                          name=filename)
+                # picture_url = (UPLOAD_FOLDER_DEST)
+                # _picture = ProfilePicture(picture_url=picture_url,
+                #                           user_id=current_user.id,
+                #                           name=filename)
 
-                picture.save(os.path.join(UPLOAD_FOLDER_DEST, filename))
+                # picture.save(os.path.join(UPLOAD_FOLDER_DEST, filename))
 
-                db.add(_picture)
-                db.commit()
+                # db.add(_picture)
+                # db.commit()
 
                 messages = 'Imagen guardada con exito!'
                 category = 'success'
@@ -81,22 +80,22 @@ def register_subjects():
 
     if form.validate_on_submit():
 
-        estado = True
+        state = True
         name = form.name.data
         profe = form.profe.data
 
         if form.estado.data:
-            estado = False
+            state = False
 
         # check that there's no subject with that name
-        check = db.query(Materias).filter(Materias.user_id==current_user.id).\
-            filter(Materias.name==name).first()
+        check = db.query(Courses).filter(Courses.user_id == current_user.id).\
+            filter(Courses.name == name).first()
 
         if check == None:
 
-            user = Materias(name=name, estado=estado,
-                            user_id=current_user.id,
-                            profesor=profe)
+            user = Courses(name=name, state=state,
+                           user_id=current_user.id,
+                           teacher=profe)
 
             try:
                 db.add(user)
@@ -128,7 +127,7 @@ def subject_completed(id):
 
     try:
         engne.execute(
-            """UPDATE materias SET estado=0
+            """UPDATE course SET estado=0
                 WHERE id=%s""", (id))
 
         messages = 'Nueva asignatura marcada como cursada!'
@@ -148,8 +147,8 @@ def subject_completed(id):
 @auth_view.route('/delete/subject/<id>')
 def delete_subjects(id):
 
-    dato = db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.id == id).one()
+    dato = db.query(Courses).filter(Courses.user_id == current_user.id).\
+        filter(Courses.id == id).one()
 
     try:
         db.delete(dato)
@@ -192,11 +191,11 @@ def assing_teacher():
 
         try:
 
-            update = db.query(Materias).filter(Materias.user_id==current_user.id)\
-                .filter(Materias.id == id_subject)
+            update = db.query(Courses).filter(Courses.user_id == current_user.id)\
+                .filter(Courses.id == id_subject)
 
             new_teacher = update.one()
-            new_teacher.profesor_id = id_teacher
+            new_teacher.Teachers_id = id_teacher
             db.commit()
 
             messages = 'La operacion se realizo con exito!'
@@ -214,7 +213,7 @@ def assing_teacher():
 
 
 # this function is to register new teacher for the current user
-@auth_view.route('/register-profesor', methods=['POST'])
+@auth_view.route('/register-Teachers', methods=['POST'])
 def register_profesor():
 
     form = ProfeForm()
@@ -223,24 +222,22 @@ def register_profesor():
 
         name = form.full_name.data
 
-        check = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
-            filter(Profesor.full_name==name).first()
+        check = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
+            filter(Teachers.full_name == name).first()
 
-        print("____________________________")
-        print(check)
 
         if check == None:
 
             if form.subjects.data is not None:
 
-                user = Profesor(full_name=name,
+                user = Teachers(full_name=name,
                                 materia=[form.subjects.data],
                                 email=form.email.data,
                                 phone_number=form.phone.data,
                                 user_id=current_user.id)
 
             else:
-                user = Profesor(full_name=name,
+                user = Teachers(full_name=name,
                                 email=form.email.data,
                                 phone_number=form.phone.data,
                                 user_id=current_user.id)
@@ -273,8 +270,8 @@ def register_profesor():
 @auth_view.route('/delete/teachers/<id>')
 def delete_teachers(id):
 
-    dato = db.query(Profesor).filter(Profesor.user_id == current_user.id).\
-        filter(Profesor.id == id).one()
+    dato = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
+        filter(Teachers.id == id).one()
 
     try:
         db.delete(dato)
@@ -309,25 +306,25 @@ def register_task():
         dia_entrega = form.dia_entrega.data
         comentario = form.nota.data
 
-        task = Tarea(name=task, user_id=current_user.id)
+        task = Tasks(name=task, user_id=current_user.id)
         db.add(task)
         db.commit()
 
         try:
 
-            task_detail = DetalleTarea(
-                tarea=task,
-                materia=materia,
-                asignada_en=asignada_en,
-                dia_endrega=dia_entrega,
-                comentario=comentario
-            )
+            # task_detail = DetalleTasks(
+            #     Tasks=task,
+            #     materia=materia,
+            #     asignada_en=asignada_en,
+            #     dia_endrega=dia_entrega,
+            #     comentario=comentario
+            # )
 
             result = notify_pending_tasks.delay(current_user.email)
             result.wait()
 
-            db.add(task_detail)
-            messages = 'Tarea guardada con exito!'
+            # db.add(task_detail)
+            messages = 'Tasks guardada con exito!'
             category = 'success'
 
         except ValueError as e:
@@ -361,7 +358,7 @@ def register_event():
         comment = form.nota.data
 
         try:
-            event = Eventos(
+            event = Events(
                 user_id=current_user.id,
                 title=title,
                 lugar=lugar,
@@ -432,8 +429,8 @@ def register_study_plan():
 @auth_view.route('/delete/tasks/<string:id>')
 def delete_tasks(id):
 
-    task = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
-        filter(Tarea.id == id).one()
+    task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.id == id).one()
 
     try:
 
@@ -465,8 +462,8 @@ def update_subjects():
 
     try:
 
-        data = db.query(Materias).filter(Materias.user_id==current_user.id).\
-            filter(Materias.id==id)
+        data = db.query(Courses).filter(Courses.user_id == current_user.id).\
+            filter(Courses.id == id)
 
         new_data = data.one()
 
@@ -474,11 +471,10 @@ def update_subjects():
 
         if teacher_id != '__None':
 
-            teacher = db.query(Profesor).filter(Profesor.user_id==current_user.id).\
-                filter(Profesor.id==teacher_id).one()
+            teacher = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
+                filter(Teachers.id == teacher_id).one()
 
-            new_data.profesor = teacher
-        
+            new_data.Teachers = teacher
 
         db.commit()
 
@@ -505,7 +501,7 @@ def add_qualification():
         id = form.id.data
 
         try:
-            qualification = db.query(Materias).filter(Materias.id == id)
+            qualification = db.query(Courses).filter(Courses.id == id)
 
             new = qualification.one()
             new.qualification = request.form['calificacion']
@@ -532,7 +528,7 @@ def update_teacher():
     form = ProfeForm()
 
     if form.validate_on_submit():
-        
+
         id = form.id.data
         name = form.full_name.data
         email = form.email.data
@@ -540,12 +536,12 @@ def update_teacher():
 
         try:
             data = engne.execute("""
-                    UPDATE profesor SET 
+                    UPDATE teacher SET 
                     full_name=%s,
                     email=%s,
                     phone_number=%s
                     WHERE id=%s""",
-                    (name, email, phone, id))
+                                 (name, email, phone, id))
 
             messages = 'Registro actualizado con exito!'
             category = 'success'
@@ -576,8 +572,8 @@ def get_edit(id):
 def edit_tasks(id):
 
     try:
-        task = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
-            filter(Tarea.id == id)
+        task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
+            filter(Tasks.id == id)
 
         task.id = id
         db.commit()

@@ -2,7 +2,12 @@
 {% from 'macro.html' import Form_off_label, navbar %}
     
     {# menu de navegacion #}
-    {{navbar(name="Agregar", holder="Agregar asignatura",title="Agregar asignaturas",modal_id="#exampleModalCenter")}}
+    {{  
+        navbar(name="Agregar",
+        holder="Agregar asignatura", 
+        title="Agregar asignaturas", 
+        modal_id="#exampleModalCenter")
+    }}
 
     {# Alerts#}
     {% include 'messages.html' %}
@@ -23,7 +28,7 @@
         <div id="content">
             <div class="container-fluid">
 
-                <ol class="breadcrumb" aria-label="breadcrumb">
+               {#  <ol class="breadcrumb" aria-label="breadcrumb">
                     <li class="breadcrumb-item active">
                         Asignaturas({{ subject | subjects(1) }})
                     </li>
@@ -39,69 +44,26 @@
                             Profesores({{ tecaher | teachers(1) }})
                         </a>
                     </li>
-                </ol>
+                </ol> #}
 
-                {% if subject | subjects(1) > 0 %}
+                {# {% if subject | subjects(1) > 0 %} #}
                     <div class="row m-auto">
-                        
-                        <div class="table-responsive">
-                                
-                            <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg display" cellspacing="0" id="table">
-                                
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th class="text-primary column-header cursor" onclick="sortTable(0)">Asignatura</th>
-                                        <th class="text-primary column-header cursor" onclick="sortTable(1)">Profesor</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                        
-                                <tbody>
-                                    {% for i in range( subject | subjects(1) )  %}
-                                        {% set dato = [subjects_user[i].name, subjects_user[i].id] %}
-                                        <tr>
-                                            <td class="list-buttons-column">
-                                                <a href="" class="btn shadow-none btn-outlne text-info my-sm-0"
-                                                 onclick='editSubjects({{ dato | tojson }})'
-                                                 data-toggle="modal" data-target="#editSubject" >
-                                                    <span title="Editar" class="fas fa-pencil-alt glyphicon glyphicon-pencil">       
-                                                    </span>
-                                                </a>
-                                                <a href=" {{ url_for('auth.delete_subjects', id=subjects_user[i].id) }} " class="btn btn-delete shadow-none btn-outlie text-danger my-sm-0">
-                                                    <span title="Eliminar" class="fa fa-trash glyphicon glyphicon-trash"></span>
-                                                </a>
-                                            </td>
-                                            <td class="name"> {{ subjects_user[i].name }} </td>
-                                            <td>
-                                                {% if subjects_user[i].profesor != None %}
-                                                    {{ subjects_user[i].profesor }}
-                                                {% else %}
-                                                    <a href="" class=" cursor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                        Asignar
-                                                    </a>
-                                                    <div class="dropdown-menu">
-                                                        <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
-                                                        <button class="dropdown-item dropright cursor"
-                                                          onclick='assignTeacher({{ dato | tojson }})'
-                                                          data-toggle="modal" data-target="#assingTeachers">
-                                                            Existente
-                                                        </button>
-                                                    </div>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                <a href=" {{ url_for('auth.subject_completed', id=subjects_user[i].id) }} " class="btn-outline btn-lg text-success my-ms-0">
-                                                    <span title="Marcar como cursada" class="fas fa-ellipsis-h">
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+
+                        <div class="row m-auto col-md-12">
+                            {% for i in range(subject | subjects(1)) %}
+                                <div class="card mx-3 my-2" style="width: 14rem;">
+                                  <img src="{{ url_for('static',filename='images/desktop.jpeg') }}" class="card-img-top" alt="...">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> {{subjects_user[i].name}} </h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                  </div>
+                                </div>
+                            {% endfor %}
                         </div>
+                        
                     </div>
-                {% endif %}
+                {# {% endif %} #}
             </div>
         </div>
     </div>

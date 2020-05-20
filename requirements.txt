@@ -47,7 +47,6 @@ mccabe==0.6.1
 mysqlclient==1.4.6
 passlib==1.7.2
 phonenumbers==8.11.4
-pkg-resources==0.0.0
 pycodestyle==2.5.0
 pycryptodome==3.9.7
 pylint==2.4.4

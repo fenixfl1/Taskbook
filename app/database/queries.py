@@ -25,9 +25,7 @@ class Queries():
         if 'order_by' in kwargs and kwargs['order_by'] == 'date1':
 
             try:
-                return db.query(entity).filter(entity.user_id == user.id).\
-                    order_by(entity.detalle.dia_endrega).one().options(
-                        contains_eager(entity.user))
+                return db.query(entity).filter(entity.user_id == user.id).first()
             except ValueError as e:
                 raise e
 
@@ -35,8 +33,7 @@ class Queries():
 
             try:
                 return db.query(entity).filter(entity.user_id == user.id).\
-                    options(contains_eager(entity.user)).older_by(
-                        entity.detalle.hora_fin)
+                    options(contains_eager(entity.user))
             except ValueError as e:
                 raise e
 
@@ -54,12 +51,12 @@ class Queries():
             this function is to count the number of rows in any table.
             :entity reference to the table to want count.
             :user the current user
-            :n is the state of the column estado
+            :n is the state of the column state
         """
 
         try:
             return db.query(entity).filter(entity.user_id == user.id).\
-                filter(entity.estado == n).count()
+                filter(entity.state == n).count()
 
         except ValueError as e:
             raise e
@@ -94,8 +91,7 @@ class Queries():
         m = max(date)
 
         r = db.query(entity).filter(entity.user_id == user.id).\
-            options(contains_eager(entity.user)).\
-            filter(entity.detalle.dia_endrega == m).first()
+            options(contains_eager(entity.user)).first()
 
         return r
 

@@ -4,103 +4,105 @@
 
 <body>
     <div class="container">
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
-            <div class="col-xl-6 col-lg-7 col-md-9">
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="p-5">
+        
+        <div class="row my-5" style="height: 100vh">
 
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">¡Crea una cuenta!</h1>
-                                    </div>
-                                    <hr>
+            <div class="m-auto col-md-8">
 
-                                    <form class="user" action="{{ url_for_security('register') }}" method="post" name="register_user_form">
+                <div class="row">
 
-                                        {{ register_user_form.hidden_tag() }}
+                    <div class="card col-md-8 m-auto shadow-lg">
+                       
+                        <div class="card-header bg-white">
+                            
+                            <h3 class="text-center notranslate">
+                                Taskbook
+                            </h3>
+                        </div>
 
-                                        <div class="form-group row">
+                        <form class="card-body" action="{{ url_for_security('register') }}" method="post" name="register_user_form">
 
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                {{ Form_off_label(register_user_form.first_name.label) }}
-                                                {{ Form_off_label(register_user_form.first_name, class="form-control ", placeholder="Nombre") }}
-                                            </div>
+                            {{ register_user_form.hidden_tag() }}
 
-                                            <div class="col-sm-6">
-                                                {{ Form_off_label(register_user_form.first_name.label) }}
-                                                {{ Form_off_label(register_user_form.last_name, class="form-control ", placeholder="Apellido") }}
-                                            </div>
-                                        </div>
+                            <div class="form-group row">
 
-                                        <div class="form-group">
-                                            {{ Form_off_label(register_user_form.email.label) }}
-                                            {{ Form_off_label(register_user_form.email, class="form-control ", placeholder="Direcciion de correo electronico") }}
-                                        </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    {{ Form_off_label(register_user_form.first_name.label) }}
+                                    {{ Form_off_label(register_user_form.first_name, class="form-control ", placeholder="Nombre") }}
+                                </div>
 
-                                        <div class="form-group row">
-
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                {{ Form_off_label(register_user_form.password.label) }}
-                                                {{ Form_off_label(register_user_form.password, class="form-control ", placeholder="Contraseña") }}
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                {{ Form_off_label(register_user_form.password_confirm.label) }}
-                                                {{ Form_off_label(register_user_form.password_confirm, class="form-control ", placeholder="Repite la contraseña") }}
-                                            </div>
-
-                                        </div>
-
-                                        <div class="form-group row">
-
-                                            <div class="form-group col-md-3">
-                                                {{ Form_off_label(register_user_form.gender.label) }}
-                                                {{ Form_off_label(register_user_form.gender, class="form-control ", placeholder="Genero") }}
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                {{ Form_off_label(register_user_form.country.label) }}
-                                                {{Form_off_label(register_user_form.country, class="form-control")}}
-                                            </div>
-
-                                            <div class="col-md-5">
-                                                {{ Form_off_label(register_user_form.phone_number.label) }}
-                                                {{ Form_off_label(register_user_form.phone_number, class="form-control ", placeholder="Numero de telefono") }}
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                              {{ Form_off_label(register_user_form.aceptar, class="form-check-input") }}
-                                                <label for="aceptar" class="form-check-label">
-                                                    <a href="#" title="terminos">Acepto los termino</a>
-                                                </label> 
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            {{ Form_off_label(register_user_form.submit, class="btn btn-primary form-control", value="Registrar") }}
-                                        </div>
-
-                                    </form>
-
-                                    <hr>
-
-                                    {% include 'messages.html' %}
-                                
-                                    <div class="text-center">
-                                        <a class="small" href="{{ url_for_security('forgot_password') }}">¿Se te olvidó tu contraseña?</a>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <a class="small" href="{{ url_for_security('login') }}">¿Ya tienes una cuenta? ¡Iniciar sesión!</a>
-                                    </div>
+                                <div class="col-sm-6">
+                                    {{ Form_off_label(register_user_form.first_name.label) }}
+                                    {{ Form_off_label(register_user_form.last_name, class="form-control ", placeholder="Apellido") }}
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                {{ Form_off_label(register_user_form.email.label) }}
+                                {{ Form_off_label(register_user_form.email, class="form-control ", placeholder="usuario@ejemplo.com") }}
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    {{ Form_off_label(register_user_form.password.label) }}
+                                    {{ Form_off_label(register_user_form.password, class="form-control ", placeholder="Contraseña") }}
+                                </div>
+
+                                <div class="col-sm-6">
+                                    {{ Form_off_label(register_user_form.password_confirm.label) }}
+                                    {{ Form_off_label(register_user_form.password_confirm, class="form-control ", placeholder="Repite la contraseña") }}
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="form-group col-md-3">
+                                    {{ Form_off_label(register_user_form.gender.label) }}
+                                    {{ Form_off_label(register_user_form.gender, class="form-control ", placeholder="Genero") }}
+                                </div>
+
+                                <div class="col-md-4">
+                                    {{ Form_off_label(register_user_form.country.label) }}
+                                    {{Form_off_label(register_user_form.country, class="form-control")}}
+                                </div>
+
+                                <div class="col-md-5">
+                                    {{ Form_off_label(register_user_form.phone_number.label) }}
+                                    {{ Form_off_label(register_user_form.phone_number, class="form-control ", placeholder="Numero de telefono") }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    {{ Form_off_label(register_user_form.aceptar, class="form-check-input") }}
+                                    <label for="aceptar" class="form-check-label">
+                                        <a href="#" title="terminos">Acepto los termino</a>
+                                    </label> 
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ Form_off_label(register_user_form.submit, class="btn btn-primary btn-block", value="Registrar") }}
+                            </div>
+
+                        </form>
+                                
+                        <div class="card-footer bg-white text-center">
+                            <a href="{{ url_for_security('forgot_password') }}">
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="card col-md-8 m-auto shadow-lg">
+                        <div class="m-auto" style="height: 100%">
+                            <p class="py-3 m-auto">¿Ya tienes cuenta?  
+                                <a href="{{ url_for_security('login') }}">¡Iniciar sesión!</a>
+                            </p>
                         </div>
                     </div>
                 </div>

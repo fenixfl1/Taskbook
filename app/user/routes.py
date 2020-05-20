@@ -6,8 +6,8 @@ from datetime import datetime, date
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
-from app.database.models import Eventos, Tarea, PlanEstudio, DetalleTarea, \
-    Materias, Profesor
+from app.database.models import Events, Tasks, StudyPlan, \
+    Courses, Teachers
 from app.database.queries import Queries
 
 
@@ -16,17 +16,17 @@ from app.database.queries import Queries
 @login_required
 def index():
 
-    event = Queries.queries(Eventos, current_user)
-    task = Queries.queries(Tarea, current_user)
-    plan = Queries.queries(PlanEstudio, current_user)
-    subject = Queries.queries(Materias, current_user)
+    event = Queries.queries(Events, current_user)
+    task = Queries.queries(Tasks, current_user)
+    plan = Queries.queries(StudyPlan, current_user)
+    subject = Queries.queries(Courses, current_user)
 
-    _task = db.query(Tarea, DetalleTarea).\
-        filter(Tarea.user_id == current_user.id).\
-        filter(DetalleTarea.dia_endrega).first()
+    _task = db.query(Tasks).\
+        filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.delivery_day).first()
 
     return render_template(
-        'user/index.html.j2',
+        'user/react/test.html.j2',
         title='Index -',
         event_user=event,
         task_user=task,
@@ -58,8 +58,8 @@ def profile(user):
 @login_required
 def subjects():
 
-    subjects = db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.estado == 1)
+    subjects = db.query(Courses).filter(Courses.user_id == current_user.id).\
+        filter(Courses.finished == 0)
 
     sform = SubjectsForm()
     pform = ProfeForm()
@@ -84,9 +84,10 @@ def subjects_finished():
     formQ = QualificationForm()
 
     try:
-        subjects = db.query(Materias).\
-            filter(Materias.user_id == current_user.id).\
-            filter(Materias.estado == 0)
+        subjects = db.query(Courses).\
+            filter(Courses.user_id == current_user.id).\
+            filter(Courses.state == False).\
+            filter(Courses.finished == True)
 
     except ValueError as e:
         raise e
@@ -108,8 +109,8 @@ def teachers():
 
     form = ProfeForm()
 
-    teacher = db.query(Profesor).filter(
-        Profesor.user_id == current_user.id).all()
+    teacher = db.query(Teachers).filter(
+        Teachers.user_id == current_user.id).all()
 
     return render_template(
         'user/teachers.html.j2',
@@ -125,7 +126,7 @@ def teachers():
 @login_required
 def horario():
 
-    subjects = Queries.queries(Materias, current_user)
+    subjects = Queries.queries(Courses, current_user)
 
     return render_template(
         'user/schedule.html.j2',
@@ -142,7 +143,7 @@ def tasks():
 
     form = TaskForm()
 
-    task = Queries.queries(Tarea, current_user)
+    task = Queries.queries(Tasks, current_user)
 
     return render_template(
         'user/task.html.j2',
@@ -157,8 +158,8 @@ def tasks():
 @login_required
 def task_finished():
 
-    task = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
-        filter(Tarea.estado == 0)
+    task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.state == True).filter(Tasks.done == True)
 
     form = TaskForm()
 
@@ -177,8 +178,8 @@ def edit_tasks(id):
 
     form = TaskForm()
 
-    datos = db.query(Tarea).filter(Tarea.user_id == current_user.id).\
-        filter(Tarea.id == id).one()
+    datos = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.id == id).one()
 
     return render_template(
         'user/edit/edit_tasks.html.j2',
@@ -196,8 +197,8 @@ def details_task(id):
 
     form = TaskForm()
 
-    details = db.query(Tarea).filter(Tarea.id == id).\
-        options(contains_eager(Tarea.user)).one()
+    details = db.query(Tasks).filter(Tasks.id == id).\
+        options(contains_eager(Tasks.user)).one()
 
     return render_template(
         'user/details_task.html.j2',
@@ -215,7 +216,7 @@ def plan_de_estudio():
 
     plan_form = PlanForm()
 
-    plan = Queries.queries(PlanEstudio, current_user)
+    plan = Queries.queries(StudyPlan, current_user)
 
     return render_template(
         'user/stady_plan.html.j2',
@@ -233,8 +234,8 @@ def eventos():
 
     form = EventForm(request.form)
 
-    event = Queries.queries(Eventos, current_user)
-    num_event = Queries.contador(Eventos, current_user, 1)
+    event = Queries.queries(Events, current_user)
+    num_event = Queries.contador(Events, current_user, 1)
 
     return render_template(
         'user/events.html.j2',

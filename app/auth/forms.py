@@ -1,24 +1,25 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
-    TextAreaField, BooleanField, SelectField, HiddenField
+    TextAreaField, BooleanField, SelectField
 from wtforms.fields.html5 import DateField, TimeField, \
     EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
-from app.database.models import Materias, Profesor
+from app.database.models import Courses, Teachers
 from app.database import db
 from flask_security import current_user
 
 
 def subject_query():
-    return db.query(Materias).filter(Materias.user_id == current_user.id).\
-        filter(Materias.estado == True).order_by(Materias.id)
+    return db.query(Courses).filter(Courses.user_id == current_user.id).\
+        filter(Courses.state == True).filter(Courses.finished == False).\
+        order_by(Courses.id)
 
 
 def profesor_query():
-    return db.query(Profesor).filter(Profesor.user_id == current_user.id)\
-        .order_by(Profesor.full_name)
+    return db.query(Teachers).filter(Teachers.user_id == current_user.id)\
+        .order_by(Teachers.full_name)
 
 
 lista_calificacion = [('A', 'A - Muy bien: 90-100%'),
@@ -32,7 +33,7 @@ class Default(FlaskForm):
     id = StringField()
     submit = SubmitField()
 
- 
+
 class LoadForm(Default):
 
     picture = FileField(id='file', _name='file')
@@ -62,9 +63,9 @@ class SubjectsForm(Default):
         allow_blank=True
     )
 
-    calificacion = SelectField('Calificación', 
-        choices=lista_calificacion
-    )
+    calificacion = SelectField('Calificación',
+                               choices=lista_calificacion
+                               )
 
     estado = BooleanField('Marcar como cursada')
 
@@ -74,13 +75,12 @@ class QualificationForm(Default):
     name = StringField(
         'Nombre', validators=[DataRequired()]
     )
-    
+
     calificacion = SelectField(
         'Calificación',
         validators=[DataRequired()],
         choices=lista_calificacion
     )
-
 
 
 class ProfeForm(Default):
