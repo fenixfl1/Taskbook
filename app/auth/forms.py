@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
-    TextAreaField, BooleanField, SelectField
-from wtforms.fields.html5 import DateField, TimeField, \
+    TextAreaField, BooleanField, SelectField, RadioField
+from wtforms.fields.html5 import TimeField, \
     EmailField, URLField, DateTimeField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
@@ -13,7 +13,7 @@ from flask_security import current_user
 
 def subject_query():
     return db.query(Courses).filter(Courses.user_id == current_user.id).\
-        filter(Courses.state == True).filter(Courses.finished == False).\
+        filter(Courses.state == 1).filter(Courses.finished == 0).\
         order_by(Courses.id)
 
 
@@ -112,10 +112,10 @@ class TaskForm(Default):
         query_factory=subject_query, allow_blank=True
     )
 
-    asignada_en = DateField(
+    asignada_en = DateTimeField(
         'Fecha de asignacion', validators=[DataRequired()])
 
-    dia_entrega = DateField(
+    dia_entrega = DateTimeField(
         'Fecha de entrega', validators=[DataRequired()])
 
     nota = TextAreaField(
@@ -161,3 +161,12 @@ class PlanForm(Default):
     objetivo = TextAreaField(
         'Objetivo', validators=[Length(max=255)]
     )
+
+
+galery = [('img_1', 'image 1'), ('img_2', 'image 2'),
+          ('img_3', 'image 3'), ('mgg_4', 'image 4')]
+
+
+class GaleryCourseForm(Default):
+
+    image = RadioField("image", choices=galery)

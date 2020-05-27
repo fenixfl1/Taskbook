@@ -1,46 +1,20 @@
 from flask import Flask
-from flask_mail import Mail
-from flask_wtf import CSRFProtect
-from flask_bootstrap import Bootstrap
 from flask_fontawesome import FontAwesome
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_admin import Admin
-from flask_login import LoginManager
-from flask_cors import CORS
-from flask_security import Security, SQLAlchemySessionUserDatastore
-from celery import Celery
+from flask_security import SQLAlchemySessionUserDatastore
+from .flask_celery.celery_utils import init_celery
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, all_request, create_user
-from .extendforms import ExtendRegisterForm
+from app.extra import register_error_handlers, MyAdminIndexView, all_request
+from app.auth.security_form import ExtendRegisterForm
 from .filters import NewFilter
-from .celery_utils import init_celery
+from .extentions import *
 import os
 
-
-mail = Mail()
-adm = Admin(name='Taskbook', template_mode='bootstrap3')
-sql = SQLAlchemy()
-migrate = Migrate()
-login = LoginManager()
-security = Security()
 name = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
-
-def make_celery(app_name=__name__):
-
-    return Celery(
-        app_name,
-        backend='redis://',
-        broker='redis://localhost:6379'
-    )
-
-
-celery = make_celery()
 
 def creatre_app(setting_module, app_name=name, **kwargs):
 
@@ -61,13 +35,14 @@ def creatre_app(setting_module, app_name=name, **kwargs):
         app.config.from_envvar('APP_PRODUCTION_SETTINGS', silent=False)
 
     # library integrations
-    CSRFProtect(app)
-    Bootstrap(app)
-    Migrate(app, db)
+    csrf.init_app(app)
+    bootstrap.init_app(app)
     FontAwesome(app)
-    CORS(app)
+    cors.init_app(app)
+    avatars.init_app(app)
     mail.init_app(app)
     sql.init_app(app)
+    socket.init_app(app)
     migrate.init_app(app, sql)
     adm.init_app(app, index_view=MyAdminIndexView())
     login.init_app(app)

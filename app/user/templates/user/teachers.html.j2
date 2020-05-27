@@ -17,15 +17,9 @@
         <div id="content">
             <div class="container-fluid">
 
-                <ul class="breadcrumb">
+                <ul class="breadcrumb mr-4 ml-4">
                     <li class="breadcrumb-item active">
-                        <a href="/subjects/" class="">Asignaturas({{ conunter | subjects(1) }}) </a>
-                    </li>
-                                
-                    <li class="breadcrumb-item">
-                        <a href="/subjects/finished" class="">
-                            Cursadas({{ conunter | subjects(0) }})
-                        </a>
+                        <a href="/courses/" class="">Cursos({{ conunter | subjects(1) }}) </a>
                     </li>
 
                     <li class="breadcrumb-item">
@@ -34,7 +28,7 @@
                 </ul>
 
                 {% if (conunter | teachers(1) ) > 0 %}
-                    <div class="row m-auto">
+                    <div class="row mr-4 ml-4">
 
                         <div class="table-responsive">
 

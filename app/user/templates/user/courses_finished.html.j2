@@ -17,23 +17,18 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-                <ol class="breadcrumb" aria-label="breadcrumb">
+                <ol class="breadcrumb mr-4 ml-4" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/subjects">Asignaturas({{ subject | subjects(1) }})</a>
+                        <a href="/courses">Cursos({{ subject | subjects(1) }})</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        Cursadas({{ subject | subjects(0) }})
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="/subjects/teachers" class="">
-                            Profesores({{ subject | teachers(1) }})
-                        </a>
+                        Cursadas({{ subject | subjects(1) }})
                     </li>
                 </ol>
 
                 {# tabel #}
                 {% if (counter | subjects(0)) > 0 %}
-                    <div class="row m-auto">
+                    <div class="row mr-4 ml-4">
                         
                         <div class="table-responsive">
                             <table class="table table-striped table-borderless table-hover model-list bg-white rounded-lg" id="table">
@@ -47,7 +42,7 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for i in range(subject | subjects(0)) %}
+                                    {% for i in range(subject | subjects(1)) %}
                                         {% set dato = [subjects_user[i].name, subjects_user[i].id] %}
                                         <tr>
                                             <td>

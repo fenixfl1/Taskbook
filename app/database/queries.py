@@ -25,7 +25,8 @@ class Queries():
         if 'order_by' in kwargs and kwargs['order_by'] == 'date1':
 
             try:
-                return db.query(entity).filter(entity.user_id == user.id).first()
+                return db.query(entity).filter(entity.user_id == user.id)\
+                    .first()
             except ValueError as e:
                 raise e
 
@@ -87,8 +88,6 @@ class Queries():
         for i in range(num):
 
             date.append(result[i].detalle[0].dia_endrega)
-
-        m = max(date)
 
         r = db.query(entity).filter(entity.user_id == user.id).\
             options(contains_eager(entity.user)).first()

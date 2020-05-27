@@ -1,6 +1,6 @@
-from app import creatre_app, make_celery
+from app import creatre_app
 from app.database import init_db
-from app import celery
+from app.extentions import celery, socket
 import os
 
 settings_module = os.getenv('APP_SETTINGS_MODULE')
@@ -12,4 +12,4 @@ with app.app_context():
 
 
 if __name__ == '__main__':
-    app.run() 
+    socket.run(app)

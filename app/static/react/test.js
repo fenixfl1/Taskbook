@@ -1,19 +1,26 @@
 'use strict';
 
-class ShoppingList extends React.Component {
+class Main extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>Lista de compras para {this.props.name}</h1>
-        <ul>
-          <li>Instagram</li>
-          <li>WhatsApp</li>
-          <li>Oculus</li>
-        </ul>
+        <div className="row">
+
+          <div className="card  m-auto" style={{ height: '16rem', width: '14rem' }}>
+
+            <div className="card-header bg-white m-auto">
+              <h3 className="m-auto">React js</h3>
+            </div>
+
+            <div className="card-body">
+              <span className="card-text">Hola mundo</span>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const domContainer = document.querySelector('#react');
-ReactDOM.render(<ShoppingList />, domContainer);
+const domContainer = document.querySelector('#root');
+ReactDOM.render(<Main />, domContainer);

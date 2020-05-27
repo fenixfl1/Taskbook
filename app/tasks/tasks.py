@@ -1,9 +1,8 @@
-from app import mail, celery
+from app.extentions import mail, celery
 from app.database import db
 from flask_mail import Message
 from flask import render_template
 from datetime import datetime
-
 
 
 def send_mail(subject, recipients, text_body, html_body):

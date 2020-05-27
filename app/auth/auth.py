@@ -80,12 +80,9 @@ def register_subjects():
 
     if form.validate_on_submit():
 
-        state = True
         name = form.name.data
         profe = form.profe.data
-
-        if form.estado.data:
-            state = False
+        finished = form.estado.data
 
         # check that there's no subject with that name
         check = db.query(Courses).filter(Courses.user_id == current_user.id).\
@@ -93,7 +90,7 @@ def register_subjects():
 
         if check == None:
 
-            user = Courses(name=name, state=state,
+            user = Courses(name=name, finished=finished,
                            user_id=current_user.id,
                            teacher=profe)
 
@@ -127,7 +124,7 @@ def subject_completed(id):
 
     try:
         engne.execute(
-            """UPDATE course SET estado=0
+            """UPDATE course SET finished=1
                 WHERE id=%s""", (id))
 
         messages = 'Nueva asignatura marcada como cursada!'
@@ -151,7 +148,7 @@ def delete_subjects(id):
         filter(Courses.id == id).one()
 
     try:
-        db.delete(dato)
+        dato.state = 0
         db.commit()
 
         messages = 'Registro eliminado con exito!'
@@ -231,7 +228,7 @@ def register_profesor():
             if form.subjects.data is not None:
 
                 user = Teachers(full_name=name,
-                                materia=[form.subjects.data],
+                                course=[form.subjects.data],
                                 email=form.email.data,
                                 phone_number=form.phone.data,
                                 user_id=current_user.id)
@@ -245,9 +242,6 @@ def register_profesor():
             try:
                 db.add(user)
                 db.commit()
-
-                result = notify_pending_tasks.delay(current_user.email)
-                result.wait()
 
                 messages = 'Registro guardado con exito!'
                 category = 'success'

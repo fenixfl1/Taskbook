@@ -1,17 +1,39 @@
 from . import user_view
 from flask import render_template, request
 from flask_security import login_required, current_user
+from flask_socketio import emit
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, date
+from app.extentions import sql, socket
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
-    SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
+    SubjectsForm, ProfeForm, AssignForm, PlanForm, \
+    QualificationForm, GaleryCourseForm
 from app.database.models import Events, Tasks, StudyPlan, \
     Courses, Teachers
 from app.database.queries import Queries
 
 
+sqla = sql.session
+
+
+@socket.on('connect', namespace='/test')
+def test_connect():
+    emit('my response', {'data': 'Connected'})
+
+
+@socket.on('connect', namespace='/hello')
+def connect_handler():
+    if current_user.is_authenticated:
+        emit('my response',
+             {'message': '{0} has joined'.format(current_user.name)},
+             broadcast=True)
+    else:
+        return 0
+
 # this is the index mfunction
+
+
 @user_view.route('/index')
 @login_required
 def index():
@@ -33,6 +55,7 @@ def index():
         next_task=_task,
         stady_plan=plan,
         subject_user=subject,
+        async_mode=socket.async_mode,
         year=datetime.now()
     )
 
@@ -54,29 +77,49 @@ def profile(user):
 
 
 # this function is to see and create the subjects
-@user_view.route('/subjects/')
+@user_view.route('/courses/')
 @login_required
 def subjects():
 
-    subjects = db.query(Courses).filter(Courses.user_id == current_user.id).\
-        filter(Courses.finished == 0)
+    page = 1
+    pages = 1
+
+    if 'page' in request.args:
+        page = int(request.args.get('page'))
+
+    subjects = sqla.query(Courses).filter(Courses.user_id == current_user.id).\
+        filter(Courses.finished == 0).\
+        filter(Courses.state == 1).paginate(page, 8, 0)
+
+    pages = subjects.total / 8
+
+    if pages is not int:
+
+        total_pages = round(pages) + 1
+
+    else:
+        total_pages = pages - 1
 
     sform = SubjectsForm()
     pform = ProfeForm()
     aform = AssignForm()
+    galery = GaleryCourseForm()
 
     return render_template(
-        'user/subjects.html.j2',
-        title='Subjects -',
+        'user/courses.html.j2',
+        title='Courses -',
         subject_form=sform,
         subjects_user=subjects,
         profe_form=pform,
         assig_form=aform,
+        galery_form=galery,
+        current_page=page,
+        total_pages=total_pages,
         year=datetime.now()
     )
 
 
-@user_view.route('/subjects/finished')
+@user_view.route('/courses/finished')
 @login_required
 def subjects_finished():
 
@@ -86,15 +129,15 @@ def subjects_finished():
     try:
         subjects = db.query(Courses).\
             filter(Courses.user_id == current_user.id).\
-            filter(Courses.state == False).\
-            filter(Courses.finished == True)
+            filter(Courses.state == 1).\
+            filter(Courses.finished == 1).all()
 
     except ValueError as e:
         raise e
 
     return render_template(
-        'user/subjects_finished.html.j2',
-        title='Subjects finished -',
+        'user/courses_finished.html.j2',
+        title='Finished courses -',
         subject_form=form,
         qualif_form=formQ,
         subjects_user=subjects,
@@ -103,7 +146,7 @@ def subjects_finished():
 
 
 # this function is to see the details of the subjects
-@user_view.route('/subjects/teachers')
+@user_view.route('/courses/teachers')
 @login_required
 def teachers():
 
@@ -114,7 +157,7 @@ def teachers():
 
     return render_template(
         'user/teachers.html.j2',
-        title="teachers -",
+        title="Teachers -",
         profe_form=form,
         teachers=teacher,
         year=datetime.now()
@@ -159,7 +202,7 @@ def tasks():
 def task_finished():
 
     task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
-        filter(Tasks.state == True).filter(Tasks.done == True)
+        filter(Tasks.state == 1).filter(Tasks.done == 1)
 
     form = TaskForm()
 

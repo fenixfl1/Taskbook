@@ -1,0 +1,139 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:16
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-bald-man-with-tie-and-glasses:before { content: "\f100"; }
+.flaticon-bald-user-with-gears:before { content: "\f101"; }
+.flaticon-bald-user-with-glasses:before { content: "\f102"; }
+.flaticon-boy-with-glasses:before { content: "\f103"; }
+.flaticon-businessman-with-tie:before { content: "\f104"; }
+.flaticon-edit-woman-with-bund-profile:before { content: "\f105"; }
+.flaticon-elegant-girl:before { content: "\f106"; }
+.flaticon-elegant-woman-with-bun:before { content: "\f107"; }
+.flaticon-femenine-user-with-long-hair:before { content: "\f108"; }
+.flaticon-girl-with-blonde-hair-and-stripped-shirt:before { content: "\f109"; }
+.flaticon-girl-with-long-hair:before { content: "\f10a"; }
+.flaticon-girl-with-short-hair-and-dress:before { content: "\f10b"; }
+.flaticon-man-user:before { content: "\f10c"; }
+.flaticon-man-with-beard-and-moustache:before { content: "\f10d"; }
+.flaticon-man-with-glasses-and-shirt:before { content: "\f10e"; }
+.flaticon-man-with-goatbeard-and-moustache:before { content: "\f10f"; }
+.flaticon-man-with-low-beard:before { content: "\f110"; }
+.flaticon-man-with-moustache:before { content: "\f111"; }
+.flaticon-man-with-moustache-and-stripped-shirt:before { content: "\f112"; }
+.flaticon-man-with-sunglasses-and-suit:before { content: "\f113"; }
+.flaticon-man-with-sunglasses-suit-and-star:before { content: "\f114"; }
+.flaticon-man-with-tie-profile:before { content: "\f115"; }
+.flaticon-old-folks-couple:before { content: "\f116"; }
+.flaticon-old-lady-conversation:before { content: "\f117"; }
+.flaticon-old-lady-telemarketer:before { content: "\f118"; }
+.flaticon-old-lady-with-bund:before { content: "\f119"; }
+.flaticon-old-lady-with-speeh-balloon:before { content: "\f11a"; }
+.flaticon-policeman-head:before { content: "\f11b"; }
+.flaticon-refresh-user-profile:before { content: "\f11c"; }
+.flaticon-user-agenda:before { content: "\f11d"; }
+.flaticon-user-girl-with-long-hair:before { content: "\f11e"; }
+.flaticon-user-pass:before { content: "\f11f"; }
+.flaticon-user-search:before { content: "\f120"; }
+.flaticon-user-security:before { content: "\f121"; }
+.flaticon-user-with-beard:before { content: "\f122"; }
+.flaticon-user-with-glasses-message:before { content: "\f123"; }
+.flaticon-user-with-moustache:before { content: "\f124"; }
+.flaticon-user-with-sunglasses-and-goatee-beard:before { content: "\f125"; }
+.flaticon-user-with-tie:before { content: "\f126"; }
+.flaticon-user-with-tie-and-glasses:before { content: "\f127"; }
+.flaticon-users-cloud:before { content: "\f128"; }
+.flaticon-woman-with-bon-and-unlock-padlock:before { content: "\f129"; }
+.flaticon-woman-with-bond-and-buttons-user:before { content: "\f12a"; }
+.flaticon-woman-with-bund:before { content: "\f12b"; }
+.flaticon-woman-with-bund-and-glasses:before { content: "\f12c"; }
+.flaticon-woman-with-sunglasses-and-bun:before { content: "\f12d"; }
+.flaticon-youn-lady-with-short-hair:before { content: "\f12e"; }
+.flaticon-young-man-with-goatbeard:before { content: "\f12f"; }
+.flaticon-young-man-with-tie:before { content: "\f130"; }
+.flaticon-young-telemarketer:before { content: "\f131"; }
+    
+    $font-Flaticon-bald-man-with-tie-and-glasses: "\f100";
+    $font-Flaticon-bald-user-with-gears: "\f101";
+    $font-Flaticon-bald-user-with-glasses: "\f102";
+    $font-Flaticon-boy-with-glasses: "\f103";
+    $font-Flaticon-businessman-with-tie: "\f104";
+    $font-Flaticon-edit-woman-with-bund-profile: "\f105";
+    $font-Flaticon-elegant-girl: "\f106";
+    $font-Flaticon-elegant-woman-with-bun: "\f107";
+    $font-Flaticon-femenine-user-with-long-hair: "\f108";
+    $font-Flaticon-girl-with-blonde-hair-and-stripped-shirt: "\f109";
+    $font-Flaticon-girl-with-long-hair: "\f10a";
+    $font-Flaticon-girl-with-short-hair-and-dress: "\f10b";
+    $font-Flaticon-man-user: "\f10c";
+    $font-Flaticon-man-with-beard-and-moustache: "\f10d";
+    $font-Flaticon-man-with-glasses-and-shirt: "\f10e";
+    $font-Flaticon-man-with-goatbeard-and-moustache: "\f10f";
+    $font-Flaticon-man-with-low-beard: "\f110";
+    $font-Flaticon-man-with-moustache: "\f111";
+    $font-Flaticon-man-with-moustache-and-stripped-shirt: "\f112";
+    $font-Flaticon-man-with-sunglasses-and-suit: "\f113";
+    $font-Flaticon-man-with-sunglasses-suit-and-star: "\f114";
+    $font-Flaticon-man-with-tie-profile: "\f115";
+    $font-Flaticon-old-folks-couple: "\f116";
+    $font-Flaticon-old-lady-conversation: "\f117";
+    $font-Flaticon-old-lady-telemarketer: "\f118";
+    $font-Flaticon-old-lady-with-bund: "\f119";
+    $font-Flaticon-old-lady-with-speeh-balloon: "\f11a";
+    $font-Flaticon-policeman-head: "\f11b";
+    $font-Flaticon-refresh-user-profile: "\f11c";
+    $font-Flaticon-user-agenda: "\f11d";
+    $font-Flaticon-user-girl-with-long-hair: "\f11e";
+    $font-Flaticon-user-pass: "\f11f";
+    $font-Flaticon-user-search: "\f120";
+    $font-Flaticon-user-security: "\f121";
+    $font-Flaticon-user-with-beard: "\f122";
+    $font-Flaticon-user-with-glasses-message: "\f123";
+    $font-Flaticon-user-with-moustache: "\f124";
+    $font-Flaticon-user-with-sunglasses-and-goatee-beard: "\f125";
+    $font-Flaticon-user-with-tie: "\f126";
+    $font-Flaticon-user-with-tie-and-glasses: "\f127";
+    $font-Flaticon-users-cloud: "\f128";
+    $font-Flaticon-woman-with-bon-and-unlock-padlock: "\f129";
+    $font-Flaticon-woman-with-bond-and-buttons-user: "\f12a";
+    $font-Flaticon-woman-with-bund: "\f12b";
+    $font-Flaticon-woman-with-bund-and-glasses: "\f12c";
+    $font-Flaticon-woman-with-sunglasses-and-bun: "\f12d";
+    $font-Flaticon-youn-lady-with-short-hair: "\f12e";
+    $font-Flaticon-young-man-with-goatbeard: "\f12f";
+    $font-Flaticon-young-man-with-tie: "\f130";
+    $font-Flaticon-young-telemarketer: "\f131";

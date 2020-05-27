@@ -14,7 +14,8 @@
 <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/DataTables/dataTables.bootstrap4.min.css') }}" 
     rel="stylesheet">
-<link href="{{ url_for('static',filename='css/google-fonts-family.css') }}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=PT+Sans:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital@1&display=swap" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/google-fonts.css') }}" rel="stylesheet"> {% endblock %}
 {% block scripts %}
 {% endblock  %}
@@ -42,19 +43,38 @@
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('users.profile',
-                        user=current_user.first_name) }}" title="Profile">
+                <a class="nav-link" 
+                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  title="Profile">
                     <i class="fas fa-user"></i>
                     <span>Perfil</span>
                 </a>
             </li>
 
             <hr class="sidebar-divider">
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/subjects" title="subjects">
+            <li class="nav-item dropdown dropdown-hover">
+                <a class="nav-link collapsed dropdown-toggle" 
+                  href="" title="Cursos" type="button" 
+                  id="dropdownMenuButton" data-toggle="dropdown" 
+                  aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>Asignaturas</span>
+                    <span>Cursos</span>
                 </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/courses">
+                        <i class="fas fa-clipboard-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Mis cursos
+                    </a>
+                    <a class="dropdown-item" href="/courses/finished">
+                        <i class="fas fa-clipboard-check fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Cursos completados
+                    </a>
+                    <a class="dropdown-item" href="/courses/teachers">
+                        <i class="fas fa-chalkboard-teacher fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Profesores
+                    </a>
+                </div>
             </li>
 
             <li class="nav-item">
@@ -174,11 +194,7 @@
                                     {{ current_user.first_name.capitalize()}} 
                                     {{ current_user.last_name.capitalize() }}
                                 </span> 
-                                {% if current_user.picture != None %}
-                                    <img class="rounded-circle" src="{{ url_for('static',filename=current_user.picture)}}">
-                                {% else %}
-                                    <img clase='rounded-circle' src="{{url_for('static',filename='images/default.png')}}"> 
-                                {% endif %}
+                                <img src="{{ avatars.default(size='s') }}">
                             </a>
 
                             <!-- Dropdown - User Information -->

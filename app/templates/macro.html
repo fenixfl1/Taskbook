@@ -28,11 +28,13 @@
 {%- endmacro %}
 
 {% macro navbar(name, holder, title, modal_id) %}
-    <nav class="navbar navbar-light shadow-none">
-        <button type="button" title="{{title}}" class="btn btn-outline-primary" data-toggle="modal" data-target="{{modal_id}}">
+    <nav class="navbar navbar-light shadow-none" style="margin-left: 25px">
+        <button type="button" title="{{title}}" class="btn btn-outline-primary" 
+         data-toggle="modal" data-target="{{modal_id}}">
             {{name}}
         </button>
-        <form class="form-inline">
+        
+        <form class="form-inline" style="margin-right: 32px">
             <input type="text" class="form-control" id="search" 
             placeholder="{{holder}}" aria-label="Search" size='40'>
         </form>

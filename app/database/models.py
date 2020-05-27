@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, String, ForeignKey,\
-    Column, DateTime, Boolean, Time, Date, CHAR
+    Column, DateTime, Boolean, Time, CHAR
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from flask_security import UserMixin, RoleMixin
@@ -111,12 +111,11 @@ class Courses(Base):
     qualification = Column(CHAR(1), default=None)
     state = Column(Boolean(), default=True)
 
-    def __init__(self, name, state, user_id, **kwargs):
+    def __init__(self, name, user_id, **kwargs):
 
         self.name = name
-        self.state = state
         self.user_id = user_id
-        self.profesor = kwargs.get('teacher')
+        self.teacher = kwargs.get('teacher')
         self.finished = kwargs.get('finished')
         self.qualification = kwargs.get('qualification')
 
@@ -156,7 +155,7 @@ class Tasks(Base):
     course = relationship('Courses', back_populates='task')
     name = Column(String(80), nullable=False)
     assigned_in = Column(DateTime(timezone=True), default=func.now())
-    delivery_day = Column(Date(), nullable=False)
+    delivery_day = Column(DateTime(), nullable=False)
     finished_in = Column(DateTime())
     comment = Column(String(150))
     done = Column(Boolean(), default=True)
