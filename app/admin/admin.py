@@ -1,5 +1,5 @@
 from flask import redirect, url_for
-from app.extentions import adm
+from app import adm
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from flask_login import current_user

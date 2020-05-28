@@ -24,6 +24,7 @@ adm = Admin(name='Taskbook', template_mode='bootstrap3')
 login = LoginManager()
 migrate = Migrate()
 celery = make_celery()
+db_session = sql.session
 
 __all__ = [
     'sql',

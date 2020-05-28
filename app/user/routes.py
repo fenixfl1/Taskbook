@@ -1,12 +1,9 @@
 from . import user_view
-from flask import render_template, request, \
-    copy_current_request_context, session
+from flask import render_template, request
 from flask_security import login_required, current_user
-from flask_socketio import emit, join_room, leave_room, \
-    close_room, rooms, disconnect
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, date
-from app.extentions import sql, socket
+from app import db_session, socket
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, \
@@ -14,35 +11,6 @@ from app.auth.forms import LoadForm, EventForm, TaskForm, \
 from app.database.models import Events, Tasks, StudyPlan, \
     Courses, Teachers
 from app.database.queries import Queries
-from threading import Lock
-
-
-sqla = sql.session
-thread = None
-thread_lock = Lock()
-
-
-def background_thread():
-    """Example of how to send server generated events to clients."""
-    count = 0
-    while True:
-        socket.sleep(10)
-        count += 1
-        socket.emit('my_response',
-                    {'data': 'Server generated event', 'count': count},
-                    namespace='/test')
-
-
-@socket.on('connect', namespace='/hello')
-def connect_handler():
-    if current_user.is_authenticated:
-        emit('my response',
-             {'message': '{0} has joined'.format(current_user.name)},
-             broadcast=True)
-    else:
-        return 0
-
-# this is the index mfunction
 
 
 @user_view.route('/index')
@@ -98,16 +66,15 @@ def subjects():
     if 'page' in request.args:
         page = int(request.args.get('page'))
 
-    subjects = sqla.query(Courses).filter(Courses.user_id == current_user.id).\
+    courses = db_session.query(Courses).\
+        filter(Courses.user_id == current_user.id).\
         filter(Courses.finished == 0).\
         filter(Courses.state == 1).paginate(page, 8, 0)
 
-    pages = subjects.total / 8
+    pages = courses.total / 8
 
     if pages is not int:
-
         total_pages = round(pages) + 1
-
     else:
         total_pages = pages - 1
 
@@ -120,7 +87,7 @@ def subjects():
         'user/courses.html.j2',
         title='Courses -',
         subject_form=sform,
-        subjects_user=subjects,
+        subjects_user=courses,
         profe_form=pform,
         assig_form=aform,
         galery_form=galery,
@@ -138,7 +105,7 @@ def subjects_finished():
     formQ = QualificationForm()
 
     try:
-        subjects = db.query(Courses).\
+        courses = db.query(Courses).\
             filter(Courses.user_id == current_user.id).\
             filter(Courses.state == 1).\
             filter(Courses.finished == 1).all()
@@ -151,7 +118,7 @@ def subjects_finished():
         title='Finished courses -',
         subject_form=form,
         qualif_form=formQ,
-        subjects_user=subjects,
+        subjects_user=courses,
         year=datetime.now()
     )
 
@@ -180,12 +147,12 @@ def teachers():
 @login_required
 def horario():
 
-    subjects = Queries.queries(Courses, current_user)
+    courses = Queries.queries(Courses, current_user)
 
     return render_template(
         'user/schedule.html.j2',
         title='Schedule -',
-        subjects_user=subjects,
+        subjects_user=courses,
         year=datetime.now()
     )
 
@@ -299,87 +266,3 @@ def eventos():
         event_form=form,
         year=datetime.now()
     )
-
-
-@socket.on('my_event', namespace='/test')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
-         {'data': message['data'], 'count': session['receive_count']})
-
-
-@socket.on('my_broadcast_event', namespace='/test')
-def test_broadcast_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
-         {'data': message['data'], 'count': session['receive_count']},
-         broadcast=True)
-
-
-@socket.on('join', namespace='/test')
-def join(message):
-    join_room(message['room'])
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
-         {'data': 'In rooms: ' + ', '.join(rooms()),
-          'count': session['receive_count']})
-
-
-@socket.on('leave', namespace='/test')
-def leave(message):
-    leave_room(message['room'])
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
-         {'data': 'In rooms: ' + ', '.join(rooms()),
-          'count': session['receive_count']})
-
-
-@socket.on('close_room', namespace='/test')
-def close(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response', {'data': 'Room ' + message['room'] + ' is closing.',
-                         'count': session['receive_count']},
-         room=message['room'])
-    close_room(message['room'])
-
-
-@socket.on('my_room_event', namespace='/test')
-def send_room_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
-         {'data': message['data'], 'count': session['receive_count']},
-         room=message['room'])
-
-
-@socket.on('disconnect_request', namespace='/test')
-def disconnect_request():
-    @copy_current_request_context
-    def can_disconnect():
-        disconnect()
-
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    # for this emit we use a callback function
-    # when the callback function is invoked we know that the message has been
-    # received and it is safe to disconnect
-    emit('my_response',
-         {'data': 'Disconnected!', 'count': session['receive_count']},
-         callback=can_disconnect)
-
-
-@socket.on('my_ping', namespace='/test')
-def ping_pong():
-    emit('my_pong')
-
-
-@socket.on('connect', namespace='/test')
-def test_connect():
-    global thread
-    with thread_lock:
-        if thread is None:
-            thread = socket.start_background_task(background_thread)
-    emit('my_response', {'data': 'Connected', 'count': 0})
-
-
-@socket.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected', request.sid)

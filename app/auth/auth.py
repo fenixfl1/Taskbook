@@ -1,5 +1,5 @@
 from . import auth_view
-from app.tasks.tasks import pending_tasks, next_subject, test
+from app.tasks import pending_tasks, next_subject, test
 from flask import render_template, flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
