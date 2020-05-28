@@ -19,15 +19,15 @@
             <div class="container-fluid">
                 <ol class="breadcrumb mr-4 ml-4" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/courses">Cursos({{ subject | subjects(1) }})</a>
+                        <a href="/courses">Cursos({{ courses | courses(0) }})</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        Cursadas({{ subject | subjects(1) }})
+                        Cursadas({{ courses | courses(1) }})
                     </li>
                 </ol>
 
                 {# tabel #}
-                {% if (counter | subjects(0)) > 0 %}
+                {% if (counter | courses(0)) > 0 %}
                     <div class="row mr-4 ml-4">
                         
                         <div class="table-responsive">
@@ -42,7 +42,7 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for i in range(subject | subjects(1)) %}
+                                    {% for i in range(courses | courses(1)) %}
                                         {% set dato = [subjects_user[i].name, subjects_user[i].id] %}
                                         <tr>
                                             <td>

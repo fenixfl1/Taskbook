@@ -11,6 +11,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from .flask_celery import make_celery
 
+
 sql = SQLAlchemy()
 cors = CORS()
 bootstrap = Bootstrap()

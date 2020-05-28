@@ -2,12 +2,12 @@ from flask import Flask
 from flask_fontawesome import FontAwesome
 from flask_security import SQLAlchemySessionUserDatastore
 from .flask_celery.celery_utils import init_celery
+from app.jinja_filters import Filter
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
 from app.extra import register_error_handlers, MyAdminIndexView, all_request
 from app.auth.security_form import ExtendRegisterForm
-from .filters import NewFilter
 from .extentions import *
 import os
 
@@ -35,6 +35,7 @@ def creatre_app(setting_module, app_name=name, **kwargs):
         app.config.from_envvar('APP_PRODUCTION_SETTINGS', silent=False)
 
     # library integrations
+    Filter(app)
     csrf.init_app(app)
     bootstrap.init_app(app)
     FontAwesome(app)
@@ -63,7 +64,5 @@ def creatre_app(setting_module, app_name=name, **kwargs):
     # my extentions
     register_error_handlers(app)
     all_request._(app, db)
-    NewFilter.counters(app)
-    # create_user(app, user_datastore, db, Role)
 
     return app
