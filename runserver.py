@@ -11,4 +11,4 @@ with app.app_context():
 
 
 if __name__ == '__main__':
-    socket.run(app)
+    app.run()

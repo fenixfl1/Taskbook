@@ -19,11 +19,6 @@ DEBUG = False
 TESTING = False
 ENV = ''
 
-SERVER_NAME = 'localhost:5000'
-PRODUCTION_DOMAIN = 'https:/taskbook.com/'
-DEVELOPMENT_DOMAIN = 'taskbook.com:5555'
-
-
 # Security
 SECURITY_PASSWORD_HASH = 'sha512_crypt'
 SECURITY_PASSWORD_SALT = 'sha512_crypt'
