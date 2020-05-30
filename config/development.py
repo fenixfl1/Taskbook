@@ -1,7 +1,6 @@
 import os
 from .default import *
 
-
 # celery config
 CELERY_BROKER_URL = os.getenv('REDIS')
 CELERY_BACKEND_URL = 'db+cymysql://root:Adminfl119?@localhost:3306/Taskbook'
