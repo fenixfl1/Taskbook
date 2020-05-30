@@ -7,7 +7,8 @@ engne = create_engine(
     SQLALCHEMY_DATABASE_URI,
     convert_unicode=True,
     pool_size=10, max_overflow=20,
-    pool_pre_ping=True
+    pool_pre_ping=True,
+    pool_recycle=280
 )
 
 db = scoped_session(sessionmaker(
