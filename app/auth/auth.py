@@ -119,7 +119,7 @@ def register_subjects():
     return redirect(url_for('users.subjects'))
 
 
-@auth_view.route('/subjects/completed/<id>')
+@auth_view.route('/subjects/completed/<int:id>')
 def subject_completed(id):
 
     try:
@@ -141,7 +141,7 @@ def subject_completed(id):
     return redirect(url_for('users.subjects_finished'))
 
 
-@auth_view.route('/delete/subject/<id>')
+@auth_view.route('/delete/subject/<int:id>')
 def delete_subjects(id):
 
     dato = db.query(Courses).filter(Courses.user_id == current_user.id).\
@@ -178,8 +178,6 @@ def assing_teacher():
 
     form = AssignForm()
 
-    print("_______________________________")
-    print(form.id.data)
     if form.validate_on_submit():
 
         name = form.profe.data
@@ -188,7 +186,8 @@ def assing_teacher():
 
         try:
 
-            update = db.query(Courses).filter(Courses.user_id == current_user.id)\
+            update = db.query(Courses).\
+                filter(Courses.user_id == current_user.id)\
                 .filter(Courses.id == id_subject)
 
             new_teacher = update.one()
@@ -219,9 +218,9 @@ def register_profesor():
 
         name = form.full_name.data
 
-        check = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
+        check = db.query(Teachers).\
+            filter(Teachers.user_id == current_user.id).\
             filter(Teachers.full_name == name).first()
-
 
         if check == None:
 
@@ -261,7 +260,7 @@ def register_profesor():
     return redirect(url_for('users.teachers'))
 
 
-@auth_view.route('/delete/teachers/<id>')
+@auth_view.route('/delete/teachers/<int:id>')
 def delete_teachers(id):
 
     dato = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
@@ -386,8 +385,9 @@ def register_event():
 def calendar_events():
 
     try:
-        result = engne.execute('SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
-            UNIX_TIMESTAMP(end_date)*1000 as end FROM event')
+        result = engne.execute("""SELECT id, title, color, 
+            UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event""")
 
         resp = jsonify({
             'success': 1,
@@ -420,7 +420,7 @@ def register_study_plan():
 # this function is to delete records in any antity
 
 
-@auth_view.route('/delete/tasks/<string:id>')
+@auth_view.route('/delete/tasks/<int:id>')
 def delete_tasks(id):
 
     task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
@@ -465,7 +465,8 @@ def update_subjects():
 
         if teacher_id != '__None':
 
-            teacher = db.query(Teachers).filter(Teachers.user_id == current_user.id).\
+            teacher = db.query(Teachers).\
+                filter(Teachers.user_id == current_user.id).\
                 filter(Teachers.id == teacher_id).one()
 
             new_data.Teachers = teacher
@@ -549,20 +550,9 @@ def update_teacher():
     flash(messages, category)
     return redirect(url_for('users.teachers'))
 
-# this function is to obtain the datas of the entity you want edit
-
-
-@auth_view.route('/edit/<string:id>')
-def get_edit(id):
-
-    return render_template(
-        'auth/edit.html.j2',
-        title='edit-{}'.format(id)
-    )
-
 
 # this function edit any entity selected in the previus function
-@auth_view.route('/edit/task/<string:id>')
+@auth_view.route('/edit/task/<int:id>')
 def edit_tasks(id):
 
     try:
@@ -574,8 +564,9 @@ def edit_tasks(id):
 
         flash('Registro modificado con exito!', category='success')
 
-    except:
+    except ValueError as e:
 
         flash('No fue posible modificar los datos!', category='danger')
+        raise e
 
     return redirect(url_for('users.tasks'))

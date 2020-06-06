@@ -1,0 +1,230 @@
+{% extends "base.html" %}{% block content %}
+    {% from 'macro.html' import Form_off_label, navbar %}
+    
+    {# menu de navegacion #}
+    {{
+    navbar(name="Agregar",
+    holder="Agregar asignatura",
+    title="Agregar asignaturas",
+    modal_id="#exampleModalCenter")
+    }}
+    {# Alerts#}
+    {% include 'messages.html' %}
+    {# modal to add new teacher #}
+    {% include "forms/teacher_form.html.j2" %}
+    {# Modal to add new subject #}
+    {% include "forms/form_subjects.html.j2" %}
+    {# modal to edit subjects #}
+    {% include "forms/edit/subjects.html.j2" %}
+    {# modal to assing teachers #}
+    {% include "forms/edit/assing_teachers.html.j2" %}
+
+    <div class="row">
+    
+        <div class="col-12 row ml-2">
+            {% if courses | courses(0) > 0 %}
+                {% for courses in subjects_user.items %}
+                    <div class="card card-row mx-2 my-4" style="width: 14rem; max-height: 18rem">
+                        <figure>
+                            {{ courses.name | generate_avatar(size=300,
+                                                                  class='card-img-top') }}
+                        </figure>
+                        <div class="card-body text-center">
+                            <h5 class="card-title"> {{ courses.name }} </h5>
+                            <p class="card-text"> {{ courses.teacher }} </p>
+                            <a href="#" class="btn btn-primary mx-auto mt-3">Ir al curso</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <span>No tiene tareas pendientes</span>
+            {% endif %}
+        </div>
+
+        {# side bar menu #}
+        {# <div class="col-3">
+
+            <div class="list-group mr-3 bg-white" id="list-ta" role="tablist">
+                <a class="list-group-item list-group-item-action active" 
+                 id="list-home-list" data-toggle="list"
+                 href="#list-home" role="tab" 
+                 aria-controls="home">
+                    Tareas pendientes
+                </a>
+
+                <a class="list-group-item list-group-item-action" 
+                 id="list-profile-list" data-toggle="list" 
+                 href="#list-profile" role="tab" 
+                 aria-controls="profile">
+                    Tarea completadas
+                </a>
+
+                <a class="list-group-item list-group-item-action" 
+                 id="list-messages-list" data-toggle="list" 
+                 href="#list-messages" role="tab" 
+                 aria-controls="messages">
+                    Messages
+                </a>
+
+                <a class="list-group-item list-group-item-action"
+                 id="list-settings-list" data-toggle="list" 
+                 href="#list-settings" role="tab" 
+                 aria-controls="settings">
+                    Settings
+                </a>
+            </div>
+        </div> #}
+    </div>
+
+    {# <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div class="container-fluid">
+
+                {% if courses | courses(0) > 0 %}
+                    <div class="row">
+                        <div class="row m-auto col-md-12">
+                            {% for courses in subjects_user.items %}
+                                {% set dato = [courses.name, courses.id] %}
+
+                                <div class="m-2">
+                                    <div class="card m-3 card-row" style="width: 14rem; max-height: 16rem">
+                                        <figure>
+                                            {{ courses.name | generate_avatar(size=300,
+                                                                         class='card-img-top') }}
+                                            <div class="text-img">
+                                                <h5>Tareas pendientes</h5>
+                                                {% if courses.task%}
+                                                    <a href="#" title="Tarea pendiente">
+                                                        {{ courses.task[0] }}
+                                                    </a>
+                                                {% else %}
+                                                    <span>
+                                                        No hay tareas pendientes
+                                                        para esta asignatura.
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </figure>
+                                        <div class="card-body card-row-body">
+                                            <div class="content-card-body">
+                                                <h5 class="card-title m-auto"> {{courses.name}} </h5>
+                                                {% if courses.teacher != None %}
+                                                    <p class="card-text">
+                                                        <a href="#" title="">
+                                                            {{courses.teacher}}
+                                                        </a>
+                                                    </p>
+                                                {% else %}
+                                                    <p class="card-text">
+                                                        Ningun profesor asignado
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="icon float-right dropdown no-arrow" title="opciones">
+                                                <a class="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-h fa-lg mb-2"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                    {% if courses.teacher == None %}
+                                                        <a class="dropdown-item" href="#"
+                                                            title="Asignar profesor" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-user-edit fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                            Asignar profesor
+                                                        </a>
+                                                        <div class="dropdown-menu">
+                                                            <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="dropdown-item cursor">Nuevo</a>
+                                                            <button class="dropdown-item dropright cursor"
+                                                            onclick='assignTeacher({{ dato | tojson }})'
+                                                            data-toggle="modal" data-target="#assingTeachers">
+                                                            Existente
+                                                            </button>
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>
+                                                    {% endif %}
+                                                    <a class="dropdown-item"
+                                                        href="{{ url_for('auth.subject_completed', id=courses.id) }}"
+                                                        title="Marcar como cursada">
+                                                        <i class="fas fa-check fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                        Marcar como cursada
+                                                    </a>
+                                                    <a class="dropdown-item" href="#" title="Editar"
+                                                        onclick='editSubjects({{ dato | tojson }})'
+                                                        data-toggle="modal" data-target="#editSubject">
+                                                        <i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                        Editar
+                                                    </a>
+                                                    <a class="dropdown-item btn-delete" title="Eliminar"
+                                                        href="{{ url_for('auth.delete_subjects', id=courses.id) }}">
+                                                        <i class="fas fa-trash fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                        Eliminar
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <nav aria-label="..." class="col-md-12 ">
+                        
+                                <ul class="pagination d-flex justify-content-end mr-4">
+
+                                    {% set next = current_page + 1 %}
+                                    {% set previous = current_page - 1  %}
+                                    
+                                    
+                                    {% if subjects_user.page == 1 %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href=" {{url_for('users.subjects', page=previous)}} " tabindex="-1">Previous</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href=" {{url_for('users.subjects', page=previous)}} " tabindex="-1">Previous</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for page in subjects_user.iter_pages() %}
+                                        {% if page %}
+                                                
+                                            {% if page != subjects_user.page %}
+                                                  
+                                                <li class="page-item">  
+                                                    <a href=" {{url_for('users.subjects', page=page)}} " 
+                                                     class="page-link"> 
+                                                        {{page}} 
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item active">
+                                                    <a href="{{url_for('users.subjects', page=page)}}" 
+                                                     class="page-link">
+                                                       {{page}} 
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="ellipsis">....</span>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if subjects_user.page == total_pages %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href=" {{url_for('users.subjects', page=next)}} ">Next</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href=" {{url_for('users.subjects', page=next)}} ">Next</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div> #}
+{% endblock  %}
+
+{% block _scripts %}
+{% endblock %}

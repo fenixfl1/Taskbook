@@ -21,11 +21,11 @@ def pending_tasks(user):
         user,
         render_template(
             'email/pending_tasks.txt',
-            user=user
+            current_user=user
         ),
         render_template(
             'email/pending_tasks.html',
-            user=user
+            current_user=user
         )
     )
 
@@ -37,7 +37,6 @@ def next_subject(user):
         <h2>Hi {user}</h2>
         <p>that's a test</p>
     """
-
     body_txt = f"Hola {user}, esto es una prueva"
 
     send_mail(
