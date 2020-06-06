@@ -12,8 +12,7 @@
   .card-row figure {
     position: relative;
     overflow: hidden;
-    width: 100%;
-    height: 50%; }
+    width: 100%; }
     .card-row figure img {
       width: 100%;
       height: 100%;
@@ -36,29 +35,6 @@
   .card-row .content-card-body p {
     opacity: 0;
     visibility: hidden; }
-  .card-row:hover .text-img {
-    opacity: 1;
-    visibility: visible; }
-    .card-row:hover .text-img h5 {
-      transition: all 500ms ease-out;
-      margin-bottom: 15px;
-      margin-top: 25px; }
-  .card-row:hover .button {
-    opacity: 1;
-    visibility: visible;
-    z-index: 150;
-    margin: 5px; }
-  .card-row:hover .icon {
-    opacity: 1;
-    visibility: visible;
-    margin-bottom: 15px; }
-  .card-row:hover p {
-    transition: all 500ms ease-out;
-    margin-bottom: 15px;
-    margin-top: 15px; }
-  .card-row:hover .content-card-body p {
-    opacity: 1;
-    visibility: visible; }
 
 .badgebox {
   opacity: 0; }

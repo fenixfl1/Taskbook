@@ -1,8 +1,10 @@
 from app.database.queries import Queries
 from flask_security import current_user
+from flask import Markup
 from app.database.models import Tasks, Courses, Teachers, StudyPlan
 from app.database import db
-from flask import Blueprint
+from app.extentions import avatars
+import hashlib
 
 def tasks(value, n=1):
 
@@ -39,14 +41,68 @@ def study_plan(value, n=1):
 
     return filtro
 
-class Filter(object):
+
+def list_courses(value):
+    return db.query(Courses).\
+        filter(Courses.user_id == current_user.id).\
+        filter(Courses.state == 1).\
+        filter(Courses.finished == 0).all()
+
+
+def avatar(value, **kwargs):
+
+    title = ''
+    classes = ''
+    size = '50'
+
+    if kwargs['title']:
+        title = kwargs['title']
+    if kwargs['size']:
+        size = kwargs['size']
+    if kwargs['class']:
+        classes = kwargs['class']
+
+    email_hash = hashlib.md5(current_user.email.lower().
+                             encode('utf-8')).hexdigest()
+
+    url_avatar = avatars.gravatar(email_hash, size=size)
+
+    return Markup(
+        '<img src="{}" class="{}" title="{}">'.
+        format(url_avatar, str(classes), str(title))
+    )
+
+
+def generate_avatar(value, **kwargs):
+
+    title = ''
+    classes = ''
+    size = '50'
+
+    if 'title' in kwargs:
+        title = kwargs.get('title')
+    if 'size' in kwargs:
+        size = kwargs['size']
+    if 'class' in kwargs:
+        classes = kwargs['class']
+
+    email_hash = hashlib.md5(value.lower().encode('utf-8')).hexdigest()
+
+    url_avatar = avatars.gravatar(email_hash, size=size)
+
+    return Markup(
+        '<img src="{}" class="{}" title="{}">'.
+        format(url_avatar, str(classes), str(title))
+    )
+
+class Filter():
 
     def __init__(self, app):
-
-        blueprint = Blueprint('filter', __name__)
 
         app.jinja_env.filters['tasks'] = tasks
         app.jinja_env.filters['courses'] = courses
         app.jinja_env.filters['teacher'] = teachers
         app.jinja_env.filters['plan'] = study_plan
-        app.register_blueprint(blueprint)
+        app.jinja_env.filters['list_courses'] = list_courses
+        app.jinja_env.filters['default'] = avatar
+        app.jinja_env.filters['generate_avatar'] = generate_avatar

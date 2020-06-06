@@ -7,13 +7,13 @@ from app import db_session, socket
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, \
-    QualificationForm, GaleryCourseForm
+    QualificationForm
 from app.database.models import Events, Tasks, StudyPlan, \
     Courses, Teachers
 from app.database.queries import Queries
 
 
-@user_view.route('/index')
+@user_view.route('/inde')
 @login_required
 def index():
 
@@ -56,7 +56,7 @@ def profile(user):
 
 
 # this function is to see and create the subjects
-@user_view.route('/courses/')
+@user_view.route('/index')
 @login_required
 def subjects():
 
@@ -71,6 +71,11 @@ def subjects():
         filter(Courses.finished == 0).\
         filter(Courses.state == 1).paginate(page, 8, 0)
 
+    list_courses = db.query(Courses).\
+        filter(Courses.user_id == current_user.id).\
+        filter(Courses.finished == 0).\
+        filter(Courses.state == 1)
+
     pages = courses.total / 8
 
     if pages is not int:
@@ -81,18 +86,48 @@ def subjects():
     sform = SubjectsForm()
     pform = ProfeForm()
     aform = AssignForm()
-    galery = GaleryCourseForm()
 
     return render_template(
-        'user/courses.html.j2',
+        'user/all_courses.html.j2',
         title='Courses -',
         subject_form=sform,
         subjects_user=courses,
+        list_courses=list_courses,
         profe_form=pform,
         assig_form=aform,
-        galery_form=galery,
         current_page=page,
         total_pages=total_pages,
+        year=datetime.now()
+    )
+
+
+@user_view.route('/courses/<int:id>/')
+@login_required
+def courses(id):
+
+    courses = db.query(Courses).\
+        filter(Courses.user_id == current_user.id).\
+        filter(Courses.id == id).first()
+
+    task = db.query(Tasks).\
+        filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.state == 1).\
+        filter(Tasks.done == 0)
+
+    sform = SubjectsForm()
+    pform = ProfeForm()
+    aform = AssignForm()
+    tform = TaskForm()
+
+    return render_template(
+        'user/courses.html.j2',
+        title='Course of {}'.format(courses.name),
+        course=courses,
+        assignments=task,
+        subject_form=sform,
+        profe_form=pform,
+        task_form=tform,
+        assig_form=aform,
         year=datetime.now()
     )
 
@@ -193,7 +228,7 @@ def task_finished():
     )
 
 
-@user_view.route('/tasks/edit/<id>')
+@user_view.route('/tasks/edit/<int:id>')
 @login_required
 def edit_tasks(id):
 

@@ -52,28 +52,27 @@
             </li>
 
             <hr class="sidebar-divider">
-            <li class="nav-item dropdown dropdown-hover">
+            <li class="nav-item dropright dropdown-hover">
+
                 <a class="nav-link collapsed dropdown-toggle" 
                   href="" title="Cursos" type="button" 
                   id="dropdownMenuButton" data-toggle="dropdown" 
                   aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>Cursos</span>
+                    <span>Mis cursos</span>
                 </a>
 
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="/courses">
-                        <i class="fas fa-clipboard-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Mis cursos
-                    </a>
-                    <a class="dropdown-item" href="/courses/finished">
-                        <i class="fas fa-clipboard-check fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Cursos completados
-                    </a>
-                    <a class="dropdown-item" href="/courses/teachers">
-                        <i class="fas fa-chalkboard-teacher fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Profesores
-                    </a>
+                <div class="dropdown-menu">
+                    {% if courses | courses(0) > 0 %}
+                        {% for course in courses | list_courses() %}
+                            <a class="dropdown-item" 
+                              href="{{ url_for('users.courses',id=course.id) }}">
+                                {{ course.name }}
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <a href="/courses" title="">Ningun curso agregardo</a>
+                    {% endif %}
                 </div>
             </li>
 
@@ -189,12 +188,19 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Perfil">
+                            <a class="nav-link dropdown-toggle" 
+                              id="userDropdown" role="button" 
+                              data-toggle="dropdown" 
+                              aria-haspopup="true" 
+                              aria-expanded="false" 
+                              title="Perfil">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
                                     {{ current_user.first_name.capitalize()}} 
                                     {{ current_user.last_name.capitalize() }}
                                 </span> 
-                                <img src="{{ avatars.default(size='s') }}">
+                                {{ profile | default(size='50', 
+                                                     class='rounded-circle', 
+                                                     title='Profile') }}
                             </a>
 
                             <!-- Dropdown - User Information -->
