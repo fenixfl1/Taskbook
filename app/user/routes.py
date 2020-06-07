@@ -3,7 +3,7 @@ from flask import render_template, request
 from flask_security import login_required, current_user
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, date
-from app import db_session, socket
+from app import db_session
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, \
@@ -11,32 +11,6 @@ from app.auth.forms import LoadForm, EventForm, TaskForm, \
 from app.database.models import Events, Tasks, StudyPlan, \
     Courses, Teachers
 from app.database.queries import Queries
-
-
-@user_view.route('/inde')
-@login_required
-def index():
-
-    event = Queries.queries(Events, current_user)
-    task = Queries.queries(Tasks, current_user)
-    plan = Queries.queries(StudyPlan, current_user)
-    subject = Queries.queries(Courses, current_user)
-
-    _task = db.query(Tasks).\
-        filter(Tasks.user_id == current_user.id).\
-        filter(Tasks.delivery_day).first()
-
-    return render_template(
-        'user/react/test.html.j2',
-        title='Index -',
-        event_user=event,
-        task_user=task,
-        next_task=_task,
-        stady_plan=plan,
-        subject_user=subject,
-        async_mode=socket.async_mode,
-        year=datetime.now()
-    )
 
 
 # this function yo see the profile of the current user
