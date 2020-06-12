@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired
 from app.database import db
 from app.database.models import (User, Role, Events, Tasks,
                                  StudyPlan, ClassSchedule, Courses,
-                                 Teachers, StudyPlanDetail)
+                                 Teachers, StudyPlanDetail, Notify)
 
 role_name = ['Admin', 'admin', 'administrador']
 
@@ -125,12 +125,8 @@ class HorarioView(AdminView):
         }
     }
 
-redis = Redis(
-    host='localhost',
-    port=6379,
-)
 
-adm.add_view(rediscli.RedisCli(redis))
+adm.add_view(rediscli.RedisCli(Redis()))
 adm.add_view(UserView(User, db, category='User'))
 adm.add_view(AdminView(Role, db, category='User'))
 adm.add_view(UserRelatedView(Events, db))
@@ -140,3 +136,4 @@ adm.add_view(StudyPlanDetailView(StudyPlanDetail, db, category='Stady plan'))
 adm.add_view(HorarioView(ClassSchedule, db))
 adm.add_view(AdminView(Courses, db))
 adm.add_view(UserRelatedView(Teachers, db))
+adm.add_view(UserRelatedView(Notify, db))

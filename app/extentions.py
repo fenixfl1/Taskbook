@@ -26,6 +26,7 @@ migrate = Migrate()
 celery = make_celery()
 db_session = sql.session
 
+
 __all__ = [
     'sql',
     'cors',
@@ -38,5 +39,5 @@ __all__ = [
     'adm',
     'login',
     'migrate',
-    'celery'
+    'celery',
 ]

@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, String, ForeignKey,\
-    Column, DateTime, Boolean, Time, CHAR
+    Column, DateTime, Boolean, Time, CHAR, TEXT
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from flask_security import UserMixin, RoleMixin
@@ -53,6 +53,7 @@ class User(Base, UserMixin):
     event = relationship('Events', back_populates='user')
     plan = relationship('StudyPlan', back_populates='user')
     task = relationship('Tasks', back_populates='user')
+    notify = relationship('Notify', back_populates='user')
     active = Column(Boolean(), default=True)
     roles = relationship('Role', secondary='roles_users',
                          backref=backref('user', lazy='dynamic'))
@@ -158,7 +159,7 @@ class Tasks(Base):
     delivery_day = Column(DateTime(), nullable=False)
     finished_in = Column(DateTime())
     comment = Column(String(150))
-    done = Column(Boolean(), default=True)
+    done = Column(Boolean(), default=False)
     state = Column(Boolean(), default=True)
 
     def __repr__(self):
@@ -234,3 +235,28 @@ class StudyPlanDetail(Base):
 
     def __repr__(self):
         return '{0}'.format(self.title)
+
+
+class Notify(Base):
+
+    __tablename__ = 'notify'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    user = relationship('User', back_populates='notify')
+    title = Column(String(250), nullable=False)
+    msg = Column(TEXT(), nullable=False)
+    notify_time = Column(DateTime(), nullable=False)
+    published_at = Column(DateTime(), default=func.now())
+    readed = Column(Boolean(), default=False)
+    state = Column(Boolean(), default=True)
+
+    def __init__(self, user_id, title, msg, notify_time):
+
+        self.user_id = user_id
+        self.title = title
+        self.msg = msg
+        self.notify_time = notify_time
+
+    def __repr__(self):
+        return '{}'.format(self.title)

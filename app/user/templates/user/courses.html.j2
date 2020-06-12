@@ -21,10 +21,10 @@
 	
 	<div class="row">
 	
-		<div class="col-9 d-flex">
+		<div class="row col-md-9 ml-2 d-flex justify-content-around">
 			{% if course.task %}
 				{% for i in range(tasks | tasks(0) ) %}
-					<div class="card card-row ml-3" style="width: 14rem; max-height: 18rem">
+					<div class="card card-row ml-2 mb-5" style="width: 14rem; max-height: 18rem">
 						<figure>
 							{{ assignments[i].name | generate_avatar(size=300,
 			                                                      class='card-img-top') }}
