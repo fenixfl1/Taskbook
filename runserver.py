@@ -1,4 +1,4 @@
-from app import create_app, celery, socket
+from app import create_app, celery
 from app.database import init_db
 import os
 
@@ -11,4 +11,4 @@ with app.app_context():
 
 
 if __name__ == '__main__':
-    socket.run(app)
+    app.run()

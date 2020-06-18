@@ -21,10 +21,10 @@
 	
 	<div class="row">
 	
-		<div class="col-9 d-flex">
+		<div class="row col-md-9 ml-2 d-flex justify-content-around">
 			{% if course.task %}
 				{% for i in range(tasks | tasks(0) ) %}
-					<div class="card card-row ml-3" style="width: 14rem; max-height: 18rem">
+					<div class="card card-row ml-2 mb-5" style="width: 14rem; max-height: 18rem">
 						<figure>
 							{{ assignments[i].name | generate_avatar(size=300,
 			                                                      class='card-img-top') }}
@@ -44,12 +44,7 @@
 		{# side bar menu #}
 		<div class="col-3">
 
-			{# <div class="card-header bg-white border border-white">
-				<h3 class="m-auto">
-					<h3 class="text-center"> {{ course.name }}</h3>
-				</h3>
-			</div>
- #}			<div class="list-group mr-3 bg-white" id="list-ta" role="tablist">
+			<div class="list-group mr-3 bg-white" id="list-ta" role="tablist">
 				<a class="list-group-item list-group-item-action active" 
 				 id="list-home-list" data-toggle="list"
 				 href="#list-home" role="tab" 

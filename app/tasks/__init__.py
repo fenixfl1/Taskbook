@@ -1,5 +1,4 @@
-from .tasks import pending_tasks, next_subject,\
-    test
+from .tasks import pending_tasks, next_subject, notifications
 from flask import Blueprint
 
 

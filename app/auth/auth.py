@@ -1,6 +1,6 @@
 from . import auth_view
-from app.tasks import pending_tasks, next_subject, test
-from flask import render_template, flash, request, redirect, jsonify, url_for
+from app.tasks import notifications
+from flask import flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
@@ -8,7 +8,8 @@ from .forms import LoadForm, TaskForm, EventForm, \
 from app.database import db, engne
 from app.database.models import Tasks, Courses, Teachers, Events
 from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
-import os
+from datetime import datetime, timedelta
+# import os
 
 
 def allowed_image(filename):
@@ -85,10 +86,12 @@ def register_subjects():
         finished = form.estado.data
 
         # check that there's no subject with that name
-        check = db.query(Courses).filter(Courses.user_id == current_user.id).\
+        check = db.query(Courses).\
+            filter(Courses.user_id == current_user.id).\
+            filter(Courses.state == 1).\
             filter(Courses.name == name).first()
 
-        if check == None:
+        if not check:
 
             user = Courses(name=name, finished=finished,
                            user_id=current_user.id,
@@ -98,8 +101,19 @@ def register_subjects():
                 db.add(user)
                 db.commit()
 
-                result = test.delay(current_user.first_name)
-                result.wait()
+                msg = '{} tu proxima clase empiezara pronto'.format(
+                    current_user.first_name)
+
+                delay = datetime.utcnow() + timedelta(minutes=3)
+
+                notifications.apply_async(
+                    (name,
+                     msg,
+                     datetime.now(),
+                     current_user.id),
+                    eta=delay
+                )
+                # result.wait()
 
                 messages = 'Asignatura registrada con exito!'
                 category = 'success'
@@ -112,7 +126,7 @@ def register_subjects():
                 raise e
 
         else:
-            messages = f'{name} ya esta registrada!'
+            messages = '{} ya esta registrada!'.format(name)
             category = 'error'
 
     flash(messages, category)
@@ -222,7 +236,7 @@ def register_profesor():
             filter(Teachers.user_id == current_user.id).\
             filter(Teachers.full_name == name).first()
 
-        if check == None:
+        if not check:
 
             if form.subjects.data is not None:
 
@@ -253,7 +267,7 @@ def register_profesor():
 
         else:
 
-            messages = f'{name} ya esta registrado!'
+            messages = '{} ya esta registrado!'.format(name)
             category = 'error'
 
     flash(messages, category)
@@ -293,30 +307,39 @@ def register_task():
 
     if form.validate_on_submit():
 
-        task = form.name.data
+        name = form.name.data
         materia = form.materia.data
         asignada_en = form.asignada_en.data
         dia_entrega = form.dia_entrega.data
         comentario = form.nota.data
 
-        task = Tasks(name=task, user_id=current_user.id)
-        db.add(task)
-        db.commit()
-
         try:
 
-            # task_detail = DetalleTasks(
-            #     Tasks=task,
-            #     materia=materia,
-            #     asignada_en=asignada_en,
-            #     dia_endrega=dia_entrega,
-            #     comentario=comentario
-            # )
+            task = Tasks(
+                name=name,
+                user_id=current_user.id,
+                course=materia,
+                assigned_in=asignada_en,
+                delivery_day=dia_entrega,
+                comment=comentario
+            )
 
-            result = notify_pending_tasks.delay(current_user.email)
-            result.wait()
+            msg = 'Saludos {} recuenrda que tuenes una tarea pendiente'.format(
+                current_user.first_name)
 
-            # db.add(task_detail)
+            delay = datetime.utcnow() + timedelta(second=30)
+
+            notifications.apply_async(
+                (name,
+                 msg,
+                 asignada_en,
+                 current_user.id),
+                eta=delay
+            )
+
+            db.add(task)
+            db.commit()
+
             messages = 'Tasks guardada con exito!'
             category = 'success'
 

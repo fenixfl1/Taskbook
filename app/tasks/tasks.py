@@ -1,8 +1,10 @@
 from app.extentions import mail, celery
 from app.database import db
+from app.database.models import Notify
 from flask_mail import Message
 from flask import render_template
 from datetime import datetime
+import time
 
 
 def send_mail(subject, recipients, text_body, html_body):
@@ -33,11 +35,12 @@ def pending_tasks(user):
 @celery.task()
 def next_subject(user):
 
-    body_html = f"""
-        <h2>Hi {user}</h2>
+    body_html = """
+        <h2>Hi {}</h2>
         <p>that's a test</p>
-    """
-    body_txt = f"Hola {user}, esto es una prueva"
+    """.format(user)
+
+    body_txt = "Hola {}, esto es una prueva".format(user)
 
     send_mail(
         'Proxima clase',
@@ -48,8 +51,21 @@ def next_subject(user):
 
 
 @celery.task()
-def test(name):
+def notifications(title, msg, notify_date, user_id):
 
-    saludo = f"Hola {name} esta es una prueva"
+    try:
+        notify = Notify(
+            user_id=user_id,
+            title=title,
+            msg=msg,
+            notify_time=notify_date
+        )
 
-    return saludo
+        db.add(notify)
+        db.commit()
+
+        return {'Id user': user_id, 'Msg': msg}
+
+    except ValueError as e:
+        raise e
+        return 'Error!'

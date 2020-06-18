@@ -29,14 +29,14 @@
 
 {% macro navbar(name, holder, title, modal_id) %}
     <nav class="navbar navbar-light shadow-none">
-        <button type="button" title="{{title}}" class="btn btn-outline-primary" 
+        <button type="button" title="{{title}}" class="btn btn-secondary btn-circle" 
          data-toggle="modal" data-target="{{modal_id}}">
-            {{name}}
+            <i class="fas fa-plus"></i>
         </button>
         
-        <form>
+        <form class="mr-2">
             <input type="text" class="form-control" id="search" 
-            placeholder="{{holder}}" aria-label="Search" size='46'>
+            placeholder="{{holder}}" aria-label="Search" size='32'>
         </form>
     </nav>
 {% endmacro %}
