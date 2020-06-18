@@ -327,12 +327,7 @@ def register_task():
             msg = 'Saludos {} recuenrda que tuenes una tarea pendiente'.format(
                 current_user.first_name)
 
-            new_date = (asignada_en - dia_entrega)
-
-            print(new_date)
-            print("_____________________________________________________")
-
-            delay = asignada_en + timedelta(dia_entrega)
+            delay = datetime.utcnow() + timedelta(second=30)
 
             notifications.apply_async(
                 (name,

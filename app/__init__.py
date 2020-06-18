@@ -4,5 +4,5 @@ __date__ = '01-2020'
 
 
 from .app import create_app
-from .extentions import db_session, socket, mail, celery,\
+from .extentions import db_session, mail, celery,\
     login, adm

@@ -5,7 +5,6 @@ from flask_security import Security
 from flask_wtf import CSRFProtect
 from flask_avatars import Avatars
 from flask_mail import Mail
-from flask_socketio import SocketIO
 from flask_admin import Admin
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -19,7 +18,6 @@ mail = Mail()
 security = Security()
 csrf = CSRFProtect()
 avatars = Avatars()
-socket = SocketIO(async_mode='eventlet')
 adm = Admin(name='Taskbook', template_mode='bootstrap3')
 login = LoginManager()
 migrate = Migrate()
@@ -35,7 +33,6 @@ __all__ = [
     'csrf',
     'avatars',
     'mail',
-    'socket',
     'adm',
     'login',
     'migrate',

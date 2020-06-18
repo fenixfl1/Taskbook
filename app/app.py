@@ -43,7 +43,6 @@ def create_app(setting_module, app_name=name, **kwargs):
     avatars.init_app(app)
     mail.init_app(app)
     sql.init_app(app)
-    socket.init_app(app, async_mode='eventlet', message_queue='redis://')
     migrate.init_app(app, sql)
     adm.init_app(app, index_view=MyAdminIndexView())
     login.init_app(app)
