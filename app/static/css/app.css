@@ -33,6 +33,10 @@
   opacity: 0;
   visibility: hidden; }
 
+.nav-icon {
+  width: 2em;
+  height: 2em; }
+
 .badgebox {
   opacity: 0; }
 
@@ -67,5 +71,19 @@
       .galery .form-group label:hover img {
         width: 130px;
         transition: all 500ms ease-out; }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .nav-icon {
+    width: 1.3em;
+    height: 1.3em; }
+
+  .nav-icon-user {
+    width: 2.5em;
+    height: 2.5em; } }
+/* Small devices (portrait tablets and large phones, 600px and up) */
+/* Medium devices (landscape tablets, 768px and up) */
+/* Large devices (laptops/desktops, 992px and up) */
+/* Extra large devices (large laptops and desktops, 1200px and up) */
 
 /*# sourceMappingURL=app.css.map */

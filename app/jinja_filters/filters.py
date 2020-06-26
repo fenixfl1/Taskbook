@@ -3,7 +3,7 @@ from flask_security import current_user
 from flask import Markup
 from app.database.models import Tasks, Courses, Teachers, StudyPlan
 from app.database import db
-from app.extentions import avatars
+from app.extentions import avatars, db_session
 import hashlib
 
 def tasks(value, n=1):
@@ -48,6 +48,16 @@ def list_courses(value):
         filter(Courses.state == 1).\
         filter(Courses.finished == 0).all()
 
+
+def paginate_courses(state, finished):
+
+    filter = db_session.query(Courses).\
+        filter(Courses.user_id == current_user.id).\
+        filter(Courses.state == state).\
+        filter(Courses.finished == finished).\
+        paginate(1, 8, 0)
+
+    return filter
 
 def avatar(value, **kwargs):
 
@@ -106,3 +116,4 @@ class Filter():
         app.jinja_env.filters['list_courses'] = list_courses
         app.jinja_env.filters['default'] = avatar
         app.jinja_env.filters['generate_avatar'] = generate_avatar
+        app.jinja_env.filters['paginate_courses'] = paginate_courses
