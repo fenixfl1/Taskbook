@@ -38,18 +38,36 @@
                         Taskbook
                     </a>
 
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" 
+                            placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2">
+                        </div>
+                    </form>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                          <a class="nav-link" href="/" title="Searc">
-                            <img src="{{ url_for('static',filename='icons-svg/icons/search.svg')}}" 
-                              alt="Search" class="nav-icon">
+                          <a class="nav-link" href="" title="Search" 
+                            id="searchDropdown" 
+                            role="button" data-toggle="dropdown" 
+                            aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ url_for('static',filename='icons-svg/icons/search.svg')}}" 
+                                   alt="Search" class="nav-icon">
                           </a>
+
+                          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                              <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" 
+                                   placeholder="Buscar" aria-label="Search" aria-describedby="basic-addon2">
+                            </form>
+                          </div>
                         </li>
 
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" 
+                        <li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
+                            <a class="nav-link dropdown-toggle" href="/" id="searchDropdown" 
                               role="button" data-toggle="dropdown" aria-haspopup="true" 
                               aria-expanded="false" title="Home">
                                 <img src=" {{ url_for('static',filename='icons-svg/icons/house.svg') }} " alt="Search" class="nav-icon">
@@ -62,7 +80,7 @@
                         </li>
 
                         <!-- nav Item courses -->
-                        <li class="nav-item dropdown no-arrow mx-1">
+                        <li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src=" {{ url_for('static',filename='icons-svg/icons/columns-gap.svg') }} " alt="Courses" class="nav-icon">
                                 <!-- Courses -->
@@ -196,7 +214,19 @@
         </div>
     </div>
 
+    <div class="d-sm-none fixed-bottom nav-footer">
+
+        <footer id="sticky-footer" class="py-4 bg-white shadow">
+            <ul class="nav nav-pills">
+                {% block footer %}
+
+                {% endblock %}            
+            </ul>
+        </footer>
+    </div>
+
     {% include 'scripts.html' %}
+    
     {% block _scripts %}
 
     {% endblock %}
