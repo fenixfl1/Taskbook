@@ -1,4 +1,4 @@
-from app.database.queries import Queries
+# from app.database.queries import Queries
 from flask_security import current_user
 from flask import Markup
 from app.database.models import Tasks, Courses, Teachers, StudyPlan
@@ -37,7 +37,9 @@ def teachers(value, n=1):
 
 def study_plan(value, n=1):
 
-    filtro = Queries.contador(StudyPlan, current_user, n)
+    filtro = db.query(StudyPlan).\
+        filter(StudyPlan.user_id).\
+        filter(StudyPlan.state == n)
 
     return filtro
 

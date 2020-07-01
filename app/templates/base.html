@@ -25,6 +25,120 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar shadow-sm
+                sidebar-dark sticky-top" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center
+                    justify-content-center" href="/index">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3 notranslate active">
+                    Taskbook
+                </div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" 
+                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  title="Profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+            <li class="nav-item dropdown no-arrow mx-1">
+                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-chalkboard-teacher text-white"></i>
+                    <span>Mis cursos</span>
+                </a>
+
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
+                  aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header"> Mis cursos </h6>
+
+                    {% if courses | courses(0) > 0 %}
+                        {% set pagination = (1 | paginate_courses(0) ) %}
+
+                        {% for course in pagination.items %}
+                            <a class="dropdown-item d-flex align-items-center" 
+                              href="{{ url_for('users.courses',id=course.id) }}">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        {{ course.name | generate_avatar(size=300,
+                                                        class='card-img-top rounded-circle') }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="small text-gray-500"> {{ course.teacher }} </div>
+                                    <span class="font-weight-bold">
+                                        {{ course.name }}
+                                    </span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                            <a class="dropdown-item text-center small text-gray-500" href="#">
+                                Ver todos los cursos
+                            </a>
+                    {% else %}
+                        <a href="/courses" title="">Ningun curso agregardo</a>
+                    {% endif %}
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/schedule" title="schedules">
+                    <i class="fas fa-calendar"></i>
+                    <span>Horarios</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="/tasks" title="Tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tareas</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/studies-plan" title="Studies plan">
+                    <i class="fas fa-fw fa-book-reader"></i>
+                    <span>Plan de estudio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/events" title="Events">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Eventos</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles%}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin" title="Panel de administracion">
+                    <i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <span>Panel de administracion</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block"> {% endif %}
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -34,14 +148,72 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <a href="/" title="Taskbook" class="navbar-brand">
-                        Taskbook
-                    </a>
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" autocomplete="off">
+                        <div class="input-group col-md-11">
+                            <input type="text" class="dropleft form-control bg-light border-0 small" 
+                                placeholder="Buscar..." aria-label="Search" 
+                                aria-describedby="basic-addon2" id='searching searchDropdown' 
+                              role="button" data-toggle="dropdown" aria-haspopup="true" 
+                              aria-expanded="false">
 
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" 
-                            placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                              aria-labelledby="alertsDropdown">
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-chalkboard-teacher text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo curso
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-tasks text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nueva tarea
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-user-shield text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo plan de estudio
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-fw fa-table text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo evento
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </form>
 
@@ -67,56 +239,75 @@
                         </li>
 
                         <li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
-                            <a class="nav-link dropdown-toggle" href="/" id="searchDropdown" 
-                              role="button" data-toggle="dropdown" aria-haspopup="true" 
-                              aria-expanded="false" title="Home">
+                            <a class="nav-link " href="/" title="Inicio">
                                 <img src=" {{ url_for('static',filename='icons-svg/icons/house.svg') }} " alt="Search" class="nav-icon">
                             </a>
-
-                          <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"   aria-labelledby="alertsDropdown">
-
-                            </div>
                         </li>
 
-                        <!-- nav Item courses -->
                         <li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src=" {{ url_for('static',filename='icons-svg/icons/columns-gap.svg') }} " alt="Courses" class="nav-icon">
-                                <!-- Courses -->
-                                <span class="badge badge-danger badge-counter"></span>
+                            <a class="nav-link dropdown-toggle" href="/" id="searchDropdown" 
+                              role="button" data-toggle="dropdown" aria-haspopup="true" 
+                              aria-expanded="false" title="Agregar">
+                                <img src=" {{ url_for('static',filename='icons-svg/icons/plus-circle.svg') }} " alt="Search" class="nav-icon">
                             </a>
 
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header"> Mis cursos </h6>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                              aria-labelledby="alertsDropdown">
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-chalkboard-teacher text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo curso
+                                        </span>
+                                    </div>
+                                </a>
 
-                                {% if courses | courses(0) > 0 %}
-                                    {% set pagination = (1 | paginate_courses(0) ) %}
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-tasks text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nueva tarea
+                                        </span>
+                                    </div>
+                                </a>
 
-                                    {% for course in pagination.items %}
-                                        <a class="dropdown-item d-flex align-items-center" 
-                                          href="{{ url_for('users.courses',id=course.id) }}">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-primary">
-                                                    {{ course.name | generate_avatar(size=300,
-                                                                        class='card-img-top rounded-circle') }}
-                                                </div>
-                                            </div>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-user-shield text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo plan de estudio
+                                        </span>
+                                    </div>
+                                </a>
 
-                                            <div>
-                                                <div class="small text-gray-500"> {{ course.teacher }} </div>
-                                                <span class="font-weight-bold">
-                                                    {{ course.name }}
-                                                </span>
-                                            </div>
-                                        </a>
-                                    {% endfor %}
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">
-                                        Ver todos los cursos
-                                    </a>
-                                {% else %}
-                                        <a href="/courses" title="">Ningun curso agregardo</a>
-                                {% endif %}
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-fw fa-table text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo evento
+                                        </span>
+                                    </div>
+                                </a>
                             </div>
                         </li>
 

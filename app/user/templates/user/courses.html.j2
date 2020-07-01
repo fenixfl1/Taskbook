@@ -9,21 +9,14 @@
 	{% include "forms/edit/subjects.html.j2" %}
 	{# modal to assing teachers #}
 	{% include "forms/edit/assing_teachers.html.j2" %}
+	
 	<div class="container-fluid">
 		
-		<div class="row justify-content-md-between mt-3" style="height: 85vh">
-			{# sidebar left #}
-			<div class="col-md-2 ml-1">
-				<button type="button" title="{{title}}"
-				class="btn btn-secondary d-none d-sm-inline-block"
-				data-toggle="modal" data-target="#staticBackdrop">
-				<i class="fas fa-plus"></i>
-				Agregar nuevo
-				</button>
-			</div>
+		<div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
 			{# main content #}
-			<div class="col-md-7 mx-2 card-container">
-				<div class="row row-card justify-content-md-start">
+			<div class="col-md-9 card-container">
+				<div class="row justify-content-md-start">
 					{% if course.task %}
 						{% for i in range(tasks | tasks(0) ) %}
 							<div class="card mx-2 card-row mb-5">
@@ -39,40 +32,44 @@
 							</div>
 						{% endfor %}
 					{% else %}
-						<img src="{{ url_for('static',filename='') }}" alt="">
+						<img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+						alt="Empty space" class="img-empty m-auto">
 					{% endif %}
 				</div>
 			</div>
 			{# sidebar right #}
-			<div class="col-10 col-md-2 mr-1 d-none d-sm-inline-block">
-				{# <div class="col-10 col-md-3 mx-auto"> #}
-					<div class="list-group bg-white col-md-12" id="list-ta" role="tablist">
-						<a class="list-group-item list-group-item-action active"
-							id="list-home-list" data-toggle="list"
-							href="#list-home" role="tab"
-							aria-controls="home">
-							Tareas pendientes
-						</a>
-						<a class="list-group-item list-group-item-action"
-							id="list-profile-list" data-toggle="list"
-							href="#list-profile" role="tab"
-							aria-controls="profile">
-							Tarea completadas
-						</a>
-						<a class="list-group-item list-group-item-action"
-							id="list-messages-list" data-toggle="list"
-							href="#list-messages" role="tab"
-							aria-controls="messages">
-							Messages
-						</a>
-						<a class="list-group-item list-group-item-action"
-							id="list-settings-list" data-toggle="list"
-							href="#list-settings" role="tab"
-							aria-controls="settings">
-							Settings
-						</a>
-					</div>
-				{# </div> #}
+			<div class="list-group col-md-3 d-none d-sm-inline-block " 
+			  id="list-ta" role="tablist">
+			  	<a class="list-group-item list-group-item-action"
+					id="list-home-list" data-toggle="list"
+					href="#list-home" role="tab"
+					aria-controls="home">
+					Todas las tereas
+				</a>
+				<a class="list-group-item list-group-item-action active"
+					id="list-home-list" data-toggle="list"
+					href="#list-home" role="tab"
+					aria-controls="home">
+					Tareas pendientes
+				</a>
+				<a class="list-group-item list-group-item-action"
+					id="list-profile-list" data-toggle="list"
+					href="#list-profile" role="tab"
+					aria-controls="profile">
+					Tarea completadas
+				</a>
+				<a class="list-group-item list-group-item-action"
+					id="list-messages-list" data-toggle="list"
+					href="#list-messages" role="tab"
+					aria-controls="messages">
+					Chat del curso
+				</a>
+				<a class="list-group-item list-group-item-action"
+					id="list-settings-list" data-toggle="list"
+					href="#list-settings" role="tab"
+					aria-controls="settings">
+					Informacion del curso
+				</a>
 			</div>
 		</div>
 	</div>

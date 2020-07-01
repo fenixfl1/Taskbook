@@ -1,9 +1,16 @@
-$(document).ready(function () {
+// $(document).ready(function () {
 
-	const form = $('#searching');
-	const filtro = $('#filtro');
+// 	const form = $('#searching');
+// 	const filtro = $('#filtro');
 
-	form.keyup(function() {
-		alert(form.val())
-	})
-});
+// 	var request = $.ajax({
+// 		method: 'GET',
+// 		url: '/searching'
+// 		data: `${filter}`
+// 	});
+
+// 	form.keyup(function() {
+// 		const texto = form.val().toLowerCase();
+		
+// 	})
+// });
