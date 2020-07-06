@@ -7,7 +7,7 @@ from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
 from app.database import db, engne
 from app.database.models import Tasks, Courses, Teachers, Events
-from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
+from config.default import IMAGE_SET_EXT
 from datetime import datetime, timedelta
 # import os
 

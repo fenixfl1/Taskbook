@@ -39,6 +39,7 @@ pip-delete-this-directory.txt
 
 dotenv
 instance/
+migrations/
 env/
 .env
 .vscode/
