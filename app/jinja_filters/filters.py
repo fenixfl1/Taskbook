@@ -39,7 +39,7 @@ def study_plan(value, n=1):
 
     filtro = db.query(StudyPlan).\
         filter(StudyPlan.user_id).\
-        filter(StudyPlan.state == n)
+        filter(StudyPlan.state == n).count()
 
     return filtro
 

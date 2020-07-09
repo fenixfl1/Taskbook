@@ -7,8 +7,8 @@
             {# main content #}
             <div class="col-md-9 card-container">
                 <div class="row justify-content-md-start">
-                    {% if stady_plan | plan(1) %}
-                        {% for i in range(plan | plan(1) > 0 ) %}
+                    {% if stady_plan | plan(0) %}
+                        {% for i in range(plan | plan(0)) %}
                             <div class="card mx-2 card-row mb-5">
                                 <figure>
                                     {{ stady_plan[i].name | generate_avatar(size=300,

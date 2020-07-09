@@ -48,7 +48,8 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        <span>No tiene tareas pendientes</span>
+                        <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+                        alt="Empty space" class="img-empty m-auto">
                     {% endif %}
                 </div>
             </div>

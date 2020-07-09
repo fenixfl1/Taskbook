@@ -1,11 +1,73 @@
 {% extends 'base.html' %} {% block content %}
 
+    <div class="container-fluid">
+        
+        <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
+            {# main content #}
+            <div class="col-md-9 card-container">
+                <div class="row justify-content-md-start">
+                    {% if ( Tarea | tasks(0)) > 0 %}
+                        {% for i in range(tasks | tasks(0) ) %}
+                            <div class="card mx-2 card-row mb-5">
+                                <figure>
+                                    {{ task_user[i].name | generate_avatar(size=300,
+                                    class='card-img-top') }}
+                                </figure>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">Some quick example text to build on the </p>
+                                    <a href="#" class="btn btn-primary mx-auto">Go somewhere</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+                        alt="Empty space" class="img-empty m-auto">
+                    {% endif %}
+                </div>
+            </div>
+            {# sidebar right #}
+            <div class="list-group col-md-3 d-none d-sm-inline-block " 
+              id="list-ta" role="tablist">
+                <a class="list-group-item list-group-item-action"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Todas las tereas
+                </a>
+                <a class="list-group-item list-group-item-action active"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Tareas pendientes
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-profile-list" data-toggle="list"
+                    href="#list-profile" role="tab"
+                    aria-controls="profile">
+                    Tarea completadas
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-messages-list" data-toggle="list"
+                    href="#list-messages" role="tab"
+                    aria-controls="messages">
+                    Tereas retrazadas
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-settings-list" data-toggle="list"
+                    href="#list-settings" role="tab"
+                    aria-controls="settings">
+                    Informacion del curso
+                </a>
+            </div>
+        </div>
+    </div>
+
+<!--
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            {% include 'messages.html' %}
-            
-            {% include "forms/task_form.html.j2" %}
 
             {# visualize each task #}
             {% if ( Tarea | tasks(0)) > 0 %}
@@ -91,5 +153,5 @@
             {% endif %}
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}
