@@ -63,12 +63,9 @@ def paginate_courses(state, finished):
 
 def avatar(value, **kwargs):
 
-    title = ''
     classes = ''
     size = '50'
 
-    if kwargs['title']:
-        title = kwargs['title']
     if kwargs['size']:
         size = kwargs['size']
     if kwargs['class']:
@@ -80,8 +77,10 @@ def avatar(value, **kwargs):
     url_avatar = avatars.gravatar(email_hash, size=size)
 
     return Markup(
-        '<img src="{}" class="{}" title="{}">'.
-        format(url_avatar, str(classes), str(title))
+        '<img src="{}" class="{}" title="{} {}">'.
+        format(url_avatar, str(classes),
+               current_user.first_name.capitalize(),
+               current_user.last_name.capitalize())
     )
 
 

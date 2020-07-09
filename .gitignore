@@ -43,6 +43,7 @@ migrations/
 env/
 .env
 .vscode/
+bin/
 Pipfile
 Pipfile.lock
 *.json

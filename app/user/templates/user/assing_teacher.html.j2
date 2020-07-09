@@ -1,33 +1,9 @@
-{% extends 'base.html' %} {% from 'macro.html' import Form_off_label, navbar %}
+{% extends 'base.html' %}
 {% block content %}
-	{# navbar to teachers #}
-	{# {{ navbar(name="Agregar", holder="Buscar Profesores", title="Agregar Profesor/a", modal_id="#staticBackdrop") }} #}
-
-	{# alerts #}
-	{% include 'messages.html' %}
-
-	{# modal for create teachers #}
-	{% include "forms/teacher_form.html.j2" %}
 
 	<div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
-
-                <ol class="breadcrumb" aria-label="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="/subjects">Asignaturas({{ subjects | subjects(1) }})</a>
-                    </li>
-                                    
-                    <li class="breadcrumb-item active">
-                        Asingnar Profesores
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <a href="/subjects/teachers" class="">
-                            Profesores({{ teacher | teachers(1) }})
-                        </a>
-                    </li>
-                </ol>
 
                 <div class="row m-auto" style="height: 60vh;">
                 	<div class="col-md-6 m-auto">

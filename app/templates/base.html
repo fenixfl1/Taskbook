@@ -20,6 +20,26 @@
 {% block scripts %}
 {% endblock  %}
 
+{% from 'macro.html' import Form_off_label %}
+
+{% include "forms/task_form.html.j2" %}
+{# modal to add new teacher #}
+{% include "forms/teacher_form.html.j2" %}
+{# Modal to add new subject #}
+{% include "forms/form_subjects.html.j2" %}
+{# modal to edit subjects #}
+{% include "forms/edit/subjects.html.j2" %}
+{# modal to assing teachers #}
+{% include "forms/edit/assing_teachers.html.j2" %}
+{# modal to add qualifications #}
+{% include "forms/edit/qualification.html.j2" %}
+{# modal to add new study plan #}
+{% include 'forms/stady_plan_form.html.j2' %}
+{# modal to edit teachers #}
+{% include "forms/edit/teachers.html.j2" %}
+{# modal to add new evenr #}
+{% include "forms/event_form.html.j2" %}
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -193,7 +213,8 @@
 
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                               aria-labelledby="alertsDropdown">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href=""
+                                 data-toggle="modal" data-target="#staticBackdropCourses">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
                                             <i class="fas fa-chalkboard-teacher text-white"></i>
@@ -207,7 +228,23 @@
                                     </div>
                                 </a>
 
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="" 
+                                  data-toggle="modal" data-target="#staticBackdropTeacher">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-address-card text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- <div class="small text-gray-500">December 12, 2019</div> -->
+                                        <span class="font-weight-bold">
+                                           Nuevo instructor
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center" href="" 
+                                  data-toggle="modal" data-target="#staticBackdrop">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
                                             <i class="fas fa-tasks text-white"></i>
@@ -221,10 +258,11 @@
                                     </div>
                                 </a>
 
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href=""
+                                  data-toggle="modal" data-target="#studyPlanModal">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
-                                            <i class="fas fa-user-shield text-white"></i>
+                                            <i class="fas fa-fw fa-book-reader text-white"></i>
                                         </div>
                                     </div>
                                     <div>
@@ -235,7 +273,8 @@
                                     </div>
                                 </a>
 
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href=""
+                                  data-toggle="modal" data-target="#exampleModal">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
                                             <i class="fas fa-fw fa-table text-white"></i>
@@ -309,14 +348,14 @@
                               data-toggle="dropdown" 
                               aria-haspopup="true" 
                               aria-expanded="false" 
-                              title="Perfil">
+                              title="{{ current_user.first_name.capitalize() }} {{ current_user.last_name.capitalize() }}">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
                                     {{ current_user.first_name.capitalize()}} 
                                     {{ current_user.last_name.capitalize() }}
                                 </span> 
                                 {{ profile | default(size='50', 
                                                      class='rounded-circle nav-icon-user', 
-                                                     title='Profile') }}
+                                                     title='') }}
                             </a>
 
                             <!-- Dropdown - User Information -->
@@ -338,7 +377,9 @@
                 </nav>
 
                 {# bloque de conteneidos para las platillas herederas #} 
-                {% block content %} 
+                {% block content %}
+                    {# Alerts#}
+                    {% include 'messages.html' %}
 
                 {% endblock %}
             </div>

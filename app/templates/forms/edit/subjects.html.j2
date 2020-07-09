@@ -12,21 +12,21 @@
       </div>
       <div class="modal-body">
         <form action=" {{ url_for('auth.update_subjects') }} " method="POST">
-          {{ subject_form.hidden_tag() }}
+          {{ course_form.hidden_tag() }}
           <input type="hidden" name="id" id='id' required>
           <div class="form-group">
             <label for="name">Nombre
               <strong style="color: red; ">*</strong>
             </label>
-            {{ Form_off_label(subject_form.name, class="form-control", id="subject") }}
+            {{ Form_off_label(course_form.name, class="form-control", id="subject") }}
           </div>
           <div class="form-group">
             <label for="profesor">Profesor</label>
-            {{ Form_off_label(subject_form.profe, class="form-control", id="profesor") }}
+            {{ Form_off_label(course_form.profe, class="form-control", id="profesor") }}
           </div>
 
           <div class="text-center form-group">
-            {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Editar") }}
+            {{ Form_off_label(course_form.submit, class="btn btn-primary btn-lg", value="Editar") }}
           </div>
         </form>
       </div>
