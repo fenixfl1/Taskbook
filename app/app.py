@@ -19,7 +19,7 @@ user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 def create_app(setting_module, app_name=name, **kwargs):
 
     # application settings
-    app = Flask(app_name, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_object(setting_module)
     app.wsgi_app = ProxyFix(app.wsgi_app)

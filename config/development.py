@@ -7,9 +7,9 @@ CELERY_BACKEND_URL = 'db+cymysql://root:Adminfl119?@localhost:3306/Taskbook'
 
 CELERY_CREATE_MISSING_QUEUES = True
 
-
-MAIL_DEFAULT_SENDER = os.getenv('MAIL_USER')
 SECURITY_EMAIL_SENDER = os.getenv('MAIL_USER')
+
+ERROR_404_HELP = False
 
 ENV = os.getenv('FLASK_ENV')
 

@@ -25,6 +25,104 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar shadow-sm
+                sidebar-dark sticky-top" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center
+                    justify-content-center" href="/index">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3 notranslate active">
+                    Taskbook
+                </div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" 
+                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  title="Profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+            <li class="nav-item dropright dropdown-hover">
+
+                <a class="nav-link collapsed dropdown-toggle" 
+                  href="" title="Cursos" type="button" 
+                  id="dropdownMenuButton" data-toggle="dropdown" 
+                  aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Mis cursos</span>
+                </a>
+
+                <div class="dropdown-menu">
+                    {% if courses | courses(0) > 0 %}
+                        {% for course in courses | list_courses() %}
+                            <a class="dropdown-item" 
+                              href="{{ url_for('users.courses',id=course.id) }}">
+                                {{ course.name }}
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <a href="/courses" title="">Ningun curso agregardo</a>
+                    {% endif %}
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/schedule" title="schedules">
+                    <i class="fas fa-calendar"></i>
+                    <span>Horarios</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="/tasks" title="Tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tareas</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/studies-plan" title="Studies plan">
+                    <i class="fas fa-fw fa-book-reader"></i>
+                    <span>Plan de estudio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/events" title="Events">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Eventos</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles%}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin" title="Panel de administracion">
+                    <i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <span>Panel de administracion</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block"> {% endif %}
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
