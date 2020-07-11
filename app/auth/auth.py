@@ -9,6 +9,7 @@ from app.database import db, engne
 from app.database.models import Tasks, Courses, Teachers, Events
 from config.default import IMAGE_SET_EXT
 from datetime import datetime, timedelta
+from app.database.schemas import CoursesSchema
 # import os
 
 
@@ -42,7 +43,7 @@ def Uploads():
             return redirect(request.url)
 
         if picture and allowed_image(picture.filename):
-            filename = secure_filename(picture.filename)
+            # filename = secure_filename(picture.filename)
 
             try:
 
@@ -402,32 +403,6 @@ def register_event():
     return redirect(url_for('users.eventos'))
 
 
-# endpoint rest to send events to the client
-@auth_view.route('/calendar-events')
-@login_required
-def calendar_events():
-
-    try:
-        result = engne.execute("""SELECT id, title, color, 
-            UNIX_TIMESTAMP(start_date)*1000 as start,\
-            UNIX_TIMESTAMP(end_date)*1000 as end FROM event""")
-
-        resp = jsonify({
-            'success': 1,
-            'result': [dict(row) for row in result]
-        }
-        )
-
-        resp.status_code = 200
-
-        return resp
-    except Exception as e:
-        raise e
-
-    finally:
-        result.close()
-
-
 # function to register studies plan
 @auth_view.route('/register-study-plan', methods=['POST'])
 def register_study_plan():
@@ -593,3 +568,48 @@ def edit_tasks(id):
         raise e
 
     return redirect(url_for('users.tasks'))
+
+
+# endpoint rest to send events to the client
+@auth_view.route('/calendar-events')
+@login_required
+def calendar_events():
+
+    try:
+        result = engne.execute("""SELECT id, title, color, 
+            UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event""")
+
+        resp = jsonify({
+            'success': 1,
+            'result': [dict(row) for row in result]
+        }
+        )
+
+        resp.status_code = 200
+
+        return resp
+    except Exception as e:
+        raise e
+
+    finally:
+        result.close()
+
+
+@auth_view.route('/search_courses')
+@login_required
+def search_courses():
+
+    try:
+
+        user = db.query(Courses).\
+            filter(Courses.state == 1).\
+            filter(Courses.finished == 0).all()
+
+        resp = CoursesSchema(many=True)
+
+        return resp.dumps(user, many=True)
+
+    except Exception as e:
+        raise e
+        return jsonify({'result': 'error'})

@@ -20,7 +20,7 @@
 {% block scripts %}
 {% endblock  %}
 
-{% from 'macro.html' import Form_off_label %}
+{% from 'macro.html' import Form_off_label, Form %}
 
 {% include "forms/task_form.html.j2" %}
 {# modal to add new teacher #}
@@ -37,7 +37,7 @@
 {% include 'forms/stady_plan_form.html.j2' %}
 {# modal to edit teachers #}
 {% include "forms/edit/teachers.html.j2" %}
-{# modal to add new evenr #}
+{# modal to add new event #}
 {% include "forms/event_form.html.j2" %}
 
 <body id="page-top">
@@ -172,8 +172,18 @@
                     <form class="d-none d-sm-inline-block form-inline my-2 my-md-0 mw-100 navbar-search" 
                       autocomplete="off">
                         <div class="input-group col-md-11">
-                            <input type="text" class="dropleft form-control bg-light border-0 small" 
-                                placeholder="Buscar..." aria-label="Search">
+                            <input type="text" class="dropleft form-control bg-light border-0 small " 
+                                placeholder="Buscar cursos" aria-label="Search" id="search ">
+
+                            {# <div class="dropdown-menu m-3" d="resultado" aria-labelledby="dropdownMenuOffset">
+                              <a class="dropdown-item" href="#">Action</a>
+                              <a class="dropdown-item" href="#">Another action</a>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                            </div> #}
+
+                            <ul id="resultado">
+                                
+                            </ul>
                         </div>
                     </form>
 
@@ -192,8 +202,8 @@
                           <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                             <form class="form-inline mr-auto w-100 navbar-search">
                               <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" 
-                                   placeholder="Buscar" aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control bg-light border-0 small" id="search" 
+                                   placeholder="Buscar cursos" aria-label="Search" aria-describedby="basic-addon2">
                             </form>
                           </div>
                         </li>
