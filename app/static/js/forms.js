@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+	$('#datetime ').datepicker({
+		format: "dd/mm/yyyy",
+		todayBtn: true,
+	});
+
+	// $('#datetime').datetimepicker();
+
 	// function to validate form of create new teachers
 	$('#submitTeacher').on('click', function() {
 
