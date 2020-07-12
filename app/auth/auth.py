@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 # from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
-from app.database import db, engne
+from app.database import db, engne as engine
 from app.database.models import Tasks, Courses, Teachers,\
     Events, StudyPlan, User
 from config.default import IMAGE_SET_EXT
@@ -139,7 +139,7 @@ def register_subjects():
 def subject_completed(id):
 
     try:
-        engne.execute(
+        engine.execute(
             """UPDATE course SET finished=1
                 WHERE id=%s""", (id))
 
@@ -529,7 +529,7 @@ def update_teacher():
         phone = form.phone.data
 
         try:
-            data = engne.execute("""
+            data = engine.execute("""
                     UPDATE teacher SET 
                     full_name=%s,
                     email=%s,
@@ -577,7 +577,7 @@ def edit_tasks(id):
 def calendar_events():
 
     try:
-        result = engne.execute("""
+        result = engine.execute("""
             SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
             UNIX_TIMESTAMP(end_date)*1000 as end FROM event
         """)
@@ -600,10 +600,10 @@ def calendar_events():
 
 @auth_view.route('/search')
 @login_required
-def search_courses():
+def search():
 
     try:
-        result = engne.execute("""
+        result = engine.execute("""
             SELECT id, name, user_id FROM course
             WHERE user_id = {0} UNION \
             SELECT id, name, user_id FROM task
@@ -611,7 +611,7 @@ def search_courses():
             SELECT id, full_name, user_id FROM teacher
             WHERE user_id = {0} UNION \
             SELECT id, name, user_id FROM study_plan \
-            WHERE user_id = {0}""".format(current_user.id, current_user.id))
+            WHERE user_id = {0}""".format(current_user.id))
 
         resp = jsonify({
             'success': 1,
