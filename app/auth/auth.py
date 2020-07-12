@@ -603,12 +603,6 @@ def calendar_events():
 def search_courses():
 
     try:
-        # q0 = db.query(User.id, User.first_name, User.email)
-        # q1 = db.query(Courses.id, Courses.name, Courses.user_id)
-        # q2 = db.query(Tasks.id, Tasks.name, Tasks.user_id)
-        # q3 = db.query(Teachers.id, Teachers.full_name, Teachers.user_id)
-        # q4 = db.query(StudyPlan.id, StudyPlan.name, StudyPlan.user_id)
-
         result = engne.execute("""
             SELECT id, name, user_id FROM course
             WHERE user_id = {0} UNION \
