@@ -11,11 +11,14 @@
 <link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/calendar.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/DatePicker/bootstrap-datepicker.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/DataTables/dataTables.bootstrap4.min.css') }}" 
     rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=PT+Sans:ital@1&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital@1&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <link href="{{ url_for('static',filename='css/google-fonts.css') }}" rel="stylesheet"> {% endblock %}
 {% block scripts %}
 {% endblock  %}
@@ -173,17 +176,12 @@
                       autocomplete="off">
                         <div class="input-group col-md-11">
                             <input type="text" class="dropleft form-control bg-light border-0 small " 
-                                placeholder="Buscar cursos" aria-label="Search" id="search ">
+                                placeholder="Buscar..." aria-label="Search" id="search">
 
-                            {# <div class="dropdown-menu m-3" d="resultado" aria-labelledby="dropdownMenuOffset">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
-                            </div> #}
-
-                            <ul id="resultado">
-                                
-                            </ul>
+                            <div class="dropdown-menu m-3" aria-labelledby="dropdownMenuOffset" 
+                              id="result">
+                              
+                            </div>
                         </div>
                     </form>
 

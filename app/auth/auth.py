@@ -2,14 +2,15 @@ from . import auth_view
 from app.tasks import notifications
 from flask import flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
 from app.database import db, engne
-from app.database.models import Tasks, Courses, Teachers, Events
+from app.database.models import Tasks, Courses, Teachers,\
+    Events, StudyPlan, User
 from config.default import IMAGE_SET_EXT
 from datetime import datetime, timedelta
-from app.database.schemas import CoursesSchema
+# from app.database.schemas import CoursesSchema
 # import os
 
 
@@ -576,9 +577,10 @@ def edit_tasks(id):
 def calendar_events():
 
     try:
-        result = engne.execute("""SELECT id, title, color, 
-            UNIX_TIMESTAMP(start_date)*1000 as start,\
-            UNIX_TIMESTAMP(end_date)*1000 as end FROM event""")
+        result = engne.execute("""
+            SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event
+        """)
 
         resp = jsonify({
             'success': 1,
@@ -596,19 +598,35 @@ def calendar_events():
         result.close()
 
 
-@auth_view.route('/search_courses')
+@auth_view.route('/search')
 @login_required
 def search_courses():
 
     try:
+        # q0 = db.query(User.id, User.first_name, User.email)
+        # q1 = db.query(Courses.id, Courses.name, Courses.user_id)
+        # q2 = db.query(Tasks.id, Tasks.name, Tasks.user_id)
+        # q3 = db.query(Teachers.id, Teachers.full_name, Teachers.user_id)
+        # q4 = db.query(StudyPlan.id, StudyPlan.name, StudyPlan.user_id)
 
-        user = db.query(Courses).\
-            filter(Courses.state == 1).\
-            filter(Courses.finished == 0).all()
+        result = engne.execute("""
+            SELECT id, name, user_id FROM course
+            WHERE user_id = {0} UNION \
+            SELECT id, name, user_id FROM task
+            WHERE user_id = {0} UNION \
+            SELECT id, full_name, user_id FROM teacher
+            WHERE user_id = {0} UNION \
+            SELECT id, name, user_id FROM study_plan \
+            WHERE user_id = {0}""".format(current_user.id, current_user.id))
 
-        resp = CoursesSchema(many=True)
+        resp = jsonify({
+            'success': 1,
+            'result': [dict(row) for row in result]
+        })
 
-        return resp.dumps(user, many=True)
+        resp.status_code = 200
+
+        return resp
 
     except Exception as e:
         raise e

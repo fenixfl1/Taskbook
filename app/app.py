@@ -9,17 +9,15 @@ from app.database import db
 from app.extra import register_error_handlers, MyAdminIndexView, all_request
 from app.auth.security_form import ExtendRegisterForm
 from .extentions import *
-import os
 
-name = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
 
-def create_app(setting_module, app_name=name, **kwargs):
+def create_app(setting_module, **kwargs):
 
     # application settings
-    app = Flask(app_name, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_object(setting_module)
     app.wsgi_app = ProxyFix(app.wsgi_app)

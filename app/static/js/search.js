@@ -1,45 +1,53 @@
+$('document').ready(function() {
 
-const search = document.querySelector("#search");
+    const ajax = $.ajax({
+      type: "GET",
+      url: "/search",
+      dataType: "json"
+    });
 
-const result = document.querySelector('#resultado');
+    const removeAccents = (str) => {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    } 
 
-const xhttp = new XMLHttpRequest();
+    const result = $('#result');
+    const search = $('#search');
 
-xhttp.open('GET', '/search_courses', true);
+    $('#search').on('keyup', function() {
 
-xhttp.send();
+        result.html("");
 
-alert('before the filter function')
+        if (search.val() !== "") {
 
-const filter = () => {
+            result.show();
+        } else {
 
-    alert('into the filter function')
-
-    result.innerHTML = "";
-
-    const datos = JSON.parse(xhttp.responseText);
-
-    const text = search.value.toLowerCase();
-
-    for (let course of datos) {
-        let name = course.name.toLowerCase();
-
-        // var item = document.createElement("a");
-
-        // item.classList.add("dropdown-item");
-        // item.href = "#"
-        // item.innerText = course.name
-        
-        if (name.indexOf(text) !== -1) {
-            result.innerHTML += `<li>${course.name}</li>`
+            result.hide();
         }
-    }
 
-    if (result.innerHTML === '') {
-        result.innerHTML += `
-            <li>Sin resultados</li>
-        `
-    }
-}
+        const datos = JSON.parse(ajax.responseText)
 
-search.addEventListener('keyup', filter);
+        const text = search.val().toLowerCase();
+        
+        for (let dato of datos.result) {
+
+            let name = dato.name.toLowerCase();
+            let name_normalize = removeAccents(name)
+
+            if (name_normalize.indexOf(text) !== -1) {
+                var item = document.createElement('a');
+                item.classList = 'dropdown-item';
+                item.href = "#";
+                item.innerText = dato.name  
+                result.append(item)
+            }
+        }
+
+        if (result.html() === "") {
+            var item = document.createElement('span');
+            item.classList = 'dropdown-item';
+            item.innerHTML = '<span>Sin resultados!</span>'
+            result.append(item);
+        }
+    });
+});
