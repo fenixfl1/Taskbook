@@ -89,6 +89,7 @@ class Teachers(Base):
     full_name = Column(String(80), nullable=False, unique=True)
     email = Column(String(100))
     phone_number = Column(String(22))
+    table_name = Column(String(10), default='teacher')
     state = Column(Boolean(), default=True)
 
     def __repr__(self):
@@ -110,6 +111,7 @@ class Courses(Base):
     name = Column(String(80), nullable=False)
     finished = Column(Boolean(), default=False)
     qualification = Column(CHAR(1), default=None)
+    table_name = Column(String(10), default='courses')
     state = Column(Boolean(), default=True)
 
     def __init__(self, name, user_id, **kwargs):
@@ -159,6 +161,7 @@ class Tasks(Base):
     delivery_day = Column(DateTime(), nullable=False)
     finished_in = Column(DateTime())
     comment = Column(String(150))
+    table_name = Column(String(10), default='task')
     done = Column(Boolean(), default=False)
     state = Column(Boolean(), default=True)
 
@@ -180,6 +183,7 @@ class Events(Base):
     start_date = Column(DateTime(), nullable=False)
     end_date = Column(DateTime(), nullable=False)
     comment = Column(String(100))
+    table_name = Column(String(10), default='events')
     finished_in = Column(DateTime())
     state = Column(Boolean(), default=True)
 
@@ -206,6 +210,7 @@ class StudyPlan(Base):
     user = relationship('User', back_populates='plan')
     detail = relationship('StudyPlanDetail', back_populates='plan')
     name = Column(String(100), nullable=False)
+    table_name = Column(String(10), default='study-plan')
     state = Column(Boolean(), default=True)
 
     def __repr__(self):
