@@ -1,33 +1,6 @@
-from flask import render_template
 from flask_admin import AdminIndexView, expose
 from flask_security import login_required, roles_required
 from datetime import datetime
-
-
-class all_request(object):
-
-    @staticmethod
-    def _(app, session):
-        """
-        _(app, session) for execute before, after and teardown requests
-        """
-
-        @app.before_request
-        def first_request_func():
-
-            pass
-
-        @app.after_request
-        def after_request_func(response):
-
-            session.close()
-            return response
-
-        @app.teardown_request
-        def teardown_request_func(exception=None):
-
-            session.remove()
-            return exception
 
 
 # my own index view in admin panel
@@ -58,37 +31,3 @@ def create_user(app, user_datastore, db, role):
                                    gender='M',
                                    confirmed_at=datetime.now())
         db.commit()
-
-
-# Errors views
-def register_error_handlers(app):
-
-    @app.errorhandler(500)
-    def base_error_handler(e):
-
-        return render_template(
-            'errors/500.html',
-            title=e.name,
-            e=e.description
-        ), 500
-
-    @app.errorhandler(404)
-    def error_404_handler(e):
-
-        return render_template(
-            'errors/404.html',
-            title=e.name,
-            e=e.description
-        ), 404
-
-    @app.errorhandler(403)
-    def error_403_handler(e):
-
-        head = e.name
-        body = e.description
-
-        return render_template(
-            'errors/403.html',
-            title=head,
-            e=body
-        ), 403
