@@ -89,7 +89,7 @@ class Teachers(Base):
     full_name = Column(String(80), nullable=False, unique=True)
     email = Column(String(100))
     phone_number = Column(String(22))
-    table_name = Column(String(10), default='teacher')
+    table_name = Column(String(10), default='teachers')
     state = Column(Boolean(), default=True)
 
     def __repr__(self):
@@ -161,7 +161,7 @@ class Tasks(Base):
     delivery_day = Column(DateTime(), nullable=False)
     finished_in = Column(DateTime())
     comment = Column(String(150))
-    table_name = Column(String(10), default='task')
+    table_name = Column(String(10), default='tasks')
     done = Column(Boolean(), default=False)
     state = Column(Boolean(), default=True)
 

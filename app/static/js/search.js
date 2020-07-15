@@ -27,18 +27,39 @@ $('document').ready(function() {
 
         const datos = JSON.parse(ajax.responseText)
 
+        console.log(datos)
+
         const text = search.val().toLowerCase();
         
         for (let dato of datos.result) {
 
             let name = dato.name.toLowerCase();
-            let name_normalize = removeAccents(name)
+            let table_name = dato.table_name.toLowerCase();
 
-            if (name_normalize.indexOf(text) !== -1) {
+            let name_normalize = removeAccents(name)
+            let tm_normalize = removeAccents(table_name)
+
+            if (name_normalize.indexOf(text) !== -1  || tm_normalize.indexOf(text) !== -1) {
                 var item = document.createElement('a');
                 item.classList = 'dropdown-item';
-                item.href = "#";
-                item.innerText = dato.name  
+                item.innerText = dato.name
+
+                if (dato.table_name === "courses") {
+                    item.href = "/courses/" + dato.id
+                } 
+
+                else if (dato.table_name === "teachers") {
+                    item.href = "/teachers/" + dato.id
+                }
+
+                else if (dato.table_name === "study-plan") {
+                    item.href = "/studies-plan/" + dato.id
+                }
+
+                else {
+                    item.href = "/tasks/details/" + dato.id
+                }
+
                 result.append(item)
             }
         }
@@ -46,7 +67,7 @@ $('document').ready(function() {
         if (result.html() === "") {
             var item = document.createElement('span');
             item.classList = 'dropdown-item';
-            item.innerHTML = '<span>Sin resultados!</span>'
+            item.innerHTML = '<span class="text-warning">Sin resultados!</span>'
             result.append(item);
         }
     });
