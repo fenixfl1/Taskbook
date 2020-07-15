@@ -604,13 +604,15 @@ def search():
 
     try:
         result = engine.execute("""
-            SELECT id, name, user_id FROM course
+            SELECT id, name, table_name FROM course
+            WHERE user_id = {0} UNION \
+            SELECT id, title, table_name FROM event
             WHERE user_id = {0} UNION \
             SELECT id, name, user_id FROM task
             WHERE user_id = {0} UNION \
-            SELECT id, full_name, user_id FROM teacher
+            SELECT id, full_name, table_name FROM teacher
             WHERE user_id = {0} UNION \
-            SELECT id, name, user_id FROM study_plan \
+            SELECT id, name, table_name FROM study_plan \
             WHERE user_id = {0}""".format(current_user.id))
 
         resp = jsonify({

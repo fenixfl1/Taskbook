@@ -60,7 +60,7 @@ def create_app(setting_module, **kwargs):
     app.register_blueprint(admin_view)
 
     from .tasks import tasks
-    app.register_blueprint(tasks)\
+    app.register_blueprint(tasks)
 
     # my extentions
     register_error_handlers(app)
