@@ -608,7 +608,7 @@ def search():
             WHERE user_id = {0} UNION \
             SELECT id, title, table_name FROM event
             WHERE user_id = {0} UNION \
-            SELECT id, name, user_id FROM task
+            SELECT id, name, table_name FROM task
             WHERE user_id = {0} UNION \
             SELECT id, full_name, table_name FROM teacher
             WHERE user_id = {0} UNION \
