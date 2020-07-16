@@ -535,7 +535,7 @@ def update_teacher():
                     email=%s,
                     phone_number=%s
                     WHERE id=%s""",
-                                 (name, email, phone, id))
+                                  (name, email, phone, id))
 
             messages = 'Registro actualizado con exito!'
             category = 'success'
@@ -613,8 +613,11 @@ def search():
             SELECT id, full_name, table_name FROM teacher
             WHERE user_id = {0} UNION \
             SELECT id, name, table_name FROM study_plan \
-            WHERE user_id = {0}""".format(current_user.id))
-
+            WHERE user_id = {0} UNION \
+            SELECT plan_id, title, day FROM (study_plan_detail
+            INNER JOIN study_plan ON study_plan_detail.plan_id = study_plan.id )
+            """.format(current_user.id))
+        
         resp = jsonify({
             'success': 1,
             'result': [dict(row) for row in result]

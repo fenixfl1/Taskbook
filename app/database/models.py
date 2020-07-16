@@ -233,7 +233,7 @@ class StudyPlanDetail(Base):
     start_time = Column(Time(), nullable=False)
     end_time = Column(Time(), nullable=False)
     objective = Column(String(255))
-    color = Column(String(25), default='text-info')
+    table_name = Column(String(15), default='study_plan_detail')
     finished_in = Column(DateTime())
     done = Column(Boolean(), default=True)
     state = Column(Boolean(), default=True)

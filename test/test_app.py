@@ -10,7 +10,7 @@ def app():
     db_fd, db_path = tempfile.mkdtemp()
 
     app = create_app(
-        'test.py',
+        'test',
         {
             'TESTING': True, 
             'SQLALCHEMY_DATABASE_URI': db_path
@@ -19,6 +19,9 @@ def app():
 
     with app.app_context():
         init_db()
+        
+        
+    print(app)
 
     yield app
 

@@ -5,7 +5,6 @@ from config.default import *
 
 engne = create_engine(
     SQLALCHEMY_DATABASE_URI,
-    convert_unicode=True,
     pool_size=10, max_overflow=20,
     pool_pre_ping=True
 )
@@ -17,6 +16,6 @@ Base = declarative_base()
 Base.query = db.query_property()
 
 def init_db():
-
+    
     from . import models
     Base.metadata.create_all(bind=engne)
