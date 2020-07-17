@@ -1,0 +1,69 @@
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div class="content">
+            <div class="container-fluid">
+                <!-- modal to details of the studies plan -->
+                <div id="studyPlanGolasModal" class="modal fade" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            
+                            <div class="modal-header border-bottom-0" style="border-bottom: none;">
+                                <h3 class="m-auto">
+                                    <h3 class="modal-title m-auto text-primary">Plan de Estudio</h3>
+                                </h3>
+                                <button type="button" class="close btn-sm" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form action="/register-study-plan-goals" method="post" autocomplete="off">
+
+                                    {{ plan_goal_form.hidden_tag() }}
+
+                                    <div class="form-group">
+                                        <label for="title">Titulo
+                                            <strong style="color: red;">*</strong>
+                                        </label> 
+
+                                        {{ Form_off_label(plan_goal_form.title, class="form-control") }}
+                                    </div>
+
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-6">
+                                            <label for="study_plan">Plan de Estudio
+                                                <strong style="color: red;">*</strong>
+                                            </label> 
+
+                                            {{ Form_off_label(plan_goal_form.study_plan, class="form-control") }}
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="deadline">Fecha Limite
+                                                <strong style="color: red;">*</strong>
+                                            </label> 
+
+                                            {{ Form_off_label(plan_goal_form.deadline, class="form-control") }}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="comment">Comentario</label> 
+
+                                        {{ Form_off_label(plan_goal_form.comment, class="form-control") }}
+                                    </div>
+
+                                    <div class="text-center form-group">
+                                        {{ Form_off_label(plan_form.submit, class="btn btn-primary btn-lg", 
+                                        value="Submit")}}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -6,7 +6,8 @@ from app.jinja_filters import Filter
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, all_request
+from app.extra import register_error_handlers, MyAdminIndexView, \
+    all_request
 from app.auth.security_form import ExtendRegisterForm
 from .extentions import *
 
@@ -65,5 +66,6 @@ def create_app(setting_module, **kwargs):
     # my extentions
     register_error_handlers(app)
     all_request._(app, db)
+    # create_user(app, user_datastore, db, Role)
 
     return app

@@ -42,6 +42,8 @@
 {% include "forms/edit/teachers.html.j2" %}
 {# modal to add new event #}
 {% include "forms/event_form.html.j2" %}
+{# modal to add new study plan goals #}
+{% include "forms/plan_goals_form.html.j2" %}
 
 <body id="page-top">
 
@@ -58,7 +60,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3 notranslate active">
+                <div class="sidebar-brand-text mx-3 notranslate text-white">
                     Taskbook
                 </div>
             </a>
@@ -67,7 +69,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" 
-                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  href="{{ url_for('users.profile', id=current_user.id, user=current_user.first_name) }}" 
                   title="Profile">
                     <i class="fas fa-user"></i>
                     <span>Perfil</span>
@@ -76,9 +78,9 @@
 
             <hr class="sidebar-divider">
 
-            <li class="nav-item dropdown no-arrow mx-1">
+            <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-chalkboard-teacher text-white"></i>
+                    <i class="fas fa-chalkboard-teacher text-whit"></i>
                     <span>Mis cursos</span>
                 </a>
 
@@ -370,7 +372,7 @@
                             <div class="dropdown-menu dropdown-menu-right
                                     shadow animated--grow-in" aria-labelledby="userDropdown">
 
-                                <a class="dropdown-item" href="{{url_for('users.profile',user=current_user.first_name) }}">
+                                <a class="dropdown-item" href="{{url_for('users.profile', id=current_user.id, user=current_user.first_name) }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
                                 </a>
 

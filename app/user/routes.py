@@ -7,9 +7,9 @@ from app import db_session
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, \
-    QualificationForm
+    QualificationForm, PlanGoalsForm
 from app.database.models import Events, Tasks, StudyPlan, \
-    Courses, Teachers
+    Courses, Teachers, StudyPlanGoals
 from app.database.queries import Queries
 
 
@@ -20,6 +20,7 @@ def context_processor():
     course_form = SubjectsForm()
     event_form = EventForm()
     plan_form = PlanForm()
+    plan_goal_form = PlanGoalsForm()
     profe_form = ProfeForm()
     assign_form = AssignForm()
     q_form = QualificationForm()
@@ -32,6 +33,7 @@ def context_processor():
         course_form=course_form,
         event_form=event_form,
         plan_form=plan_form,
+        plan_goal_form=plan_goal_form,
         profe_form=profe_form,
         assign_form=assign_form,
         q_form=q_form,
@@ -42,14 +44,15 @@ def context_processor():
 
 
 # this function yo see the profile of the current user
-@user_view.route('/profile/<string:user>/')
+@user_view.route('/users/<int:id>/<string:user>/')
 @login_required
-def profile(user):
+def profile(id, user):
 
     return render_template(
         'user/profile.html.j2',
         title='perfil -',
-        user=user
+        user=user,
+        id=id
     )
 
 
@@ -223,12 +226,21 @@ def details_task(id):
 @login_required
 def plan_de_estudio():
 
-    plan = Queries.queries(StudyPlan, current_user)
+    plan = db.query(StudyPlan).\
+        filter(StudyPlan.user_id == current_user.id). \
+        filter(StudyPlan.state == 1).\
+        options(contains_eager(StudyPlan.user)). \
+        order_by(StudyPlan.name)
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.id == StudyPlan.id).\
+        filter(StudyPlan.user_id == current_user.id).count()
 
     return render_template(
         'user/stady_plan.html.j2',
         title='Studies plan -',
-        stady_plan=plan
+        stady_plan=plan,
+        goals=goals
     )
 
 

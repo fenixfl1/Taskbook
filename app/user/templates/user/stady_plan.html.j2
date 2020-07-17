@@ -7,8 +7,8 @@
             {# main content #}
             <div class="col-md-9 card-container">
                 <div class="row justify-content-md-start">
-                    {% if stady_plan | plan(0) %}
-                        {% for i in range(plan | plan(0)) %}
+                    {% if stady_plan | plan(1) %}
+                        {% for i in range(plan | plan(1)) %}
                             <div class="card mx-2 card-row mb-5">
                                 <figure>
                                     {{ stady_plan[i].name | generate_avatar(size=300,
@@ -16,8 +16,12 @@
                                 </figure>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"> {{ stady_plan[i].name }} </h5>
-                                    <p class="card-text">Some quick example text to build on the </p>
-                                    <a href="#" class="btn btn-primary mx-auto">Go somewhere</a>
+                                    <p class="card-text">
+                                        {% if stady_plan[i].goals | length > 0 %}
+                                            
+                                        {% endif %}
+                                    </p>
+                                    <a href="#" class="btn btn-primary mx-auto">visitar</a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -31,6 +35,12 @@
             {# sidebar right #}
             <div class="list-group col-md-3 d-none d-sm-inline-block " 
               id="list-ta" role="tablist">
+
+                <button type="button" class="btn btn-secondary btn-block mb-3"
+                  data-toggle="modal" data-target="#studyPlanGolasModal">
+                    Nuevo Objetivo
+                </button>
+
                 <a class="list-group-item list-group-item-action"
                     id="list-home-list" data-toggle="list"
                     href="#list-home" role="tab"

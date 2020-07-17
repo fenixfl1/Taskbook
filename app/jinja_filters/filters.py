@@ -38,7 +38,7 @@ def teachers(value, n=1):
 def study_plan(value, n=1):
 
     filtro = db.query(StudyPlan).\
-        filter(StudyPlan.user_id).\
+        filter(StudyPlan.user_id == current_user.id).\
         filter(StudyPlan.state == n).count()
 
     return filtro

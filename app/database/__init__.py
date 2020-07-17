@@ -16,6 +16,5 @@ Base = declarative_base()
 Base.query = db.query_property()
 
 def init_db():
-    
     from . import models
     Base.metadata.create_all(bind=engne)

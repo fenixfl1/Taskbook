@@ -31,18 +31,18 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6 pmd-textfield pmd-textfield-floating-label">
                                 <label for="asignada_en ">Fecha de Asignacion 
                                     <strong style="color: red; ">*</strong>
                                 </label>
-                                {{ Form_off_label(task_form.asignada_en, class="form-control", id="datetime1") }}
+                                {{ Form_off_label(task_form.asignada_en, class="form-control", id="start_date") }}
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6 pmd-textfield pmd-textfield-floating-label">
                                 <label for="dia_entrega ">Fecha de Entrega 
                                     <strong style="color: red; ">*</strong>
                                 </label>
-                                {{ Form_off_label(task_form.dia_entrega, class="form-control", id="datetime2") }}
+                                {{ Form_off_label(task_form.dia_entrega, class="form-control", id="datepicker-end") }}
                             </div>
                         </div>
 

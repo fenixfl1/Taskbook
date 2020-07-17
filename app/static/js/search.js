@@ -27,8 +27,6 @@ $('document').ready(function() {
 
         const datos = JSON.parse(ajax.responseText)
 
-        console.log(datos)
-
         const text = search.val().toLowerCase();
         
         for (let dato of datos.result) {
@@ -54,6 +52,12 @@ $('document').ready(function() {
 
                 else if (dato.table_name === "study-plan") {
                     item.href = "/studies-plan/" + dato.id
+                }
+
+                else if (dato.table_name === 'users') {
+                    item.innerText = dato.name + " " + dato.user_id
+                    url = '/users/' + dato.id + "/" + dato.name + "/"
+                    item.href = url
                 }
 
                 else {

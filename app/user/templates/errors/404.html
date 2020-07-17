@@ -1,1 +1,16 @@
-<h2> {{ e }} </h2>
+{% if current_user.is_authenticated%}
+	{% extends 'layout.html' %} {% block content %}
+		
+		<div class="container">
+			
+			<div class="row m-auto" style="width: 80%">
+				
+				<div class="m-auto">
+					
+					<img src="{{ url_for('static',filename='images/undraw/404.svg') }}" 
+					   alt="Not found" style="width: 40rem">
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+{% endif %}
