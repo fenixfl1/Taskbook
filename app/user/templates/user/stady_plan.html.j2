@@ -12,16 +12,24 @@
                             <div class="card mx-2 card-row mb-5">
                                 <figure>
                                     {{ stady_plan[i].name | generate_avatar(size=300,
-                                    class='card-img-top') }}
+                                        class='card-img-top') }}
                                 </figure>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"> {{ stady_plan[i].name }} </h5>
                                     <p class="card-text">
                                         {% if stady_plan[i].goals | length > 0 %}
-                                            
+
+                                            {{ stady_plan[i].id | study_plan_goals_done() }} de 
+                                            {{ stady_plan[i].id | study_plan_goals() }}
+                                            Metas Alcanzadas
+                                        {% else %}
+                                            No ha gregado ninguna meta
                                         {% endif %}
                                     </p>
-                                    <a href="#" class="btn btn-primary mx-auto">visitar</a>
+                                    <a href=" {{ url_for('users.study_plan_golas', id=stady_plan[i].id) }} " 
+                                      class="btn btn-primary mx-auto">
+                                        Ver Mis Metas
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -36,10 +44,16 @@
             <div class="list-group col-md-3 d-none d-sm-inline-block " 
               id="list-ta" role="tablist">
 
-                <button type="button" class="btn btn-secondary btn-block mb-3"
-                  data-toggle="modal" data-target="#studyPlanGolasModal">
-                    Nuevo Objetivo
-                </button>
+                {% if stady_plan | plan(1) %}
+                    <button type="button" class="btn btn-secondary btn-block mb-3"
+                      data-toggle="modal" data-target="#studyPlanGolasModal">
+                        Nuevo Objetivo
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-secondary btn-block mb-3 disabled">
+                        Nuevo Objetivo
+                    </button>
+                {% endif %}
 
                 <a class="list-group-item list-group-item-action"
                     id="list-home-list" data-toggle="list"
@@ -72,7 +86,6 @@
                     Informacion del curso
                 </a>
             </div>
-        </div>
         </div>
     </div>
 {% endblock %}

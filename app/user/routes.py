@@ -229,18 +229,33 @@ def plan_de_estudio():
     plan = db.query(StudyPlan).\
         filter(StudyPlan.user_id == current_user.id). \
         filter(StudyPlan.state == 1).\
-        options(contains_eager(StudyPlan.user)). \
-        order_by(StudyPlan.name)
-
-    goals = db.query(StudyPlanGoals).\
-        join(StudyPlan, StudyPlanGoals.id == StudyPlan.id).\
-        filter(StudyPlan.user_id == current_user.id).count()
+        options(contains_eager(StudyPlan.user))
 
     return render_template(
         'user/stady_plan.html.j2',
         title='Studies plan -',
-        stady_plan=plan,
-        goals=goals
+        stady_plan=plan
+    )
+
+
+# this functionis to watch all golas of one study plan
+@user_view.route('/studies-plan/<int:id>')
+@login_required
+def study_plan_golas(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlanGoals.done == 0).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    return render_template(
+        'user/stady_plan_goals.html.j2',
+        title='Studies plan goals -',
+        goals=goals,
+        plan_id=id
     )
 
 

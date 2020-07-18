@@ -12,10 +12,9 @@
 <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/calendar.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/bootstrap-datetimepicker-standalone.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/DatePicker/bootstrap-datepicker.min.css') }}" rel="stylesheet">
-<link href="{{ url_for('static',filename='css/DataTables/dataTables.bootstrap4.min.css') }}" 
-    rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=PT+Sans:ital@1&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital@1&display=swap" rel="stylesheet">
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -388,8 +387,6 @@
 
                 {# bloque de conteneidos para las platillas herederas #} 
                 {% block content %}
-                    {# Alerts#}
-                    {% include 'messages.html' %}
 
                 {% endblock %}
             </div>

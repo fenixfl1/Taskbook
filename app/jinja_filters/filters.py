@@ -1,7 +1,8 @@
 # from app.database.queries import Queries
 from flask_security import current_user
 from flask import Markup
-from app.database.models import Tasks, Courses, Teachers, StudyPlan
+from app.database.models import Tasks, Courses, Teachers, \
+    StudyPlan, StudyPlanGoals
 from app.database import db
 from app.extentions import avatars, db_session
 import hashlib
@@ -42,6 +43,31 @@ def study_plan(value, n=1):
         filter(StudyPlan.state == n).count()
 
     return filtro
+
+
+def study_plan_goals_done(id):
+
+    filter = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.done == 1).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id).count()
+
+    return filter
+
+
+def study_plan_goals(id):
+
+    filter = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id).count()
+
+    return filter
 
 
 def list_courses(value):
@@ -118,3 +144,5 @@ class Filter():
         app.jinja_env.filters['default'] = avatar
         app.jinja_env.filters['generate_avatar'] = generate_avatar
         app.jinja_env.filters['paginate_courses'] = paginate_courses
+        app.jinja_env.filters['study_plan_goals_done'] = study_plan_goals_done
+        app.jinja_env.filters['study_plan_goals'] = study_plan_goals

@@ -1,0 +1,217 @@
+{# {% extends 'base.html' %} {% block content %}
+	
+	<div class="container-fluid">
+        <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
+        	<div class="col-md-8 card-container"> 
+        		<div class="row justify-content-md-start"></div>
+
+		        	{% if goals.count() > 0 %}
+			        	{% for i in range(goals.count()) %}
+			        		<div class="card mx-2 card-list mb-3">
+			        			<div class="card-body">
+				        			<div class="table-responsive">
+
+					                    <table class="table model-list bg-white rounded-lg" 
+					                        id="table">
+
+					                        <tbody>
+					                            <tr>
+					                                <th>Titulo</th>
+					                                <td class="col-md-7">{{ goals[i].title }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Cumplir en</th>
+					                                <td class="col-md-7">{{ goals[i].deadline }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Pagina web</th>
+					                                <td class="col-md-7">{{ goals[i].url }}</td>
+					                            </tr>
+					                                                        <tr>
+					                                <th>Fecha de creacion</th>
+					                                <td class="col-md-7">{{ goals[i].created_at }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Comentario</th>
+					                                <td class="col-md-7">{{ goals[i].comment }}</td>
+					                            </tr>
+					                            <tr class="p-n2">
+					                            	<th>Opciones</th>
+					                                <td>
+					                                	<button type="button" class="btn btn-secondary">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/check2-circle.svg') }}" alt="">
+					                                	</button>
+					                                </td>
+
+					                                <td>
+					                                	<button type="button" class="btn btn-secondary">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/trash.svg') }}" alt="">
+					                                	</button>
+					                                </td>
+
+					                                <td>
+					                                	<button type="button" class="btn btn-secondary">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/pencil-square.svg') }}" alt="">
+					                                	</button>
+					                                </td>
+					                            </tr>
+					                        </tbody>
+					                    </table>
+					                </div>
+				                </div>
+				            </div>
+			        	{% endfor %}
+			        {% else %}
+			        	<img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+		                        alt="Empty space" class="img-empty m-auto">
+			        {% endif %}
+			    </div>
+			</div>
+
+	        <div class="list-group col-md-3 d-none d-sm-inline-block " 
+              id="list-ta" role="tablist">
+
+                <button type="button" class="btn btn-secondary btn-block mb-3"
+                  data-toggle="modal" data-target="#studyPlanGolasModal">
+                    Nuevo Objetivo
+                </button>
+
+                <a class="list-group-item list-group-item-action"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Todas las metas
+                </a>
+                <a class="list-group-item list-group-item-action active"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Metas por cumplir
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-profile-list" data-toggle="list"
+                    href="#list-profile" role="tab"
+                    aria-controls="profile">
+                    Metas alcanzadas
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-settings-list" data-toggle="list"
+                    href="#list-settings" role="tab"
+                    aria-controls="settings">
+                    Editar informacion
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %} #}
+
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
+            {# main content #}
+            <div class="col-md-9 card-container">
+                <div class="row justify-content-md-start">
+                    {% if goals.count() > 0 %}
+			        	{% for i in range(goals.count()) %}
+			        		<div class="card mx-2 card-list mb-3">
+			        			<div class="card-body">
+				        			<div class="table-responsive">
+
+					                    <table class="table model-list bg-white rounded-lg" id="table">
+
+					                        <tbody>
+					                            <tr>
+					                                <th>Titulo</th>
+					                                <td class="col-md-7">{{ goals[i].title }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Cumplir en</th>
+					                                <td class="col-md-7">{{ goals[i].deadline }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Pagina web</th>
+					                                <td class="col-md-7">{{ goals[i].url }}</td>
+					                            </tr>
+					                                                        <tr>
+					                                <th>Fecha de creacion</th>
+					                                <td class="col-md-7">{{ goals[i].created_at }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Comentario</th>
+					                                <td class="col-md-7">{{ goals[i].comment }}</td>
+					                            </tr>
+					                            <tr>
+					                            	<th>Opciones</th>
+					                                <td>
+					                                	<a class="btn btn-secondary" href="">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/check2-circle.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+
+					                                <td>
+					                                	<a href="{{url_for('auth.delete_plan', id=goals[i].id, plan_id=plan_id)}}"
+					                                	 class="btn btn-secondary btn-delete">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/trash.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+
+					                                <td>
+					                                	<a href="" class="btn btn-secondary">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/pencil-square.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+					                            </tr>
+					                        </tbody>
+					                    </table>
+					                </div>
+				                </div>
+				            </div>
+			        	{% endfor %}
+			        {% else %}
+			        	<img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+		                        alt="Empty space" class="img-empty m-auto">
+			        {% endif %}
+                </div>
+            </div>
+
+            {# sidebar right #}
+            <div class="list-group col-md-3 d-none d-sm-inline-block " 
+              id="list-ta" role="tablist">
+
+                <button type="button" class="btn btn-secondary btn-block mb-3"
+                  data-toggle="modal" data-target="#studyPlanGolasModal">
+                    Nuevo Objetivo
+                </button>
+
+                <a class="list-group-item list-group-item-action"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Todas las metas
+                </a>
+                <a class="list-group-item list-group-item-action active"
+                    id="list-home-list" data-toggle="list"
+                    href="#list-home" role="tab"
+                    aria-controls="home">
+                    Metas por cumplir
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    id="list-profile-list" data-toggle="list"
+                    href="#list-profile" role="tab"
+                    aria-controls="profile">
+                    Metas alcanzadas
+                </a>
+
+                <button type="button" class="list-group-item list-group-item-action"
+                    id="list-settings-list" data-toggle="list" role="tab"
+                    aria-controls="settings">
+                    Editar informacion
+                </<button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
