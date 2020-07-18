@@ -47,6 +47,10 @@
   margin-right: 4.2em !important;
   color: green; }
 
+.card-list {
+  width: 97%;
+  height: 22rem; }
+
 .nav-icon {
   width: 2em;
   height: 2em; }
