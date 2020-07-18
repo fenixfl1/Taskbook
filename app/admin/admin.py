@@ -20,20 +20,20 @@ class AdminView(ModelView):
     # can_delete = False
     can_view_details = True
 
-    def is_accessible(self):
+    # def is_accessible(self):
 
-        for i in role_name:
+    #     for i in role_name:
 
-            if i in current_user.roles:
+    #         if i in current_user.roles:
 
-                return True
+    #             return True
 
-            else:
-                return False
+    #         else:
+    #             return False
 
-    def inaccessible_callback(self, name, **kwargs):
+    # def inaccessible_callback(self, name, **kwargs):
 
-        return redirect(url_for('users.index'))
+    #     return redirect(url_for('users.index'))
 
 
 class UserView(AdminView):
