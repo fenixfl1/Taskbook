@@ -32,3 +32,20 @@ function editTeachers(dato) {
 		$('.teacher').trigger('focus');
 	});
 }
+
+function editStudyPlan (datos) {
+
+	var date = $('#goals_date');
+
+	var current_date = new Date();
+
+	date.min = current_date.getDate() + "-0" + (current_date.getMonth() +1) + "-" + current_date.getFullYear()
+
+	console.log(date.man)
+
+	$('#editStudyPlanModal').on('shown.bs.modal', function(){
+		$('#goals_name').trigger('focus');
+		$('#goals_name').val(datos.result['0']);
+		$('.d-none').val(datos.result['1'])
+	});
+}

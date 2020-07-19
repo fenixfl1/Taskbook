@@ -46,7 +46,8 @@
                                                 <strong style="color: red;">*</strong>
                                             </label> 
 
-                                            {{ Form_off_label(plan_goal_form.deadline, class="form-control") }}
+                                            {{ Form_off_label(plan_goal_form.deadline, 
+                                                class="form-control", min=hoy) }}
                                         </div>
 
                                     </div>

@@ -1,5 +1,5 @@
 from . import auth_view
-from app.tasks import notifications
+# from app.tasks import notifications
 from flask import flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
 # from werkzeug.utils import secure_filename
@@ -8,9 +8,8 @@ from .forms import LoadForm, TaskForm, EventForm, \
     QualificationForm, PlanGoalsForm
 from app.database import db, engne as engine
 from app.database.models import Tasks, Courses, Teachers,\
-    Events, StudyPlan, User, StudyPlanGoals
+    Events, StudyPlan, StudyPlanGoals
 from config.default import IMAGE_SET_EXT
-from datetime import datetime, timedelta
 # from app.database.schemas import CoursesSchema
 # import os
 
@@ -96,27 +95,13 @@ def register_subjects():
 
         if not check:
 
-            user = Courses(name=name, finished=finished,
-                           user_id=current_user.id,
-                           teacher=profe)
-
             try:
+                user = Courses(name=name, finished=finished,
+                               user_id=current_user.id,
+                               teacher=profe)
+
                 db.add(user)
                 db.commit()
-
-                msg = '{} tu proxima clase empiezara pronto'.format(
-                    current_user.first_name)
-
-                delay = datetime.utcnow() + timedelta(minutes=3)
-
-                notifications.apply_async(
-                    (name,
-                     msg,
-                     datetime.now(),
-                     current_user.id),
-                    eta=delay
-                )
-                # result.wait()
 
                 messages = 'Asignatura registrada con exito!'
                 category = 'success'
@@ -325,19 +310,6 @@ def register_task():
                 assigned_in=asignada_en,
                 delivery_day=dia_entrega,
                 comment=comentario
-            )
-
-            msg = 'Saludos {} recuenrda que tuenes una tarea pendiente'.format(
-                current_user.first_name)
-
-            delay = datetime.utcnow() + timedelta(second=30)
-
-            notifications.apply_async(
-                (name,
-                 msg,
-                 asignada_en,
-                 current_user.id),
-                eta=delay
             )
 
             db.add(task)

@@ -40,10 +40,13 @@
 					                            <tr>
 					                            	<th>Opciones</th>
 					                                <td>
-					                                	<a class="btn btn-secondary"
-					                                	  title="Marcar como completada" 
+					                                	<a class="btn btn-secondary" 
 					                                	   href="{{url_for('auth.marck_as_done', id=goals[i].id, plan_id=plan_id)}}">
-					                                		<img src="{{ url_for('static',filename='icons-svg/icons/check2.svg') }}" alt="">
+					                                		{% if goals[i].done %}
+					                                			<img src="{{ url_for('static',filename='icons-svg/icons/check2-all.svg') }}" alt="">
+					                                		{% else %}
+					                                			<img src="{{ url_for('static',filename='icons-svg/icons/check2-circle.svg') }}" alt="">	
+					                                		{% endif %}
 					                                	</a>
 					                                </td>
 
@@ -82,20 +85,18 @@
                     Nuevo Objetivo
                 </button>
 
-                <a class="list-group-item list-group-item-action"
+                <a class="list-group-item list-group-item-action active"
                     id="list-home-list" href="/studies-plan/{{plan_id}}/all" 
                     role="tab"
-                    aria-controls="home">
+                    aria-controls="all">
                     Todas las metas
                 </a>
-
-                <a class="list-group-item list-group-item-action active"
+                <a class="list-group-item list-group-item-action"
                     id="list-home-list" href="/studies-plan/{{plan_id}}" 
                     role="tab"
-                    aria-controls="home">
+                    aria-controls="current">
                     Metas por cumplir
                 </a>
-
                 <a class="list-group-item list-group-item-action"
                     id="list-profile-list" href="/studies-plan/{{plan_id}}/done"
                     role="tab"

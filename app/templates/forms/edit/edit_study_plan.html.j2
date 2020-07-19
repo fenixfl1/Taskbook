@@ -1,0 +1,54 @@
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div class="content">
+            <div class="container-fluid">
+                <!-- modal to details of the studies plan -->
+                <div id="editStudyPlanModal" class="modal fade" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="False">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            
+                            <div class="modal-header border-bottom-0" style="border-bottom: none;">
+                                <h3 class="m-auto">
+                                    <h3 class="modal-title m-auto text-primary">Editar plan de estudio</h3>
+                                </h3>
+                                <button type="button" class="close btn-sm" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form action="/staty_plan/edit" method="post" autocomplete="off">
+
+                                    {{ plan_form.hidden_tag() }}
+
+                                    <div class="form-group">
+                                        <label for="name">Nombre
+                                            <strong style="color: red;">*</strong>
+                                        </label> 
+
+                                        {{ Form_off_label(plan_form.name, class="form-control", id="goals_name") }}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Fecha de Inicio
+                                            <strong style="color: red;">*</strong>
+                                        </label> 
+
+                                        {{Form_off_label(plan_form.start_date, class="form-control", 
+                                            id="goals_date", min=hoy )}}
+                                    </div>
+
+                                    {{ Form_off_label(plan_form.id, class="d-none", id="token") }}
+
+                                    <div class="text-center form-group">
+                                        {{ Form_off_label(plan_form.submit, class="btn btn-primary btn-lg", 
+                                        value="Submit", id="submit-plan")}}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

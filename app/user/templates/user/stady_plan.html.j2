@@ -2,6 +2,7 @@
 {% block content %}
 
     <div class="container-fluid">
+        {% include 'messages.html' %}
         <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
 
             {# main content #}
@@ -9,26 +10,43 @@
                 <div class="row justify-content-md-start">
                     {% if stady_plan | plan(1) %}
                         {% for i in range(plan | plan(1)) %}
-                            <div class="card mx-2 card-row mb-5">
+                            {% set datos = {'result': [
+                                stady_plan[i].name,
+                                stady_plan[i].id
+                            ]} %}
+
+                            <div class="card border-primary mx-2 card-row mb-5">
                                 <figure>
                                     {{ stady_plan[i].name | generate_avatar(size=300,
                                         class='card-img-top') }}
                                 </figure>
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"> {{ stady_plan[i].name }} </h5>
-                                    <p class="card-text">
-                                        {% if stady_plan[i].goals | length > 0 %}
+                                    <h5 class="card-title"> 
+                                        {{ stady_plan[i].name }} 
+                                        <a href="" title="Editar" 
+                                            onclick='editStudyPlan({{ datos | tojson }})'
+                                            data-toggle="modal" 
+                                            data-target="#editStudyPlanModal">
 
+                                            <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" 
+                                          style="width: 1rem;">
+                                        </a>
+                                    </h5>
+                                    
+                                    {% if stady_plan[i].goals | length > 0 %}
+                                        <p class="card-text text-success">
                                             {{ stady_plan[i].id | study_plan_goals_done() }} de 
                                             {{ stady_plan[i].id | study_plan_goals() }}
                                             Metas Alcanzadas
-                                        {% else %}
-                                            No ha gregado ninguna meta
-                                        {% endif %}
-                                    </p>
-                                    <a href=" {{ url_for('users.study_plan_golas', id=stady_plan[i].id) }} " 
-                                      class="btn btn-primary mx-auto">
-                                        Ver Mis Metas
+                                        </p>
+                                    {% else %}
+                                        <p class="card-text text-warning">
+                                            Sin metas!
+                                        </p>
+                                    {% endif %}
+                                    <a href=" {{ url_for('users.study_plan_goals', id=stady_plan[i].id) }} " 
+                                      class="mx-auto" title="Ir">
+                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
                                     </a>
                                 </div>
                             </div>
@@ -41,7 +59,7 @@
             </div>
 
             {# sidebar right #}
-            <div class="list-group col-md-3 d-none d-sm-inline-block " 
+            <div class="list-group col-md-3 d-none d-sm-inline-block" 
               id="list-ta" role="tablist">
 
                 {% if stady_plan | plan(1) %}
@@ -55,11 +73,14 @@
                     </button>
                 {% endif %}
 
-                <a class="list-group-item list-group-item-action"
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                     id="list-home-list" data-toggle="list"
                     href="#list-home" role="tab"
                     aria-controls="home">
-                    Todas las tereas
+                    Todos mis planes
+                    <span class="badge badge-primary badge-pill">
+                        {{ stady_plan.count() }}
+                    </span>
                 </a>
                 <a class="list-group-item list-group-item-action active"
                     id="list-home-list" data-toggle="list"

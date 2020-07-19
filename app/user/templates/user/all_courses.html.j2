@@ -1,6 +1,7 @@
 {% extends "base.html" %}{% block content %}
 
     <div class="container-fluid">
+        {% include 'messages.html' %}
         
         <div class="row justify-content-md-between mt-3 ml-1">
             
@@ -9,41 +10,57 @@
                 <div class="row justify-content-md-star">
                     {% if courses | courses(0) > 0 %}
                         {% for courses in subjects_user.items %}
-                            {% set dato = [courses.name, courses.id] %}
+                            {% set dato = [
+                                courses.name, 
+                                courses.id] %}
                             <div class="card card-row mx-2 mb-5">
                                 <figure>
                                     {{ courses.name | generate_avatar(size=300,
                                     class='card-img-top') }}
                                 </figure>
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"> {{ courses.name }} </h5>
+                                    <h5 class="card-title"> 
+                                        {{ courses.name }} 
+                                        <a href="" title="Editar" 
+                                            onclick='editSubjects({{ dato | tojson }})'
+                                            data-toggle="modal" 
+                                            data-target="#editSubject">
+
+                                            <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" 
+                                          style="width: 1rem;">
+                                        </a>
+                                    </h5>
                                     {% if courses.teacher %}
                                         <p class="card-text"> {{ courses.teacher }} </p>
                                     {% else %}
-                                        <div class="dropdown no-arrow">
-                                            <a href="#" class="dropdown-toggle"
-                                                type="button" id="dropdownMenuButton"
-                                                data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                Asignar instructor
-                                            </a>
-                                            <div class="dropdown-menu">
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#staticBackdropTeacher"
-                                                    class="dropdown-item cursor">
-                                                    Nuevo
+                                        <p class="card-text">
+                                            <div class="dropdown no-arrow">
+                                                <a href="#" class="dropdown-toggle"
+                                                    type="button" id="dropdownMenuButton"
+                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    Asignar instructor
                                                 </a>
-                                                <button class="dropdown-item dropright cursor"
-                                                onclick='assignTeacher({{ dato | tojson }})'
-                                                data-toggle="modal" data-target="#assingTeachers">
-                                                Existente
-                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#staticBackdropTeacher"
+                                                        class="dropdown-item cursor">
+                                                        Nuevo
+                                                    </a>
+                                                    <button class="dropdown-item dropright cursor"
+                                                    onclick='assignTeacher({{ dato | tojson }})'
+                                                    data-toggle="modal" data-target="#assingTeachers">
+                                                    Existente
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </p>
                                     {% endif %}
                                     
                                     <a href=" {{url_for('users.courses', id=courses.id)}} "
-                                    class="btn btn-primary mx-auto mt-3">Ir al curso</a>
+                                    class="mx-auto" title="Ir al curso">
+                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

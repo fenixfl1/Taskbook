@@ -241,7 +241,7 @@ def plan_de_estudio():
 # this functionis to watch all golas of one study plan
 @user_view.route('/studies-plan/<int:id>')
 @login_required
-def study_plan_golas(id):
+def study_plan_goals(id):
 
     goals = db.query(StudyPlanGoals).\
         join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
@@ -256,6 +256,47 @@ def study_plan_golas(id):
         title='Studies plan goals -',
         goals=goals,
         plan_id=id
+    )
+
+
+@user_view.route('/studies-plan/<int:id>/done')
+@login_required
+def study_plan_goals_done(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlanGoals.done == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    return render_template(
+        'user/stady_plan_goals_done.html.j2',
+        title="Studies plan done -",
+        plan_id=id,
+        goals=goals
+    )
+
+
+@user_view.route('/studies-plan/<int:id>/all')
+@login_required
+def study_plan_goals_all(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    goals.order_by(StudyPlanGoals.title)
+
+    return render_template(
+        'user/stady_plan_goals_all.html.j2',
+        title="Studies plan done -",
+        plan_id=id,
+        goals=goals
     )
 
 
