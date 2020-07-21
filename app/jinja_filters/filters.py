@@ -7,24 +7,61 @@ from app.database import db
 from app.extentions import avatars, db_session
 import hashlib
 
-def tasks(value, n=1):
+def tasks(value, **kwargs):
 
     filtro = db.query(Tasks).\
         filter(Tasks.user_id == current_user.id).\
-        filter(Tasks.state == 1).\
-        filter(Tasks.done == n).count()
+        filter(Tasks.state == 1)
 
-    return filtro
+    if 'done' in kwargs:
 
+        if kwargs.get('done') == 1:
+            return filtro.filter(Tasks.done == 1).count()
 
-def courses(value, n=1):
+        if kwargs.get('done') == 0:
+            return filtro.filter(Tasks.done == 0).count()
+
+        else:
+            return filtro.count()
+
+    if 'progress' in kwargs:
+
+        if kwargs.get('progress') == 1:
+            total = filtro.filter(Tasks.course_id == value).count()
+            done = filtro.filter(Tasks.done == 1).count()
+
+            progress = (done * 100) / total
+
+            return progress
+
+def courses(value, **kwargs):
 
     filtro = db.query(Courses).\
         filter(Courses.user_id == current_user.id).\
-        filter(Courses.finished == n).\
-        filter(Courses.state == 1).count()
+        filter(Courses.state == 1)
 
-    return filtro
+    if 'finished' in kwargs:
+
+        if kwargs.get('finished') == 0:
+            return filtro.filter(Courses.finished == 0).count()
+
+        if kwargs.get('finished') == 1:
+            return filtro.filter(Courses.finished == 1).count()
+
+        else:
+            return filtro.count()
+
+    if 'progress' in kwargs:
+
+        if kwargs.get('progress') == 1:
+            total = filtro.count()
+            finished = filtro.filter(Courses.finished == 1).count()
+
+            progress = (finished * 100) / total
+
+            return progress
+        else:
+            return None
 
 
 def teachers(value, n=1):

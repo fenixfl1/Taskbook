@@ -49,3 +49,6 @@ function editStudyPlan (datos) {
 		$('.d-none').val(datos.result['1'])
 	});
 }
+
+$('document').ready(function() {
+})

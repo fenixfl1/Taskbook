@@ -8,16 +8,38 @@
 			<div class="col-md-9 card-container">
 				<div class="row justify-content-md-start">
 					{% if course.task %}
-						{% for i in range(tasks | tasks(0) ) %}
-							<div class="card mx-2 card-row mb-5">
+						{% for i in range(tasks | tasks(done=0) ) %}
+							{% set dato = [
+								assignments[i].id, 
+								assignments[i].name,
+								assignments[i].materia,
+								assignments[i].asignada_en,
+								assignments[i].delivery_day] %}
+
+							<div class="card  mx-2 card-row mb-5" time()>
 								<figure>
 									{{ assignments[i].name | generate_avatar(size=300,
 									class='card-img-top') }}
 								</figure>
 								<div class="card-body text-center">
-									<h5 class="card-title">Card title</h5>
-									<p class="card-text">Some quick example text to build on the </p>
-									<a href="#" class="btn btn-primary mx-auto">Go somewhere</a>
+									<h5 class="card-title">
+										{{ assignments[i].name }}
+										<a href="" title="Editar"
+                                            data-toggle="modal" 
+                                            data-target="#editTaskModal">
+                                            <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" 
+                                          style="width: 1rem;">
+                                        </a>
+									</h5>
+									<p class="card-text">
+										<input type="text" class="d-none" id="dia-entrega"
+										 value="{{ assignments[i].delivery_day }}">
+										<span id="date"></span>
+									</p>
+									<a href=" {{ url_for('users.details_task', id=assignments[i].id) }} " 
+                                      class="mx-auto" title="Ir">
+                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                    </a>
 								</div>
 							</div>
 						{% endfor %}
@@ -86,7 +108,7 @@
 		</a>
 		<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
 			<h6 class="dropdown-header"> Mis cursos </h6>
-			{% if courses | courses(0) > 0 %}
+			{% if courses | courses(finished=0) > 0 %}
 				{% set pagination = (1 | paginate_courses(0) ) %}
 				{% for course in pagination.items %}
 					<a class="dropdown-item d-flex align-items-center"

@@ -1,0 +1,70 @@
+<div class="row">
+    <div id="editTaskModal" class="modal fade hide in" role="dialog" 
+      aria-labelledby="staticBackdropLabel" aria-hidden="False">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h3 class="m-auto">
+                        <h3 class="modal-title m-auto text-primary">editar Tarea</h3>
+                    </h3>
+                    <button type="button" class="close btn-sm" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    
+                    <form action="{{ url_for( 'auth.register_task') }}" autocomplete="off" method="POST">
+                        {{ task_form.hidden_tag() }}
+                        {{ Form_off_label(task_form.id, class="d-none") }}
+
+                        <div class="form-group">
+                            <label for="name ">Nombre 
+                                <strong style="color: red; ">*</strong>
+                            </label>
+                            {{ Form_off_label(task_form.name, class="form-control") }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="materia ">Asignatura 
+                                <strong style="color: red; ">*</strong>
+                            </label>
+                            {{ Form_off_label(task_form.materia, class="form-control") }}
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="asignada_en ">Fecha de Asignacion 
+                                    <strong style="color: red; ">*</strong>
+                                </label>
+                                {{ Form_off_label(task_form.asignada_en, class="form-control") }}
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="dia_entrega ">Fecha de Entrega 
+                                    <strong style="color: red; ">*</strong>
+                                </label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    {{ Form_off_label(task_form.dia_entrega, class="form-control") }}
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form_off_label(task_form.nota.label) }}
+                            {{ Form_off_label(task_form.nota, class="form-control", id="exampleFormControlTextarea1", rows="3") }}
+                        </div>
+
+                        <div class="text-center form-group">
+                            {{Form_off_label(task_form.submit, class="btn btn-primary btn-lg", value="Guardar")}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    

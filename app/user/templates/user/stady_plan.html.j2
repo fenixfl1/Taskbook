@@ -73,10 +73,10 @@
                     </button>
                 {% endif %}
 
-                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                    id="list-home-list" data-toggle="list"
+                <a id="list-home-list" data-toggle="list"
                     href="#list-home" role="tab"
-                    aria-controls="home">
+                    aria-controls="home"
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Todos mis planes
                     <span class="badge badge-primary badge-pill">
                         {{ stady_plan.count() }}

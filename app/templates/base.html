@@ -35,6 +35,8 @@
 {% include "forms/edit/assing_teachers.html.j2" %}
 {# modal to add qualifications #}
 {% include "forms/edit/qualification.html.j2" %}
+{# modal to edit taks #}
+{% include "forms/edit/edit_task_form.html.j2" %}
 {# modal to add new study plan #}
 {% include 'forms/stady_plan_form.html.j2' %}
 {# modal to edit teachers #}
@@ -273,7 +275,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src=" {{ url_for('static',filename='icons-svg/icons/bell.svg') }} " alt="Courses" class="nav-icon">
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter"></span>
+                                <span class="badge badge-danger badge-counter" id="notify"></span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">

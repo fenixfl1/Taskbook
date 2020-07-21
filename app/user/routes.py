@@ -77,6 +77,9 @@ def subjects():
         filter(Courses.finished == 0).\
         filter(Courses.state == 1)
 
+    num_courses = db.query(Courses). \
+        filter(Courses.user_id == current_user.id).count()
+
     pages = courses.total / 8
 
     if pages is not int:
@@ -90,7 +93,8 @@ def subjects():
         subjects_user=courses,
         list_courses=list_courses,
         current_page=page,
-        total_pages=total_pages
+        total_pages=total_pages,
+        num_courses=num_courses
     )
 
 
@@ -103,7 +107,7 @@ def courses(id):
         filter(Courses.id == id).first()
 
     task = db.query(Tasks).\
-        filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.course_id == id). \
         filter(Tasks.state == 1).\
         filter(Tasks.done == 0)
 
