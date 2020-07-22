@@ -37,5 +37,5 @@ function countDown () {
 
 $(document).ready(function() {
     
-    countDown();
+    // countDown();
 });

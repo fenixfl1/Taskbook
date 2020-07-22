@@ -7,11 +7,14 @@ from app.database import db
 from app.extentions import avatars, db_session
 import hashlib
 
+
 def tasks(value, **kwargs):
 
     filtro = db.query(Tasks).\
         filter(Tasks.user_id == current_user.id).\
         filter(Tasks.state == 1)
+
+    progress = 0
 
     if 'done' in kwargs:
 
@@ -30,15 +33,21 @@ def tasks(value, **kwargs):
             total = filtro.filter(Tasks.course_id == value).count()
             done = filtro.filter(Tasks.done == 1).count()
 
-            progress = (done * 100) / total
+            try:
+                progress = (done * 100) / total
+            except ZeroDivisionError as e:
+                raise e
+            finally:
+                return progress
 
-            return progress
 
 def courses(value, **kwargs):
 
     filtro = db.query(Courses).\
         filter(Courses.user_id == current_user.id).\
         filter(Courses.state == 1)
+
+    progress = 0
 
     if 'finished' in kwargs:
 
@@ -57,9 +66,12 @@ def courses(value, **kwargs):
             total = filtro.count()
             finished = filtro.filter(Courses.finished == 1).count()
 
-            progress = (finished * 100) / total
-
-            return progress
+            try:
+                progress = (finished * 100) / total
+            except ZeroDivisionError as e:
+                raise e
+            finally:
+                return progress
         else:
             return None
 
