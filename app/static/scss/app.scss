@@ -88,6 +88,13 @@
 	height: 2em;
 }
 
+.card-title {
+	max-width: 300px;
+	max-height: 18px;
+	line-height: 18px;
+	overflow: hidden;
+}
+
 // .nav-footer {
 // 	max-height: 50px !important;
 // }

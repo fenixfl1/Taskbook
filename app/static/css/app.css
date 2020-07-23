@@ -60,6 +60,12 @@
   width: 2em;
   height: 2em; }
 
+.card-title {
+  max-width: 300px;
+  max-height: 18px;
+  line-height: 18px;
+  overflow: hidden; }
+
 .img-empty {
   width: 40rem; }
   .img-empty:before {
