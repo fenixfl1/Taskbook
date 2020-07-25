@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container-fluid">
+    	{% include 'messages.html' %}
+        <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
+            {# main content #}
+            <div class="col-md-9 card-container">
+                <div class="row justify-content-md-start">
+                    {% if plan_id | study_plan_goals(done=find) %}
+			        	{% for i in range( plan_id | study_plan_goals(done=find)) %}
+			        		{% if goals[i].done == 0 %}
+			        			{% set color = "border-primary" %}
+			        		{% else %}
+			        			{% set color = "border-success" %}
+			        		{% endif %}
+			        		<div class="card mx-2 card-list mb-3 {{color}}">
+			        			<div class="card-body">
+				        			<div class="table-responsive">
+
+					                    <table class="table model-list bg-white rounded-lg" id="table">
+
+					                        <tbody>
+					                            <tr>
+					                                <th>Titulo</th>
+					                                <td class="col-md-7">{{ goals[i].title }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Cumplir en</th>
+					                                <td class="col-md-7">{{ goals[i].deadline }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Pagina web</th>
+					                                <td class="col-md-7">{{ goals[i].url }}</td>
+					                            </tr>
+					                                                        <tr>
+					                                <th>Fecha de creacion</th>
+					                                <td class="col-md-7">{{ goals[i].created_at }}</td>
+					                            </tr>
+					                            <tr>
+					                                <th>Comentario</th>
+					                                <td class="col-md-7">{{ goals[i].comment }}</td>
+					                            </tr>
+					                            <tr>
+					                            	<th>Opciones</th>
+					                                <td>
+					                                	<a class="btn btn-secondary"
+					                                	  title="Marcar como completada" 
+					                                	   href="{{url_for('auth.marck_as_done', id=goals[i].id, plan_id=plan_id)}}">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/check2.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+
+					                                <td>
+					                                	<a href="{{url_for('auth.delete_plan', id=goals[i].id, plan_id=plan_id)}}"
+					                                	 class="btn btn-secondary btn-delete">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/trash.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+
+					                                <td>
+					                                	<a href="" class="btn btn-secondary">
+					                                		<img src="{{ url_for('static',filename='icons-svg/icons/pencil-square.svg') }}" alt="">
+					                                	</a>
+					                                </td>
+					                            </tr>
+					                        </tbody>
+					                    </table>
+					                </div>
+				                </div>
+				            </div>
+			        	{% endfor %}
+			        {% else %}
+			        	<img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+		                        alt="Empty space" class="img-empty m-auto">
+			        {% endif %}
+                </div>
+            </div>
+
+            {# sidebar right #}
+            <div class="list-group col-md-3 d-none d-sm-inline-block " 
+              id="list-ta" role="tablist">
+
+                <button type="button" class="btn btn-secondary btn-block mb-3"
+	              data-toggle="modal" data-target="#studyPlanGolasModal">
+	                Nuevo objetivo
+	            </button>
+
+                <a class="list-group-item list-group-item-action d-flex justify-content-between
+                  align-items-center" href="?goals=all">
+                    Todas las metas
+                    <span class="badge badge-primary badge-pill">
+                        {{ plan_id | study_plan_goals() }}
+                    </span>
+                </a>
+
+                <a class="list-group-item list-group-item-action d-flex justify-content-between
+                  align-items-center" href="?goals=pending">
+                    Metas por cumplir
+                    <span class="badge badge-primary badge-pill">
+                        {{ plan_id | study_plan_goals(done=0) }}
+                    </span>
+                </a>
+
+                <a class="list-group-item list-group-item-action d-flex justify-content-between
+                  align-items-center" href="?goals=finished">
+                    Metas alcanzadas
+                    <span class="badge badge-primary badge-pill">
+                        {{ plan_id | study_plan_goals(done=1) }}
+                    </span>
+                </a>
+
+                <span class="list-group-item list-group-item-action d-flex justify-content-between 
+                  align-items-center" aria-controls="settings">
+                    Progreo
+                    <span class="badge badge-primary badge-pill">
+                        {{ plan_id | study_plan_goals(progress=1) }}%
+                    </span>
+                </span>
+
+                <div class="btn-group btn-block mt-3">
+              		<button type="button" class="btn btn-secondary"
+	                  data-toggle="modal" data-target="#">
+	                    <img src="{{url_for('static',filename='icons-svg/icons/trash.svg')}}" alt="Delete">
+	                </button>
+
+	                <button type="button" class="btn btn-secondary"
+	                  data-toggle="modal" data-target="#">
+	                    Editar Informacion
+	                </button>
+
+	                <button type="button" class="btn btn-secondary"
+	                  data-toggle="modal" data-target="#">
+	                    <img src="{{url_for('static',filename='icons-svg/icons/check2.svg')}}" alt="Edit">
+	                </button>
+	            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

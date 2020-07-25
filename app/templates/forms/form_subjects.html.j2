@@ -1,4 +1,4 @@
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+<div class="modal fade" id="staticBackdropCourses" tabindex="-1" role="dialog" aria-labelledby="staticBackdropCourses" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header border-bottom-0">
@@ -12,32 +12,32 @@
 
             <div class="modal-body">
                 <form action="/register-subjects" method="POST" autocomplete="off">
-                    {{ subject_form.hidden_tag() }}
+                    {{ course_form.hidden_tag() }}
                     <div class="form-group my-4">
-                        {{ Form_off_label(subject_form.name.label) }}
-                        {{ Form_off_label(subject_form.name, class="form-control form-control-lg") }}
+                        {{ Form_off_label(course_form.name.label) }}
+                        {{ Form_off_label(course_form.name, class="form-control form-control-lg") }}
                     </div>
 
                     <div class="form-group my-4">
-                        {{ Form_off_label(subject_form.profe.label) }}
-                        {{ Form_off_label(subject_form.profe, 
+                        {{ Form_off_label(course_form.profe.label) }}
+                        {{ Form_off_label(course_form.profe, 
                         class="form-control form-control-lg") }}
                     </div>
 
                     <div class="form-group my-4">
-                        {{ Form_off_label(subject_form.calificacion.label, class="d-none", id="label") }}
-                        {{ Form_off_label(subject_form.calificacion, class="form-control form-control-lg d-none") }}
+                        {{ Form_off_label(course_form.calificacion.label, class="d-none", id="label") }}
+                        {{ Form_off_label(course_form.calificacion, class="form-control form-control-lg d-none") }}
                     </div>
 
                     <div class="form-group text-center">
                         <label for="estado" class="btn btn-white btn-sm checked">Marcar como cursada
-                            {{ Form_off_label(subject_form.estado, class="badgebox") }}
+                            {{ Form_off_label(course_form.estado, class="badgebox") }}
                             <span class="badge">&check;</span>
                         </label>
                     </div>
 
                     <div class="text-center form-group">
-                        {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                        {{ Form_off_label(course_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
                     </div>
                 </form>
             </div>

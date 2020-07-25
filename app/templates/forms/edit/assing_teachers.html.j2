@@ -12,18 +12,18 @@
       </div>
       <div class="modal-body">
         <form action=" {{url_for('auth.assing_teacher')}} " method="POST">
-          {{ assig_form.hidden_tag() }}
-          {{ Form_off_label(assig_form.id, class="d-none") }}
+          {{ assign_form.hidden_tag() }}
+          {{ Form_off_label(assign_form.id, class="d-none") }}
           <div class="form-group">
-            {{ Form_off_label(assig_form.subjects.label) }}
-            {{ Form_off_label(assig_form.subjects, class="form-control form-control-lg subjects") }}
+            {{ Form_off_label(assign_form.subjects.label) }}
+            {{ Form_off_label(assign_form.subjects, class="form-control form-control-lg subjects") }}
           </div>
           <div class="form-group">
-            {{ Form_off_label(assig_form.profe.label) }}
-            {{ Form_off_label(assig_form.profe, class="form-control form-control-lg") }}
+            {{ Form_off_label(assign_form.profe.label) }}
+            {{ Form_off_label(assign_form.profe, class="form-control form-control-lg") }}
           </div>
           <div class="text-center form-group">
-            {{ Form_off_label(assig_form.submit, class="btn btn-primary btn-lg", value="Asignar") }}
+            {{ Form_off_label(assign_form.submit, class="btn btn-primary btn-lg", value="Asignar") }}
           </div>
         </form>
       </div>

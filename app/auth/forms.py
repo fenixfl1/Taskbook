@@ -2,11 +2,11 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
     TextAreaField, BooleanField, SelectField, RadioField
-from wtforms.fields.html5 import TimeField, \
-    EmailField, URLField, DateTimeField
+from wtforms.fields.html5 import EmailField, URLField, \
+    DateTimeField, DateField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
-from app.database.models import Courses, Teachers
+from app.database.models import Courses, Teachers, StudyPlan
 from app.database import db
 from flask_security import current_user
 
@@ -14,12 +14,17 @@ from flask_security import current_user
 def subject_query():
     return db.query(Courses).filter(Courses.user_id == current_user.id).\
         filter(Courses.state == 1).filter(Courses.finished == 0).\
-        order_by(Courses.id)
+        order_by(Courses.name)
 
 
 def profesor_query():
     return db.query(Teachers).filter(Teachers.user_id == current_user.id)\
         .order_by(Teachers.full_name)
+
+
+def study_plan_query():
+    return db.query(StudyPlan).filter(StudyPlan.user_id == current_user.id).\
+        filter(StudyPlan.state == 1).order_by(StudyPlan.name)
 
 
 lista_calificacion = [('A', 'A - Muy bien: 90-100%'),
@@ -112,10 +117,10 @@ class TaskForm(Default):
         query_factory=subject_query, allow_blank=True
     )
 
-    asignada_en = DateTimeField(
+    asignada_en = StringField(
         'Fecha de asignacion', validators=[DataRequired()])
 
-    dia_entrega = DateTimeField(
+    dia_entrega = StringField(
         'Fecha de entrega', validators=[DataRequired()])
 
     nota = TextAreaField(
@@ -150,16 +155,28 @@ class PlanForm(Default):
         'Nombre', validators=[DataRequired(), Length(max=80)]
     )
 
-    start = TimeField(
-        'Desde', validators=[DataRequired()]
+    start_date = DateField(
+        'Fecha de inicio', validators=[DataRequired()]
     )
 
-    end = TimeField(
-        'Hasta', validators=[DataRequired()]
+
+class PlanGoalsForm(Default):
+
+    title = StringField(
+        'Titulo', validators=[DataRequired(), Length(max=150)]
     )
 
-    objetivo = TextAreaField(
-        'Objetivo', validators=[Length(max=255)]
+    study_plan = QuerySelectField(
+        'Plan de estudios', query_factory=study_plan_query,
+        allow_blank=True, validators=[DataRequired()]
+    )
+
+    deadline = DateField(
+        'Fecha limite', validators=[DataRequired()]
+    )
+
+    comment = TextAreaField(
+        'Comentario', validators=[Length(max=255)]
     )
 
 
