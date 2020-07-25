@@ -1,12 +1,8 @@
-function countDown () {
+function countDown (selector) {
 
     var top = document.getElementById('dia-entrega');
 
-    var current_date = Date.UTC(top.value)
-
-    console.log(current_date)
-
-    const topDate = new Date(current_date);
+    const topDate = new Date(top.value);
 
     const updateClock = (date) => {
         if (!date) return;
@@ -26,7 +22,7 @@ function countDown () {
 
         let seconds = Math.floor(diff / 1000);
         
-        document.getElementById('date').innerHTML = days + "" + hours + "" + minutes + "" + seconds;
+        document.getElementById('date').innerHTML = days + "D -" + hours + "H -" + minutes + "M -" + seconds + "s";
     }
 
     updateClock(topDate);
@@ -36,6 +32,11 @@ function countDown () {
 
 
 $(document).ready(function() {
+
+    const cards = $('.card').each(function (index) {
+
+        $(this).find('#date').append($(this).find('.fecha').val()); 
+    });
     
-    countDown();
+    // countDown();
 });

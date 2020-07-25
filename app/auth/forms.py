@@ -117,10 +117,10 @@ class TaskForm(Default):
         query_factory=subject_query, allow_blank=True
     )
 
-    asignada_en = DateTimeField(
+    asignada_en = StringField(
         'Fecha de asignacion', validators=[DataRequired()])
 
-    dia_entrega = DateTimeField(
+    dia_entrega = StringField(
         'Fecha de entrega', validators=[DataRequired()])
 
     nota = TextAreaField(

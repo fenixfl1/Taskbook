@@ -75,7 +75,6 @@
 .card-row:nth-child(3n+2) {
 	margin-left: 4.2em !important;
 	margin-right: 4.2em !important;
-	color: green;
 }
 
 .card-list {
@@ -86,6 +85,13 @@
 .nav-icon {
 	width: 2em;
 	height: 2em;
+}
+
+.card-title {
+	max-width: 300px;
+	max-height: 18px;
+	line-height: 18px;
+	overflow: hidden;
 }
 
 // .nav-footer {
@@ -157,12 +163,6 @@
 			}
 		}
 	}
-}
-
-.dropdown-menu {
-	width: 90%;
-	max-height: 500px;
-	overflow: hidden;
 }
 
 .footer {
