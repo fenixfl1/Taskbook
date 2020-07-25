@@ -1,0 +1,74 @@
+{% extends 'base.html' %} {% block content %}
+
+    <div class="container-fluid">
+        
+        <div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
+            {# main content #}
+            <div class="col-md-9 card-container">
+                <div class="row justify-content-md-start">
+                    {% if ( Tarea | tasks(this=False, done=find)) > 0 %}
+                        {% for i in range(tasks | tasks(this=False, done=find) ) %}
+                            {% if task_user[i].done == 1%}
+                                {% set color = "border-success" %}
+                            {% else %}
+                                {% set color = "border-primary" %}
+                            {% endif %}
+                            <div class="card mx-2 card-row mb-5 {{color}} ">
+                                <figure>
+                                    {{ task_user[i].name | generate_avatar(size=300,
+                                    class='card-img-top') }}
+                                </figure>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title" title="{{ task_user[i].name }}">
+                                        {{ task_user[i].name  }}
+                                    </h5>
+                                    <p class="card-text">
+                                        {{ task_user[i].course }}
+                                    </p>
+                                    <a href=" {{ url_for('users.details_task', id=task_user[i].id) }} " 
+                                      class="mx-auto" title="Ir">
+                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+                        alt="Empty space" class="img-empty m-auto">
+                    {% endif %}
+                </div>
+            </div>
+            {# sidebar right #}
+            <div class="list-group col-md-3 d-none d-sm-inline-block" id="list-ta" role="tablist">
+                <a class="list-group-item list-group-item-action d-flex justify-content-between 
+                    align-items-cente" href="?tasks=all">
+                    Todas las tereas
+                    <span class="badge badge-primary badge-pill">
+                        {{ tasks | tasks(this=False, done='both') }}
+                    </span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between 
+                    align-items-cente" href="?tasks=pending">
+                    Tareas pendientes
+                    <span class="badge badge-primary badge-pill">
+                        {{ tasks | tasks(this=False, done=False) }}
+                    </span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between 
+                    align-items-cente" href="?tasks=finished">
+                    Tarea completadas
+                    <span class="badge badge-primary badge-pill">
+                        {{ tasks | tasks(this=False, done=True) }}
+                    </span>
+                </a>
+                <span class="list-group-item d-flex justify-content-between align-items-cente">
+                    Progreso
+                    <span class="badge badge-primary badge-pill">
+                        {{ tasks | tasks(this=False, progress=True) }}%
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

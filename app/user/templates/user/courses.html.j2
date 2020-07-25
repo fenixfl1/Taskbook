@@ -1,78 +1,138 @@
 {% extends 'base.html' %} {% block content %}
-	{% from 'macro.html' import Form_off_label, navbar %}
-	
-	{# menu de navegacion #}
-	{{
-	navbar(name="Agregar",
-	holder="Agregar asignatura",
-	title="Agregar asignaturas",
-	modal_id="#exampleModalCenter")
-	}}
-	{# Alerts#}
-	{% include 'messages.html' %}
-	{# modal to add new teacher #}
-	{% include "forms/teacher_form.html.j2" %}
-	{# Modal to add new subject #}
-	{% include "forms/form_subjects.html.j2" %}
-	{# modal to edit subjects #}
-	{% include "forms/edit/subjects.html.j2" %}
-	{# modal to assing teachers #}
-	{% include "forms/edit/assing_teachers.html.j2" %}
-	
-	<div class="row">
-	
-		<div class="row col-md-9 ml-2 d-flex justify-content-around">
-			{% if course.task %}
-				{% for i in range(tasks | tasks(0) ) %}
-					<div class="card card-row ml-2 mb-5" style="width: 14rem; max-height: 18rem">
-						<figure>
-							{{ assignments[i].name | generate_avatar(size=300,
-			                                                      class='card-img-top') }}
-						</figure>
-						<div class="card-body text-center">
-							<h5 class="card-title">Card title</h5>
-							<p class="card-text">Some quick example text to build on the </p>
-							<a href="#" class="btn btn-primary mx-auto">Go somewhere</a>
-						</div>
-					</div>
-				{% endfor %}
-			{% else %}
-				<span>No tiene tareas pendientes</span>
-			{% endif %}
-		</div>
 
-		{# side bar menu #}
-		<div class="col-3">
+	<div class="container-fluid">
+		
+		<div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
 
-			<div class="list-group mr-3 bg-white" id="list-ta" role="tablist">
-				<a class="list-group-item list-group-item-action active" 
-				 id="list-home-list" data-toggle="list"
-				 href="#list-home" role="tab" 
-				 aria-controls="home">
-				 	Tareas pendientes
+			{# main content #}
+			<div class="col-md-9 card-container">
+				<div class="row justify-content-md-start">
+					{% if course.task %}
+						{% for i in range(tasks | tasks(done=0) ) %}
+							{% set dato = [
+								assignments[i].id, 
+								assignments[i].name,
+								assignments[i].materia,
+								assignments[i].asignada_en,
+								assignments[i].delivery_day] %}
+
+							<div class="card border-primary mx-2 card-row mb-5" time()>
+								<figure>
+									{{ assignments[i].name | generate_avatar(size=300,
+									class='card-img-top') }}
+								</figure>
+								<div class="card-body text-center">
+									<h5 class="card-title">
+										{{ assignments[i].name }}
+										<a href="" title="Editar"
+                                            data-toggle="modal" 
+                                            data-target="#editTaskModal">
+                                            <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" 
+                                          style="width: 1rem;">
+                                        </a>
+									</h5>
+									<p class="card-text">
+										<input type="text" class="d-none" id="dia-entrega"
+										 value="{{ assignments[i].delivery_day }}">
+										<span id="date"></span>
+									</p>
+									<a href=" {{ url_for('users.details_task', id=assignments[i].id) }} " 
+                                      class="mx-auto" title="Ir">
+                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                    </a>
+								</div>
+							</div>
+						{% endfor %}
+					{% else %}
+						<img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+						alt="Empty space" class="img-empty m-auto">
+					{% endif %}
+				</div>
+			</div>
+			{# sidebar right #}
+			<div class="list-group col-md-3 d-none d-sm-inline-block " 
+			  id="list-ta" role="tablist">
+			  	<a class="list-group-item list-group-item-action"
+					id="list-home-list" data-toggle="list"
+					href="#list-home" role="tab"
+					aria-controls="home">
+					Todas las tereas
 				</a>
-
-				<a class="list-group-item list-group-item-action" 
-				 id="list-profile-list" data-toggle="list" 
-				 href="#list-profile" role="tab" 
-				 aria-controls="profile">
+				<a class="list-group-item list-group-item-action active"
+					id="list-home-list" data-toggle="list"
+					href="#list-home" role="tab"
+					aria-controls="home">
+					Tareas pendientes
+				</a>
+				<a class="list-group-item list-group-item-action"
+					id="list-profile-list" data-toggle="list"
+					href="#list-profile" role="tab"
+					aria-controls="profile">
 					Tarea completadas
 				</a>
-
-				<a class="list-group-item list-group-item-action" 
-				 id="list-messages-list" data-toggle="list" 
-				 href="#list-messages" role="tab" 
-				 aria-controls="messages">
-					Messages
-				</a>
-
 				<a class="list-group-item list-group-item-action"
-				 id="list-settings-list" data-toggle="list" 
-				 href="#list-settings" role="tab" 
-				 aria-controls="settings">
-					Settings
+					id="list-messages-list" data-toggle="list"
+					href="#list-messages" role="tab"
+					aria-controls="messages">
+					Chat del curso
+				</a>
+				<a class="list-group-item list-group-item-action"
+					id="list-settings-list" data-toggle="list"
+					href="#list-settings" role="tab"
+					aria-controls="settings">
+					Informacion del curso
 				</a>
 			</div>
 		</div>
 	</div>
+{% endblock %}
+{% block footer %}
+	<li class="nav-item">
+		<a href="" title="" class="nav-link">
+			<img src="{{ url_for('static',filename='icons-svg/icons/') }}" alt="">
+			
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/" title="Home">
+			<img src=" {{ url_for('static',filename='icons-svg/icons/house.svg') }} " alt="Search" class="nav-icon">
+			
+		</a>
+	</li>
+
+	<li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
+		<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<img src=" {{ url_for('static',filename='icons-svg/icons/columns-gap.svg') }} " alt="Courses" class="nav-icon">
+			<!-- Courses -->
+			<span class="badge badge-danger badge-counter"></span>
+		</a>
+		<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+			<h6 class="dropdown-header"> Mis cursos </h6>
+			{% if courses | courses(finished=0) > 0 %}
+				{% set pagination = (1 | paginate_courses(0) ) %}
+				{% for course in pagination.items %}
+					<a class="dropdown-item d-flex align-items-center"
+						href="{{ url_for('users.courses',id=course.id) }}">
+						<div class="mr-3">
+							<div class="icon-circle bg-primary">
+								{{ course.name | generate_avatar(size=300,
+								class='card-img-top rounded-circle') }}
+							</div>
+						</div>
+						<div>
+							<div class="small text-gray-500"> {{ course.teacher }} </div>
+							<span class="font-weight-bold">
+								{{ course.name }}
+							</span>
+						</div>
+					</a>
+				{% endfor %}
+				<a class="dropdown-item text-center small text-gray-500" href="#">
+					Ver todos los cursos
+				</a>
+			{% else %}
+				<a href="/courses" title="">Ningun curso agregardo</a>
+			{% endif %}
+		</div>
+	</li>
 {% endblock %}

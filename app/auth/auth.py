@@ -1,14 +1,16 @@
 from . import auth_view
-from app.tasks import notifications
+# from app.tasks import notifications
 from flask import flash, request, redirect, jsonify, url_for
 from flask_login import login_required, current_user
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 from .forms import LoadForm, TaskForm, EventForm, \
-    SubjectsForm, ProfeForm, AssignForm, PlanForm, QualificationForm
-from app.database import db, engne
-from app.database.models import Tasks, Courses, Teachers, Events
-from config.default import IMAGE_SET_EXT, UPLOAD_FOLDER_DEST
-from datetime import datetime, timedelta
+    SubjectsForm, ProfeForm, AssignForm, PlanForm, \
+    QualificationForm, PlanGoalsForm
+from app.database import db, engne as engine
+from app.database.models import Tasks, Courses, Teachers,\
+    Events, StudyPlan, StudyPlanGoals
+from config.default import IMAGE_SET_EXT
+# from app.database.schemas import CoursesSchema
 # import os
 
 
@@ -42,7 +44,7 @@ def Uploads():
             return redirect(request.url)
 
         if picture and allowed_image(picture.filename):
-            filename = secure_filename(picture.filename)
+            # filename = secure_filename(picture.filename)
 
             try:
 
@@ -93,27 +95,13 @@ def register_subjects():
 
         if not check:
 
-            user = Courses(name=name, finished=finished,
-                           user_id=current_user.id,
-                           teacher=profe)
-
             try:
+                user = Courses(name=name, finished=finished,
+                               user_id=current_user.id,
+                               teacher=profe)
+
                 db.add(user)
                 db.commit()
-
-                msg = '{} tu proxima clase empiezara pronto'.format(
-                    current_user.first_name)
-
-                delay = datetime.utcnow() + timedelta(minutes=3)
-
-                notifications.apply_async(
-                    (name,
-                     msg,
-                     datetime.now(),
-                     current_user.id),
-                    eta=delay
-                )
-                # result.wait()
 
                 messages = 'Asignatura registrada con exito!'
                 category = 'success'
@@ -137,7 +125,7 @@ def register_subjects():
 def subject_completed(id):
 
     try:
-        engne.execute(
+        engine.execute(
             """UPDATE course SET finished=1
                 WHERE id=%s""", (id))
 
@@ -194,7 +182,7 @@ def assing_teacher():
 
     if form.validate_on_submit():
 
-        name = form.profe.data
+        # name = form.profe.data
         id_teacher = request.form['profe']
         id_subject = form.id.data
 
@@ -324,19 +312,6 @@ def register_task():
                 comment=comentario
             )
 
-            msg = 'Saludos {} recuenrda que tuenes una tarea pendiente'.format(
-                current_user.first_name)
-
-            delay = datetime.utcnow() + timedelta(second=30)
-
-            notifications.apply_async(
-                (name,
-                 msg,
-                 asignada_en,
-                 current_user.id),
-                eta=delay
-            )
-
             db.add(task)
             db.commit()
 
@@ -402,32 +377,6 @@ def register_event():
     return redirect(url_for('users.eventos'))
 
 
-# endpoint rest to send events to the client
-@auth_view.route('/calendar-events')
-@login_required
-def calendar_events():
-
-    try:
-        result = engne.execute("""SELECT id, title, color, 
-            UNIX_TIMESTAMP(start_date)*1000 as start,\
-            UNIX_TIMESTAMP(end_date)*1000 as end FROM event""")
-
-        resp = jsonify({
-            'success': 1,
-            'result': [dict(row) for row in result]
-        }
-        )
-
-        resp.status_code = 200
-
-        return resp
-    except Exception as e:
-        raise e
-
-    finally:
-        result.close()
-
-
 # function to register studies plan
 @auth_view.route('/register-study-plan', methods=['POST'])
 def register_study_plan():
@@ -436,13 +385,71 @@ def register_study_plan():
 
     if form.validate_on_submit():
 
-        pass
+        try:
+            name = form.name.data
+            start_date = form.start_date.data
+
+            plan = StudyPlan(name, start_date, current_user.id)
+
+            db.add(plan)
+            db.commit()
+
+            messages = 'Plan de estudio creado exitosamente'
+            category = 'success'
+
+        except ValueError as e:
+
+            messages = 'No fue posible crear el plan de estudios'
+            category = 'error'
+            raise e
+
+        finally:
+            flash(messages, category)
 
     return redirect(url_for('users.plan_de_estudio'))
 
+
+@auth_view.route('/register-study-plan-goals', methods=['POST'])
+def register_study_plan_goals():
+
+    form = PlanGoalsForm()
+
+    if form.validate_on_submit():
+
+        try:
+            title = form.title.data
+            deadline = form.deadline.data
+            study_plan = request.form['study_plan']
+            comment = form.comment.data
+
+            user = StudyPlanGoals(
+                title=title,
+                deadline=deadline,
+                comment=comment,
+                plan_id=study_plan
+            )
+
+            db.add(user)
+            db.commit()
+
+            messages = "Objetivo guardado exitosamente!"
+            category = "success"
+
+        except Exception as e:
+
+            messages = "Ha ocurrido un error desconocido!"
+            category = "error"
+
+            raise e
+
+        finally:
+
+            flash(messages, category)
+
+    return redirect(url_for('users.plan_de_estudio'))
+
+
 # this function is to delete records in any antity
-
-
 @auth_view.route('/delete/tasks/<int:id>')
 def delete_tasks(id):
 
@@ -553,13 +560,13 @@ def update_teacher():
         phone = form.phone.data
 
         try:
-            data = engne.execute("""
-                    UPDATE teacher SET 
+            engine.execute("""
+                    UPDATE teacher SET \
                     full_name=%s,
                     email=%s,
                     phone_number=%s
                     WHERE id=%s""",
-                                 (name, email, phone, id))
+                           (name, email, phone, id))
 
             messages = 'Registro actualizado con exito!'
             category = 'success'
@@ -593,3 +600,68 @@ def edit_tasks(id):
         raise e
 
     return redirect(url_for('users.tasks'))
+
+
+# endpoint rest to send events to the client
+@auth_view.route('/calendar-events')
+@login_required
+def calendar_events():
+
+    try:
+        result = engine.execute("""
+            SELECT id, title, color, UNIX_TIMESTAMP(start_date)*1000 as start,\
+            UNIX_TIMESTAMP(end_date)*1000 as end FROM event
+        """)
+
+        resp = jsonify({
+            'success': 1,
+            'result': [dict(row) for row in result]
+        }
+        )
+
+        resp.status_code = 200
+
+        return resp
+    except Exception as e:
+        raise e
+
+    finally:
+        result.close()
+
+
+@auth_view.route('/search')
+@login_required
+def search():
+
+    try:
+        result = engine.execute("""
+            SELECT id, name, table_name, user_id FROM course
+            WHERE user_id = {0} UNION \
+            SELECT id, first_name, table_name, last_name FROM user
+            WHERE NOT id = {0} UNION \
+            SELECT id, title, table_name, user_id FROM event
+            WHERE user_id = {0} UNION \
+            SELECT id, name, table_name, user_id FROM task
+            WHERE user_id = {0} UNION \
+            SELECT id, full_name, table_name, user_id FROM teacher
+            WHERE user_id = {0} UNION \
+            SELECT id, name, table_name, user_id FROM study_plan \
+            WHERE user_id = {0} UNION \
+            SELECT plan_id, title, deadline, finished_in FROM (study_plan_goals
+            INNER JOIN study_plan ON \
+            study_plan_goals.plan_id = study_plan.id ) \
+            WHERE study_plan.user_id = {0}
+            """.format(current_user.id))
+
+        resp = jsonify({
+            'success': 1,
+            'result': [dict(row) for row in result]
+        })
+
+        resp.status_code = 200
+
+        return resp
+
+    except Exception as e:
+        raise e
+        return jsonify({'result': 'error'})

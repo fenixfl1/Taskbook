@@ -1,17 +1,4 @@
-{% extends "base.html" %} {% block content %} {% from 'macro.html' import Form_off_label, navbar %}
-
-    {# Modal to add new subject #}
-    {% include "forms/form_subjects.html.j2" %}
-
-    {# modal to add qualifications #}
-    {% include "forms/edit/qualification.html.j2" %}
-    
-    {# button to create and imput search #}
-    {{ navbar(name="Agregar", holder="Buscar Asignaturas cursada", title="Agregar asignaturas", modal_id="#exampleModalCenter") }}
-
-    {# alerts #}
-    {% include 'messages.html' %}
-
+{% extends "base.html" %} {% block content %}
 
     {# body of the page #}
     <div id="content-wrapper" class="d-flex flex-column">

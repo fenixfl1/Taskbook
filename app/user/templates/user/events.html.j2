@@ -1,24 +1,15 @@
-{% extends 'base.html' %} {% from 'macro.html' import Form, Form_off_label, navbar %} 
+{% extends 'base.html' %}
 {% block scripts %}
 	<link type="text/css"  rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}"/>
 	<link type="text/css"  rel="stylesheet" href="{{ url_for('static', filename='css/calendar.min.css') }}"/>
 {% endblock  %}
 {% block content %}
 
-{# modal to events #}
-{% include "forms/event_form.html.j2" %}
-
-{# navbar to events #}
-{{ navbar(name="Agregar", holder="Buscar eventos", title="Agregar evento", modal_id="#staticBackdrop") }}
-
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            
-            <hr class="sidebar-divider">
 
             <div class="container">
-                {% include 'messages.html' %}
 
                 <div class="row m-auto">
 
@@ -115,7 +106,7 @@
                     (function($) {
                         "use strict";
                         var options = {
-                            events_source: 'http://taskbook.com:5555/calendar-events',
+                            events_source: '/calendar-events',
                             view: 'month',
                             tmpl_path: '../../static/templates/calendar/',
                             tmpl_cache: false,

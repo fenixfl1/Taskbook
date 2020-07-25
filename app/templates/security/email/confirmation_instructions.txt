@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{# {% extends 'base.html' %} 
 {% block content %}
 
 	<p>{{ _('Please confirm your email through the link below:') }}</p>
@@ -9,4 +9,4 @@
 		</p>
 	</div>
 	
-{% endblock %}
+{% endblock %} #}

@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, String, ForeignKey,\
-    Column, DateTime, Boolean, Time, CHAR, TEXT
+    Column, DateTime, Boolean, Time, CHAR, TEXT, Date
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from flask_security import UserMixin, RoleMixin
@@ -40,7 +40,7 @@ class User(Base, UserMixin):
     first_name = Column(String(80), nullable=False)
     last_name = Column(String(80), nullable=False)
     password = Column(String(255), nullable=False)
-    phone_number = Column(PhoneNumberType(), nullable=False)
+    phone_number = Column(PhoneNumberType())
     country = Column(CountryType(), nullable=False)
     gender = Column(String(3), nullable=False)
     last_login_at = Column(DateTime(timezone=True))
@@ -48,6 +48,7 @@ class User(Base, UserMixin):
     current_login_ip = Column(String(100))
     login_count = Column(Integer)
     confirmed_at = Column(DateTime(timezone=True))
+    table_name = Column(String(10), default='users')
     course = relationship('Courses', back_populates='user')
     teacher = relationship('Teachers', back_populates='user')
     event = relationship('Events', back_populates='user')
@@ -89,6 +90,7 @@ class Teachers(Base):
     full_name = Column(String(80), nullable=False, unique=True)
     email = Column(String(100))
     phone_number = Column(String(22))
+    table_name = Column(String(10), default='teachers')
     state = Column(Boolean(), default=True)
 
     def __repr__(self):
@@ -110,6 +112,7 @@ class Courses(Base):
     name = Column(String(80), nullable=False)
     finished = Column(Boolean(), default=False)
     qualification = Column(CHAR(1), default=None)
+    table_name = Column(String(10), default='courses')
     state = Column(Boolean(), default=True)
 
     def __init__(self, name, user_id, **kwargs):
@@ -159,6 +162,7 @@ class Tasks(Base):
     delivery_day = Column(DateTime(), nullable=False)
     finished_in = Column(DateTime())
     comment = Column(String(150))
+    table_name = Column(String(10), default='tasks')
     done = Column(Boolean(), default=False)
     state = Column(Boolean(), default=True)
 
@@ -180,6 +184,7 @@ class Events(Base):
     start_date = Column(DateTime(), nullable=False)
     end_date = Column(DateTime(), nullable=False)
     comment = Column(String(100))
+    table_name = Column(String(10), default='events')
     finished_in = Column(DateTime())
     state = Column(Boolean(), default=True)
 
@@ -204,33 +209,40 @@ class StudyPlan(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='plan')
-    detail = relationship('StudyPlanDetail', back_populates='plan')
+    goals = relationship('StudyPlanGoals', back_populates='plan')
     name = Column(String(100), nullable=False)
+    start_date = Column(Date, nullable=False)
+    created_at = Column(DateTime(), default=func.now())
+    table_name = Column(String(10), default='study-plan')
     state = Column(Boolean(), default=True)
+
+    def __init__(self, name, date, user):
+
+        self.user_id = user
+        self.name = name
+        self.start_date = date
 
     def __repr__(self):
 
         return '{}'.format(self.name)
 
 
-class StudyPlanDetail(Base):
+class StudyPlanGoals(Base):
 
-    __tablename__ = 'study_plan_detail'
+    __tablename__ = 'study_plan_goals'
 
     id = Column(Integer, primary_key=True)
     plan_id = Column(Integer, ForeignKey(
         'study_plan.id', ondelete='CASCADE'))
-    plan = relationship('StudyPlan', back_populates='detail')
-    date_created = Column(DateTime(), default=func.now())
+    plan = relationship('StudyPlan', back_populates='goals')
     title = Column(String(255), nullable=False)
     url = Column(URLType)
-    day = Column(Integer(), nullable=False)
-    start_time = Column(Time(), nullable=False)
-    end_time = Column(Time(), nullable=False)
-    objective = Column(String(255))
-    color = Column(String(25), default='text-info')
+    deadline = Column(DateTime(), nullable=False)
+    comment = Column(String(255))
+    table_name = Column(String(25), default='study_plan_goals')
     finished_in = Column(DateTime())
-    done = Column(Boolean(), default=True)
+    created_at = Column(DateTime(), default=func.now())
+    done = Column(Boolean(), default=False)
     state = Column(Boolean(), default=True)
 
     def __repr__(self):

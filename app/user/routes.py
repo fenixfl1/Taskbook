@@ -7,25 +7,52 @@ from app import db_session
 from app.database import db
 from app.auth.forms import LoadForm, EventForm, TaskForm, \
     SubjectsForm, ProfeForm, AssignForm, PlanForm, \
-    QualificationForm
+    QualificationForm, PlanGoalsForm
 from app.database.models import Events, Tasks, StudyPlan, \
-    Courses, Teachers
+    Courses, Teachers, StudyPlanGoals
 from app.database.queries import Queries
 
 
-# this function yo see the profile of the current user
-@user_view.route('/profile/<string:user>/')
-@login_required
-def profile(user):
+@user_view.context_processor
+def context_processor():
 
-    form = LoadForm(request.form)
+    task_form = TaskForm()
+    course_form = SubjectsForm()
+    event_form = EventForm()
+    plan_form = PlanForm()
+    plan_goal_form = PlanGoalsForm()
+    profe_form = ProfeForm()
+    assign_form = AssignForm()
+    q_form = QualificationForm()
+    load_form = LoadForm()
+    year = datetime.now()
+    hoy = date.today()
+
+    return dict(
+        task_form=task_form,
+        course_form=course_form,
+        event_form=event_form,
+        plan_form=plan_form,
+        plan_goal_form=plan_goal_form,
+        profe_form=profe_form,
+        assign_form=assign_form,
+        q_form=q_form,
+        load_form=load_form,
+        year=year,
+        hoy=hoy
+    )
+
+
+# this function yo see the profile of the current user
+@user_view.route('/users/<int:id>/<string:user>/')
+@login_required
+def profile(id, user):
 
     return render_template(
         'user/profile.html.j2',
         title='perfil -',
         user=user,
-        upload_form=form,
-        year=datetime.now()
+        id=id
     )
 
 
@@ -50,6 +77,9 @@ def subjects():
         filter(Courses.finished == 0).\
         filter(Courses.state == 1)
 
+    num_courses = db.query(Courses). \
+        filter(Courses.user_id == current_user.id).count()
+
     pages = courses.total / 8
 
     if pages is not int:
@@ -57,21 +87,14 @@ def subjects():
     else:
         total_pages = pages - 1
 
-    sform = SubjectsForm()
-    pform = ProfeForm()
-    aform = AssignForm()
-
     return render_template(
         'user/all_courses.html.j2',
         title='Courses -',
-        subject_form=sform,
         subjects_user=courses,
         list_courses=list_courses,
-        profe_form=pform,
-        assig_form=aform,
         current_page=page,
         total_pages=total_pages,
-        year=datetime.now()
+        num_courses=num_courses
     )
 
 
@@ -84,34 +107,21 @@ def courses(id):
         filter(Courses.id == id).first()
 
     task = db.query(Tasks).\
-        filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.course_id == id). \
         filter(Tasks.state == 1).\
         filter(Tasks.done == 0)
-
-    sform = SubjectsForm()
-    pform = ProfeForm()
-    aform = AssignForm()
-    tform = TaskForm()
 
     return render_template(
         'user/courses.html.j2',
         title='Course of {}'.format(courses.name),
         course=courses,
-        assignments=task,
-        subject_form=sform,
-        profe_form=pform,
-        task_form=tform,
-        assig_form=aform,
-        year=datetime.now()
+        assignments=task
     )
 
 
 @user_view.route('/courses/finished')
 @login_required
 def subjects_finished():
-
-    form = SubjectsForm()
-    formQ = QualificationForm()
 
     try:
         courses = db.query(Courses).\
@@ -125,10 +135,7 @@ def subjects_finished():
     return render_template(
         'user/courses_finished.html.j2',
         title='Finished courses -',
-        subject_form=form,
-        qualif_form=formQ,
-        subjects_user=courses,
-        year=datetime.now()
+        subjects_user=courses
     )
 
 
@@ -137,17 +144,13 @@ def subjects_finished():
 @login_required
 def teachers():
 
-    form = ProfeForm()
-
     teacher = db.query(Teachers).filter(
         Teachers.user_id == current_user.id).all()
 
     return render_template(
         'user/teachers.html.j2',
         title="Teachers -",
-        profe_form=form,
-        teachers=teacher,
-        year=datetime.now()
+        teachers=teacher
     )
 
 
@@ -161,8 +164,7 @@ def horario():
     return render_template(
         'user/schedule.html.j2',
         title='Schedule -',
-        subjects_user=courses,
-        year=datetime.now()
+        subjects_user=courses
     )
 
 
@@ -171,16 +173,12 @@ def horario():
 @login_required
 def tasks():
 
-    form = TaskForm()
-
     task = Queries.queries(Tasks, current_user)
 
     return render_template(
         'user/task.html.j2',
         title='Tasks -',
-        task_user=task,
-        task_form=form,
-        year=datetime.now()
+        task_user=task
     )
 
 
@@ -191,14 +189,10 @@ def task_finished():
     task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
         filter(Tasks.state == 1).filter(Tasks.done == 1)
 
-    form = TaskForm()
-
     return render_template(
         'user/task_finished.html.j2',
         title='Finished tasks -',
-        task_form=form,
-        task_user=task,
-        year=datetime.now()
+        task_user=task
     )
 
 
@@ -206,17 +200,13 @@ def task_finished():
 @login_required
 def edit_tasks(id):
 
-    form = TaskForm()
-
     datos = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
         filter(Tasks.id == id).one()
 
     return render_template(
         'user/edit/edit_tasks.html.j2',
         title='Edit tasks -',
-        task_form=form,
-        edit_data=datos,
-        year=datetime.now()
+        edit_data=datos
     )
 
 
@@ -225,17 +215,13 @@ def edit_tasks(id):
 @login_required
 def details_task(id):
 
-    form = TaskForm()
-
     details = db.query(Tasks).filter(Tasks.id == id).\
         options(contains_eager(Tasks.user)).one()
 
     return render_template(
         'user/details_task.html.j2',
         title='details -',
-        details=details,
-        task_form=form,
-        hoy=date.today()
+        details=details
     )
 
 
@@ -244,16 +230,77 @@ def details_task(id):
 @login_required
 def plan_de_estudio():
 
-    plan_form = PlanForm()
-
-    plan = Queries.queries(StudyPlan, current_user)
+    plan = db.query(StudyPlan).\
+        filter(StudyPlan.user_id == current_user.id). \
+        filter(StudyPlan.state == 1).\
+        options(contains_eager(StudyPlan.user))
 
     return render_template(
         'user/stady_plan.html.j2',
         title='Studies plan -',
-        stady_plan=plan,
-        plan_form=plan_form,
-        year=datetime.now()
+        stady_plan=plan
+    )
+
+
+# this functionis to watch all golas of one study plan
+@user_view.route('/studies-plan/<int:id>')
+@login_required
+def study_plan_goals(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlanGoals.done == 0).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    return render_template(
+        'user/stady_plan_goals.html.j2',
+        title='Studies plan goals -',
+        goals=goals,
+        plan_id=id
+    )
+
+
+@user_view.route('/studies-plan/<int:id>/done')
+@login_required
+def study_plan_goals_done(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlanGoals.done == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    return render_template(
+        'user/stady_plan_goals_done.html.j2',
+        title="Studies plan done -",
+        plan_id=id,
+        goals=goals
+    )
+
+
+@user_view.route('/studies-plan/<int:id>/all')
+@login_required
+def study_plan_goals_all(id):
+
+    goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlan.id == id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+
+    goals.order_by(StudyPlanGoals.title)
+
+    return render_template(
+        'user/stady_plan_goals_all.html.j2',
+        title="Studies plan done -",
+        plan_id=id,
+        goals=goals
     )
 
 
@@ -262,8 +309,6 @@ def plan_de_estudio():
 @login_required
 def eventos():
 
-    form = EventForm(request.form)
-
     event = Queries.queries(Events, current_user)
     num_event = Queries.contador(Events, current_user, 1)
 
@@ -271,7 +316,5 @@ def eventos():
         'user/events.html.j2',
         title='Events -',
         event_user=event,
-        num_event=num_event,
-        event_form=form,
-        year=datetime.now()
+        num_event=num_event
     )

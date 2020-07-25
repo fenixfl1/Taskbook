@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{% block head %} {% block meta %}
+<meta charset="UTF-8">
+<meta name="Description" content="Edcation Web">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="Author" content="Benjamin Rosario --Rainsoft--"> {% endblock %} {% block title %}
+<title class="notranslate"> {{ title }} Taskbook</title>
+{% endblock %} {{ fontawesome_html() }} {{ bootstrap.load_css() }}
+<link href="{{ url_for('static',filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/calendar.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/DatePicker/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/DataTables/dataTables.bootstrap4.min.css') }}" 
+    rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=PT+Sans:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital@1&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link href="{{ url_for('static',filename='css/google-fonts.css') }}" rel="stylesheet"> {% endblock %}
+{% block scripts %}
+{% endblock  %}
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar shadow-sm
+                sidebar-dark sticky-top" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center
+                    justify-content-center" href="/index">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3 notranslate text-white">
+                    Taskbook
+                </div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" 
+                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  title="Profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-chalkboard-teacher text-whit"></i>
+                    <span>Mis cursos</span>
+                </a>
+
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
+                  aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header"> Mis cursos </h6>
+
+                    {% if courses | courses(0) > 0 %}
+                        {% set pagination = (1 | paginate_courses(0) ) %}
+
+                        {% for course in pagination.items %}
+                            <a class="dropdown-item d-flex align-items-center" 
+                              href="{{ url_for('users.courses',id=course.id) }}">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        {{ course.name | generate_avatar(size=300,
+                                                        class='card-img-top rounded-circle') }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="small text-gray-500"> {{ course.teacher }} </div>
+                                    <span class="font-weight-bold">
+                                        {{ course.name }}
+                                    </span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                            <a class="dropdown-item text-center small text-gray-500" href="#">
+                                Ver todos los cursos
+                            </a>
+                    {% else %}
+                        <a href="/courses" title="">Ningun curso agregardo</a>
+                    {% endif %}
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/schedule" title="schedules">
+                    <i class="fas fa-calendar"></i>
+                    <span>Horarios</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="/tasks" title="Tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tareas</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/studies-plan" title="Studies plan">
+                    <i class="fas fa-fw fa-book-reader"></i>
+                    <span>Plan de estudio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/events" title="Events">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Eventos</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider"> {% if 'Admin' in current_user.roles%}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin" title="Panel de administracion">
+                    <i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <span>Panel de administracion</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block"> {% endif %}
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow ml-n3">
+
+                    <form class="d-none d-sm-inline-block form-inline my-2 my-md-0 mw-100 navbar-search" 
+                      autocomplete="off">
+                        <div class="input-group col-md-11">
+                            <input type="text" class="dropleft form-control bg-light border-0 small " 
+                                placeholder="Buscar..." aria-label="Search" id="search">
+
+                            <div class="dropdown-menu m-3" aria-labelledby="dropdownMenuOffset" 
+                              id="result">
+                              
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                          <a class="nav-link" href="" title="Search" 
+                            id="searchDropdown" 
+                            role="button" data-toggle="dropdown" 
+                            aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ url_for('static',filename='icons-svg/icons/search.svg')}}" 
+                                   alt="Search" class="nav-icon">
+                          </a>
+
+                          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                              <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" id="search" 
+                                   placeholder="Buscar cursos" aria-label="Search" aria-describedby="basic-addon2">
+                            </form>
+                          </div>
+                        </li>
+
+                        <li class="nav-item dropdown no-arrow mx-1 d-none d-sm-inline-block">
+                            <a class="nav-link " href="/" title="Inicio">
+                                <img src=" {{ url_for('static',filename='icons-svg/icons/house.svg') }} " alt="Search" class="nav-icon">
+                            </a>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src=" {{ url_for('static',filename='icons-svg/icons/bell.svg') }} " alt="Courses" class="nav-icon">
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter"></span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header"> Centro de alertas </h6>
+
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">
+                                            A new monthly report is ready to download!
+                                        </span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" 
+                              id="userDropdown" role="button" 
+                              data-toggle="dropdown" 
+                              aria-haspopup="true" 
+                              aria-expanded="false" 
+                              title="{{ current_user.first_name.capitalize() }} {{ current_user.last_name.capitalize() }}">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small notranslate">
+                                    {{ current_user.first_name.capitalize()}} 
+                                    {{ current_user.last_name.capitalize() }}
+                                </span> 
+                                {{ profile | default(size='50', 
+                                                     class='rounded-circle nav-icon-user', 
+                                                     title='') }}
+                            </a>
+
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right
+                                    shadow animated--grow-in" aria-labelledby="userDropdown">
+
+                                <a class="dropdown-item" href="{{url_for('users.profile',user=current_user.first_name) }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{{url_for_security('logout') }}">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Cerrar session
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+
+                {# bloque de conteneidos para las platillas herederas #} 
+                {% block content %}
+                    {# Alerts#}
+                    {% include 'messages.html' %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="d-sm-none fixed-bottom nav-footer">
+
+        <footer id="sticky-footer" class="py-4 bg-white shadow">
+            <ul class="nav nav-pills">
+                {% block footer %}
+
+                {% endblock %}            
+            </ul>
+        </footer>
+    </div>
+
+    {% include 'scripts.html' %}
+    
+    {% block _scripts %}
+
+    {% endblock %}
+</body>
+
+</html>

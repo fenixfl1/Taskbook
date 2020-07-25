@@ -6,20 +6,19 @@ from app.jinja_filters import Filter
 from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, all_request
+from app.extra import register_error_handlers, MyAdminIndexView, \
+    all_request
 from app.auth.security_form import ExtendRegisterForm
 from .extentions import *
-import os
 
-name = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
 
 
-def create_app(setting_module, app_name=name, **kwargs):
+def create_app(setting_module, **kwargs):
 
     # application settings
-    app = Flask(app_name, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_object(setting_module)
     app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -30,8 +29,10 @@ def create_app(setting_module, app_name=name, **kwargs):
         init_celery(celery, app)
 
     if app.config.get('TESTING', True):
+        print("Running in development mode")
         app.config.from_envvar('APP_DEVELOPMENT_SETTINGS', silent=False)
     else:
+        print("Running in production mode")
         app.config.from_envvar('APP_PRODUCTION_SETTINGS', silent=False)
 
     # library integrations
@@ -43,6 +44,7 @@ def create_app(setting_module, app_name=name, **kwargs):
     avatars.init_app(app)
     mail.init_app(app)
     sql.init_app(app)
+    ma.init_app(app)
     migrate.init_app(app, sql)
     adm.init_app(app, index_view=MyAdminIndexView())
     login.init_app(app)
@@ -66,5 +68,6 @@ def create_app(setting_module, app_name=name, **kwargs):
     # my extentions
     register_error_handlers(app)
     all_request._(app, db)
+    # create_user(app, user_datastore, db, Role)
 
     return app

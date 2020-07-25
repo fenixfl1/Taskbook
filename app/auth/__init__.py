@@ -6,4 +6,4 @@ auth_view = Blueprint('auth', __name__,
                       template_folder='templates')
 CORS(auth_view)
 
-from . import auth
+from . import auth, actions

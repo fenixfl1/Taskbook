@@ -1,24 +1,8 @@
-{% extends 'base.html' %} {% block content %} {% from 'macro.html' import Form, Form_off_label, navbar %}
-
-{# Nav for task table #}
-{{ navbar(name="Agregar", holder="Buscar Tareas", title="Agregar tareas", modal_id="#staticBackdrop") }}
+{% extends 'base.html' %} {% block content %}
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            {% include 'messages.html' %}
-            
-            {% include "forms/task_form.html.j2" %}
-
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">
-                    <a href="/tasks"> Tareas({{ tareas | tasks(1) }})</a>
-                </li>
-
-                <li class="breadcrumb-item">
-                    Realizadas( {{ finalizadas | tasks(0) }} )
-                </li>
-            </ol>
 
             <div class="row">
                 <div class="table-responsive">

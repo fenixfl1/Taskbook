@@ -12,19 +12,19 @@
       </div>
       <div class="modal-body">
         <form action=" {{ url_for('auth.add_qualification') }} " method="post">
-          {{ qualif_form.hidden_tag() }}
-          {{ Form_off_label(qualif_form.id, class="form-control d-none", id="id") }}
+          {{ q_form.hidden_tag() }}
+          {{ Form_off_label(q_form.id, class="form-control d-none", id="id") }}
           <div class="form-group">
-            {{ Form_off_label(qualif_form.name.label) }} 
-            {{ Form_off_label(qualif_form.name, class="form-control", id="subject") }}
+            {{ Form_off_label(q_form.name.label) }} 
+            {{ Form_off_label(q_form.name, class="form-control", id="subject") }}
           </div>
           <div class="form-group">
-            {{ Form_off_label(qualif_form.calificacion.label) }} 
-            {{ Form_off_label(qualif_form.calificacion, class="form-control", id="calificacion") }}
+            {{ Form_off_label(q_form.calificacion.label) }} 
+            {{ Form_off_label(q_form.calificacion, class="form-control", id="calificacion") }}
           </div>
 
           <div class="text-center form-group">
-            {{ Form_off_label(qualif_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+            {{ Form_off_label(q_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
           </div>
         </form>
       </div>

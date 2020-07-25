@@ -49,7 +49,7 @@ def create_user(app, user_datastore, db, role):
     @app.before_first_request
     def new_user():
 
-        user_datastore.create_user(email='admin@taskbook.com',
+        user_datastore.create_user(email='benjaminfl11@gmail.com',
                                    first_name='Benjamin',
                                    last_name='Rosario',
                                    password='adminfl119',

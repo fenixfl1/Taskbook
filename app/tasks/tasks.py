@@ -3,13 +3,11 @@ from app.database import db
 from app.database.models import Notify
 from flask_mail import Message
 from flask import render_template
-from datetime import datetime
-import time
 
 
 def send_mail(subject, recipients, text_body, html_body):
 
-    msg = Message(subject, recipients=recipients)
+    msg = Message(subject, recipients)
     msg.body = text_body
     msg.html = html_body
     mail.send(msg)
@@ -64,7 +62,7 @@ def notifications(title, msg, notify_date, user_id):
         db.add(notify)
         db.commit()
 
-        return {'Id user': user_id, 'Msg': msg}
+        return {'User ID': user_id, 'Msg': msg}
 
     except ValueError as e:
         raise e
