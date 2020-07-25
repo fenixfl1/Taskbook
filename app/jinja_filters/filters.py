@@ -8,37 +8,73 @@ from app.extentions import avatars, db_session
 import hashlib
 
 
-def tasks(value, **kwargs):
+def tasks(id, **kwargs):
 
-    filtro = db.query(Tasks).\
+    get_tasks = db.query(Tasks).\
         filter(Tasks.user_id == current_user.id).\
         filter(Tasks.state == 1)
 
-    progress = 0
+    f = get_tasks
+    progress = 0.0
 
-    if 'done' in kwargs:
+    if 'this' in kwargs:
+        if kwargs.get('this') == 1:
+            if 'done' in kwargs:
+                if kwargs.get('done') == 1:
+                    f = get_tasks.filter(Tasks.course_id == id). \
+                        filter(Tasks.done == 1).count()
+                elif kwargs.get('done') == 0:
+                    f = get_tasks.filter(Tasks.course_id == id). \
+                        filter(Tasks.done == 0).count()
+                else:
+                    f = get_tasks.filter(Tasks.course_id == id).count()
 
-        if kwargs.get('done') == 1:
-            return filtro.filter(Tasks.done == 1).count()
+                return f
 
-        if kwargs.get('done') == 0:
-            return filtro.filter(Tasks.done == 0).count()
+            if 'progress' in kwargs:
+                if kwargs.get('progress') == 1:
+                    done = get_tasks.filter(Tasks.done == 1). \
+                        filter(Tasks.course_id == id).count()
+                    total = get_tasks.filter(Tasks.course_id == id).count()
 
-        else:
-            return filtro.count()
+                    try:
+                        progress = (done * 100) / total
+                    except ZeroDivisionError as e:
+                        raise e
+                    finally:
+                        return progress
 
-    if 'progress' in kwargs:
+                else:
+                    return ValueError("Value error")
 
-        if kwargs.get('progress') == 1:
-            total = filtro.filter(Tasks.course_id == value).count()
-            done = filtro.filter(Tasks.done == 1).count()
+        if kwargs.get('this') == 0:
+            if 'done' in kwargs:
+                if kwargs.get('done') == 1:
+                    return get_tasks.filter(Tasks.done == 1).count()
+                if kwargs.get('done') == 0:
+                    return get_tasks.filter(Tasks.done == 0).count()
+                else:
+                    return get_tasks.count()
 
-            try:
-                progress = (done * 100) / total
-            except ZeroDivisionError as e:
-                raise e
-            finally:
-                return progress
+            if 'progress' in kwargs:
+
+                if kwargs.get('progress') == 1:
+                    done = get_tasks.filter(Tasks.done == 1).count()
+                    total = get_tasks.count()
+
+                    try:
+                        progress = (done * 100) / total
+                    except ZeroDivisionError as e:
+                        raise e
+                    finally:
+                        return progress
+
+                else:
+                    return ValueError("Value error")
+    else:
+        return ValueError("Value error")
+
+    return get_tasks.count()
 
 
 def courses(value, **kwargs):
@@ -73,50 +109,84 @@ def courses(value, **kwargs):
             finally:
                 return progress
         else:
-            return None
+            return 0
 
 
-def teachers(value, n=1):
+def teachers(id, n=1):
 
     filtro = db.query(Teachers).\
         filter(Teachers.user_id == current_user.id).\
-        filter(Teachers.state == n).count()
+        filter(Teachers.state == n)
 
     return filtro
 
 
-def study_plan(value, n=1):
+def study_plan(value, **kwargs):
 
-    filtro = db.query(StudyPlan).\
+    get_plan = db.query(StudyPlan).\
         filter(StudyPlan.user_id == current_user.id).\
-        filter(StudyPlan.state == n).count()
+        filter(StudyPlan.state == 1)
 
-    return filtro
+    progress = 0
+
+    if 'done' in kwargs:
+        if kwargs.get('done') == 1:
+            return get_plan.filter(StudyPlan.done == 1).count()
+        elif kwargs.get('done') == 0:
+            return get_plan.filter(StudyPlan.done == 0).count()
+        else:
+            return get_plan.count()
+
+    if 'progress' in kwargs:
+        if kwargs.get('progress') == 1:
+            done = get_plan.filter(StudyPlan.done == 1).count()
+            total = get_plan.count()
+
+            try:
+                progress = (done * 100) / total
+            except ZeroDivisionError as e:
+                raise e
+            finally:
+                return progress
+
+        else:
+            return ValueError('Error in the key word')
+
+    return get_plan.count()
 
 
-def study_plan_goals_done(id):
+def study_plan_goals(id, **kwargs):
 
-    filter = db.query(StudyPlanGoals).\
+    get_goals = db.query(StudyPlanGoals).\
         join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
-        filter(StudyPlanGoals.done == 1).\
         filter(StudyPlanGoals.state == 1).\
         filter(StudyPlan.id == id).\
         filter(StudyPlan.state == 1).\
-        filter(StudyPlan.user_id == current_user.id).count()
+        filter(StudyPlan.user_id == current_user.id)
 
-    return filter
+    progress = 0
 
+    if 'done' in kwargs:
+        if kwargs.get('done') == 1:
+            return get_goals.filter(StudyPlanGoals.done == 1).count()
+        elif kwargs.get('done') == 0:
+            return get_goals.filter(StudyPlanGoals.done == 0).count()
+        else:
+            return get_goals.count()
 
-def study_plan_goals(id):
+    if 'progress' in kwargs:
+        if kwargs.get('progress') == 1:
+            done = get_goals.filter(StudyPlanGoals.done == 1).count()
+            total = get_goals.count()
 
-    filter = db.query(StudyPlanGoals).\
-        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
-        filter(StudyPlanGoals.state == 1).\
-        filter(StudyPlan.id == id).\
-        filter(StudyPlan.state == 1).\
-        filter(StudyPlan.user_id == current_user.id).count()
+            try:
+                progress = (done * 100) / total
+            except ZeroDivisionError as e:
+                raise e
+            finally:
+                return progress
 
-    return filter
+    return get_goals.count()
 
 
 def list_courses(value):
@@ -193,5 +263,4 @@ class Filter():
         app.jinja_env.filters['default'] = avatar
         app.jinja_env.filters['generate_avatar'] = generate_avatar
         app.jinja_env.filters['paginate_courses'] = paginate_courses
-        app.jinja_env.filters['study_plan_goals_done'] = study_plan_goals_done
         app.jinja_env.filters['study_plan_goals'] = study_plan_goals

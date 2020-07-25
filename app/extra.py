@@ -2,6 +2,7 @@ from flask import render_template
 from flask_admin import AdminIndexView, expose
 from flask_security import login_required, roles_required
 from datetime import datetime
+from app.database.models import User, RolesUsers, Role
 
 
 class all_request(object):
@@ -49,21 +50,37 @@ def create_user(app, user_datastore, db, role):
     @app.before_first_request
     def new_user():
 
-        user_datastore.create_user(email='benjaminfl11@gmail.com',
-                                   first_name='Benjamin',
-                                   last_name='Rosario',
-                                   password='adminfl119',
-                                   phone_number='(829) 359 4707',
-                                   country='DO',
-                                   gender='M',
-                                   confirmed_at=datetime.now())
-        db.commit()
+        user = db.query(User.email).all()
+
+        role = db.query(Role).all()
+
+        if len(role) == 0:
+            rol = Role(
+                name="Admin",
+                description="Control total de la applicacion"
+            )
+
+            db.add(rol)
+            db.commit()
+
+        if len(user) == 0:
+
+            user_datastore.create_user(email='benjaminfl119@gmail.com',
+                                       first_name='Benjamin',
+                                       last_name='Rosario',
+                                       password='adminfl119',
+                                       phone_number='(829) 359 4707',
+                                       country='DO',
+                                       gender='M',
+                                       confirmed_at=datetime.now(),
+                                       roles=['Admin'])
+            db.commit()
 
 
 # Errors views
 def register_error_handlers(app):
 
-    @app.errorhandler(500)
+    @ app.errorhandler(500)
     def base_error_handler(e):
 
         return render_template(
@@ -72,7 +89,7 @@ def register_error_handlers(app):
             e=e.description
         ), 500
 
-    @app.errorhandler(404)
+    @ app.errorhandler(404)
     def error_404_handler(e):
 
         return render_template(
@@ -81,7 +98,7 @@ def register_error_handlers(app):
             e=e.description
         ), 404
 
-    @app.errorhandler(403)
+    @ app.errorhandler(403)
     def error_403_handler(e):
 
         head = e.name

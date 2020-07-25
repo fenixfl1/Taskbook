@@ -8,7 +8,7 @@
             <div class="col-md-9 card-container">
                 
                 <div class="row justify-content-md-star">
-                    {% if courses | courses(finished=0) > 0 %}
+                    {% if courses | courses(finished=find) > 0 %}
                         {% for courses in subjects_user.items %}
                             {% set dato = [
                                 courses.name, 
@@ -20,14 +20,7 @@
                                 </figure>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"> 
-                                        {{ courses.name }} 
-                                        <a href="" title="Editar" 
-                                            onclick='editSubjects({{ dato | tojson }})'
-                                            data-toggle="modal" 
-                                            data-target="#editSubject">
-                                            <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" 
-                                          style="width: 1rem;">
-                                        </a>
+                                        {{ courses.name }}
                                         <span></span>
                                     </h5>
                                     {% if courses.teacher %}
@@ -74,45 +67,33 @@
             <div class="list-group col-md-3 d-none d-sm-inline-block" 
               id="list-ta" role="tablist">
                 <a class="list-group-item list-group-item-action d-flex justify-content-between 
-                    align-items-cente"
-                    id="list-home-list" data-toggle="list"
-                    href="#list-home" role="tab"
-                    aria-controls="home">
+                    align-items-cente" href="?courses=all">
                     Todas los cursos
                     <span class="badge badge-primary badge-pill">
                         {{ courses | courses(finished='all') }}
                     </span>
                 </a>
-                <a class="list-group-item list-group-item-action active d-flex justify-content-between 
-                    align-items-center"
-                    id="list-home-list" data-toggle="list"
-                    href="#list-home" role="tab"
-                    aria-controls="home">
+                <a class="list-group-item list-group-item-action d-flex justify-content-between 
+                    align-items-center" href="?courses=pending">
                     Cursos actuales
                     <span class="badge badge-primary badge-pill">
                         {{ courses | courses(finished=0) }}
                     </span>
                 </a>
                 <a class="list-group-item list-group-item-action d-flex justify-content-between 
-                    align-items-center"
-                    id="list-profile-list" data-toggle="list"
-                    href="#list-profile" role="tab"
-                    aria-controls="profile">
+                    align-items-center" href="?courses=finished">
                     Cursos completados
                     <span class="badge badge-primary badge-pill">
                         {{ courses | courses(finished=1) }}
                     </span>
                 </a>
-                <a class="list-group-item list-group-item-action d-flex justify-content-between 
-                    align-items-center"
-                    id="list-settings-list" data-toggle="list"
-                    href="#list-settings" role="tab"
-                    aria-controls="settings">
+                <span class="list-group-item d-flex justify-content-between 
+                    align-items-center">
                     Progreso
                     <span class="badge badge-primary badge-pill">
                         {{ courses | courses(progress=True) }}%
                     </span>
-                </a>
+                </span>
             </div>
         </div>
     </div>

@@ -67,18 +67,26 @@ def subjects():
     if 'page' in request.args:
         page = int(request.args.get('page'))
 
-    courses = db_session.query(Courses).\
-        filter(Courses.user_id == current_user.id).\
-        filter(Courses.finished == 0).\
-        filter(Courses.state == 1).paginate(page, 8, 0)
-
-    list_courses = db.query(Courses).\
+    get_courses = db_session.query(Courses).\
         filter(Courses.user_id == current_user.id).\
         filter(Courses.finished == 0).\
         filter(Courses.state == 1)
 
-    num_courses = db.query(Courses). \
-        filter(Courses.user_id == current_user.id).count()
+    find = 'both'
+    args = request.args.get('courses')
+
+    if args == "all":
+        courses = get_courses.paginate(page, 8, 0)
+    elif args == "finished":
+        find = 1
+        courses = get_courses.filter(Courses.finished == 1).\
+            paginate(page, 8, 0)
+    elif args == "pending":
+        find = 0
+        courses = get_courses.filter(Courses.finished == 0).\
+            paginate(page, 8, 0)
+    else:
+        courses = get_courses.paginate(page, 8, 0)
 
     pages = courses.total / 8
 
@@ -91,10 +99,9 @@ def subjects():
         'user/all_courses.html.j2',
         title='Courses -',
         subjects_user=courses,
-        list_courses=list_courses,
         current_page=page,
         total_pages=total_pages,
-        num_courses=num_courses
+        find=find
     )
 
 
@@ -102,40 +109,45 @@ def subjects():
 @login_required
 def courses(id):
 
+    get_task = db.query(Tasks).\
+        filter(Tasks.user_id == current_user.id). \
+        filter(Tasks.course_id == id). \
+        filter(Tasks.state == 1)
+
     courses = db.query(Courses).\
         filter(Courses.user_id == current_user.id).\
         filter(Courses.id == id).first()
 
-    task = db.query(Tasks).\
-        filter(Tasks.course_id == id). \
-        filter(Tasks.state == 1).\
-        filter(Tasks.done == 0)
+    find = "both"
+
+    if 'tasks' in request.args:
+
+        args = request.args.get('tasks')
+
+        if args == 'finished':
+            find = 1
+            task = get_task.filter(Tasks.done == 1).all()
+
+        elif args == 'all':
+            task = get_task.all()
+
+        elif args == 'pending':
+            find = 0
+            task = get_task.filter(Tasks.done == 0).all()
+
+        else:
+            task = get_task.all()
+
+    else:
+        task = get_task.all()
 
     return render_template(
         'user/courses.html.j2',
-        title='Course of {}'.format(courses.name),
+        title='Courses: {}'.format(courses.name),
         course=courses,
-        assignments=task
-    )
-
-
-@user_view.route('/courses/finished')
-@login_required
-def subjects_finished():
-
-    try:
-        courses = db.query(Courses).\
-            filter(Courses.user_id == current_user.id).\
-            filter(Courses.state == 1).\
-            filter(Courses.finished == 1).all()
-
-    except ValueError as e:
-        raise e
-
-    return render_template(
-        'user/courses_finished.html.j2',
-        title='Finished courses -',
-        subjects_user=courses
+        assignments=task,
+        course_id=id,
+        find=find
     )
 
 
@@ -169,30 +181,36 @@ def horario():
 
 
 # this function is to see and creat task
-@user_view.route('/tasks', methods=['GET', 'POST'])
+@user_view.route('/tasks')
 @login_required
 def tasks():
 
-    task = Queries.queries(Tasks, current_user)
+    get_task = db.query(Tasks).\
+        filter(Tasks.user_id == current_user.id).\
+        filter(Tasks.state == 1)
+
+    args = request.args.get('tasks')
+    find = "all"
+
+    if args == "all":
+        task = get_task.all()
+
+    elif args == "finished":
+        find = 1
+        task = get_task.filter(Tasks.done == 1)
+
+    elif args == "pending":
+        find = 0
+        task = get_task.filter(Tasks.done == 0)
+
+    else:
+        task = get_task.all()
 
     return render_template(
-        'user/task.html.j2',
+        'user/all_tasks.html.j2',
         title='Tasks -',
-        task_user=task
-    )
-
-
-@user_view.route('/tasks/finished')
-@login_required
-def task_finished():
-
-    task = db.query(Tasks).filter(Tasks.user_id == current_user.id).\
-        filter(Tasks.state == 1).filter(Tasks.done == 1)
-
-    return render_template(
-        'user/task_finished.html.j2',
-        title='Finished tasks -',
-        task_user=task
+        task_user=task,
+        find=find
     )
 
 
@@ -230,15 +248,33 @@ def details_task(id):
 @login_required
 def plan_de_estudio():
 
-    plan = db.query(StudyPlan).\
+    args = request.args.get('plan')
+    find = 'both'
+
+    get_plan = db.query(StudyPlan).\
         filter(StudyPlan.user_id == current_user.id). \
         filter(StudyPlan.state == 1).\
         options(contains_eager(StudyPlan.user))
 
+    if args == 'all':
+        plan = get_plan.all()
+
+    elif args == 'finished':
+        find = 1
+        plan = get_plan.filter(StudyPlan.done == 1)
+
+    elif args == 'pending':
+        find = 0
+        plan = get_plan.filter(StudyPlan.done == 0)
+
+    else:
+        plan = get_plan.all()
+
     return render_template(
         'user/stady_plan.html.j2',
         title='Studies plan -',
-        stady_plan=plan
+        stady_plan=plan,
+        find=find
     )
 
 
@@ -247,60 +283,33 @@ def plan_de_estudio():
 @login_required
 def study_plan_goals(id):
 
-    goals = db.query(StudyPlanGoals).\
+    args = request.args.get('goals')
+    find = "all"
+
+    get_goals = db.query(StudyPlanGoals).\
         join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
         filter(StudyPlanGoals.state == 1).\
-        filter(StudyPlanGoals.done == 0).\
         filter(StudyPlan.id == id).\
         filter(StudyPlan.state == 1).\
         filter(StudyPlan.user_id == current_user.id)
+
+    if args == 'all':
+        goals = get_goals.all()
+    elif args == 'finished':
+        find = 1
+        goals = get_goals.filter(StudyPlanGoals.done == 1)
+    elif args == 'pending':
+        find = 0
+        goals = get_goals.filter(StudyPlanGoals.done == 0)
+    else:
+        goals = get_goals.all()
 
     return render_template(
         'user/stady_plan_goals.html.j2',
         title='Studies plan goals -',
         goals=goals,
-        plan_id=id
-    )
-
-
-@user_view.route('/studies-plan/<int:id>/done')
-@login_required
-def study_plan_goals_done(id):
-
-    goals = db.query(StudyPlanGoals).\
-        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
-        filter(StudyPlanGoals.state == 1).\
-        filter(StudyPlanGoals.done == 1).\
-        filter(StudyPlan.id == id).\
-        filter(StudyPlan.state == 1).\
-        filter(StudyPlan.user_id == current_user.id)
-
-    return render_template(
-        'user/stady_plan_goals_done.html.j2',
-        title="Studies plan done -",
         plan_id=id,
-        goals=goals
-    )
-
-
-@user_view.route('/studies-plan/<int:id>/all')
-@login_required
-def study_plan_goals_all(id):
-
-    goals = db.query(StudyPlanGoals).\
-        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
-        filter(StudyPlanGoals.state == 1).\
-        filter(StudyPlan.id == id).\
-        filter(StudyPlan.state == 1).\
-        filter(StudyPlan.user_id == current_user.id)
-
-    goals.order_by(StudyPlanGoals.title)
-
-    return render_template(
-        'user/stady_plan_goals_all.html.j2',
-        title="Studies plan done -",
-        plan_id=id,
-        goals=goals
+        find=find
     )
 
 

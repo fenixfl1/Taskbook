@@ -213,6 +213,7 @@ class StudyPlan(Base):
     name = Column(String(100), nullable=False)
     start_date = Column(Date, nullable=False)
     created_at = Column(DateTime(), default=func.now())
+    done = Column(Boolean(), default=False)
     table_name = Column(String(10), default='study-plan')
     state = Column(Boolean(), default=True)
 

@@ -47,7 +47,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" 
-                  href="{{ url_for('users.profile', user=current_user.first_name) }}" 
+                  href="{{ url_for('users.profile', id=current_user.id, user=current_user.first_name) }}" 
                   title="Profile">
                     <i class="fas fa-user"></i>
                     <span>Perfil</span>
