@@ -44,7 +44,7 @@ class MyAdminIndexView(AdminIndexView):
         )
 
 
-# funtion for create new user
+# create new admin user
 def create_user(app, user_datastore, db, role):
 
     @app.before_first_request
