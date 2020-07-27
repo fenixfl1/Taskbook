@@ -8,7 +8,6 @@ app = create_app(settings_module, celery=celery)
 
 with app.app_context():
     init_db()
-
-
+    
 if __name__ == '__main__':
     app.run()
