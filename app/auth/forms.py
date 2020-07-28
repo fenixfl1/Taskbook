@@ -3,7 +3,7 @@ from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
     TextAreaField, BooleanField, SelectField, RadioField
 from wtforms.fields.html5 import EmailField, URLField, \
-    DateTimeField, DateField
+    DateTimeLocalField, DateField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
 from app.database.models import Courses, Teachers, StudyPlan
@@ -117,10 +117,10 @@ class TaskForm(Default):
         query_factory=subject_query, allow_blank=True
     )
 
-    asignada_en = StringField(
+    asignada_en = DateTimeLocalField(
         'Fecha de asignacion', validators=[DataRequired()])
 
-    dia_entrega = StringField(
+    dia_entrega = DateTimeLocalField(
         'Fecha de entrega', validators=[DataRequired()])
 
     nota = TextAreaField(
@@ -139,10 +139,10 @@ class EventForm(Default):
 
     url = URLField('Url')
 
-    start_date = DateTimeField(
+    start_date = DateTimeLocalField(
         'Inicio', validators=[DataRequired()])
 
-    end_date = DateTimeField(
+    end_date = DateTimeLocalField(
         'Fin', validators=[DataRequired()])
 
     nota = TextAreaField(
