@@ -1,5 +1,5 @@
 <form action="/register-subjects" method="POST" autocomplete="off" id="actualidarDatos">
-    {{ subject_form.hidden_tag() }}
+    {{ course_form.hidden_tag() }}
     <div class="modal fade" id="editSubjects" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -14,11 +14,11 @@
                     </div>
 
                     <div class="form-group my-4">
-                        {{ Form_off_label(subject_form.name, class="form-control form-control-lg text-center") }}
+                        {{ Form_off_label(course_form.name, class="form-control form-control-lg text-center") }}
                     </div>
 
                     <div class="text-center form-group">
-                        {{ Form_off_label(subject_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
+                        {{ Form_off_label(course_form.submit, class="btn btn-primary btn-lg", value="Guardar") }}
                     </div>
                 </div>
             </div>
