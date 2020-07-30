@@ -1,9 +1,7 @@
-from . import user_view as app
 from flask import render_template
 
 
-@app.errorhandler(500)
-def base_error_handler(e):
+def error_500_handler(e):
 
     return render_template(
         'errors/500.html',
@@ -12,7 +10,6 @@ def base_error_handler(e):
     ), 500
 
 
-@app.errorhandler(404)
 def error_404_handler(e):
 
     return render_template(
@@ -22,7 +19,6 @@ def error_404_handler(e):
     ), 404
 
 
-@app.errorhandler(403)
 def error_403_handler(e):
 
     head = e.name

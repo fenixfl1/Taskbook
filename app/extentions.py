@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
-from flask_security import Security
+from flask_security import Security, SQLAlchemySessionUserDatastore
 from flask_wtf import CSRFProtect
 from flask_avatars import Avatars
 from flask_admin import Admin
@@ -10,6 +10,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from .flask_celery import make_celery
 from flask_marshmallow import Marshmallow
+from app.database import db
+from app.database.models import Role, User
 
 
 sql = SQLAlchemy()
@@ -26,6 +28,8 @@ celery = make_celery()
 ma = Marshmallow()
 db_session = sql.session
 
+user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
+
 
 __all__ = [
     'sql',
@@ -39,5 +43,6 @@ __all__ = [
     'login',
     'migrate',
     'celery',
-    'ma'
+    'ma',
+    'user_datastore'
 ]

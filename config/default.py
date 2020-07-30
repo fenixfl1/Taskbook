@@ -15,8 +15,8 @@ IMAGE_SET_EXT = ('jpg', 'jpe', 'jpeg', 'png', 'gif', 'svg', 'bmp')
 
 
 # configuracion de despligue de la aplicacion
-DEBUG = False
-TESTING = False
+DEBUG = True
+TESTING = True
 ENV = ''
 
 # avatars

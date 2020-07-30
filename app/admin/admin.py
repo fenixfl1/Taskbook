@@ -1,16 +1,31 @@
 from flask import redirect, url_for
-from app import adm
+from app.extentions import adm
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from flask_login import current_user
+from flask_admin import AdminIndexView, expose
+from flask_security import login_required, roles_required
+from app.database import db
 from redis import Redis
 from wtforms.validators import DataRequired
-from app.database import db
 from app.database.models import (User, Role, Events, Tasks,
                                  StudyPlan, ClassSchedule, Courses,
                                  Teachers, StudyPlanGoals, Notify)
 
 role_name = ['Admin', 'admin', 'administrador']
+
+
+# my own index view in admin panel
+class MyAdminIndexView(AdminIndexView):
+    @expose()
+    @login_required
+    @roles_required('Admin')
+    def index(self):
+
+        return self.render(
+            'admin/index.html',
+            name='Taskbook'
+        )
 
 
 class AdminView(ModelView):

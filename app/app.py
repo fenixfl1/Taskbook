@@ -1,20 +1,14 @@
 from flask import Flask
 from flask_fontawesome import FontAwesome
-from flask_security import SQLAlchemySessionUserDatastore
 from .flask_celery.celery_utils import init_celery
 from app.jinja_filters import Filter
-from app.database.models import User, Role
 from werkzeug.middleware.proxy_fix import ProxyFix
-from app.database import db
-from app.extra import register_error_handlers, MyAdminIndexView, \
-    all_request, create_user
 from app.auth.security_form import ExtendRegisterForm
+from app.admin.admin import MyAdminIndexView
 from .extentions import *
 
 
-user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
-
-
+# factory app
 def create_app(setting_module, **kwargs):
 
     # application settings
@@ -29,10 +23,10 @@ def create_app(setting_module, **kwargs):
         init_celery(celery, app)
 
     if app.config.get('TESTING', True):
-        print("Running in development mode")
+        print(" * Running in development mode")
         app.config.from_envvar('APP_DEVELOPMENT_SETTINGS', silent=False)
     else:
-        print("Running in production mode")
+        print(" * Running in production mode")
         app.config.from_envvar('APP_PRODUCTION_SETTINGS', silent=False)
 
     # library integrations
@@ -65,9 +59,27 @@ def create_app(setting_module, **kwargs):
     from .tasks import tasks
     app.register_blueprint(tasks)
 
-    # my extentions
-    register_error_handlers(app)
-    all_request._(app, db)
-    create_user(app, user_datastore, db, Role)
+    # Register error handler
+    from .user.errors import error_500_handler
+    app.register_error_handler(500, error_500_handler)
+
+    from .user.errors import error_403_handler
+    app.register_error_handler(403, error_403_handler)
+
+    from .user.errors import error_404_handler
+    app.register_error_handler(404, error_404_handler)
+
+    # Register context request
+    from .user.requests import before_request_func
+    app.before_request(before_request_func)
+
+    from .user.requests import after_request_func
+    app.after_request(after_request_func)
+
+    from .user.requests import teardown_request_func
+    app.teardown_request(teardown_request_func)
+
+    from .user.requests import fisrt_request_func
+    app.before_first_request(fisrt_request_func)
 
     return app
