@@ -139,10 +139,10 @@ class EventForm(Default):
 
     url = URLField('Url')
 
-    start_date = DateTimeField(
+    start_date = DateTimeLocalField(
         'Inicio', validators=[DataRequired()])
 
-    end_date = DateTimeField(
+    end_date = DateTimeLocalField(
         'Fin', validators=[DataRequired()])
 
     nota = TextAreaField(
