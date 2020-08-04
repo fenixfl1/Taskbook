@@ -2,10 +2,11 @@
 from flask_security import current_user
 from flask import Markup
 from app.database.models import Tasks, Courses, Teachers, \
-    StudyPlan, StudyPlanGoals
+    StudyPlan, StudyPlanGoals, Events
 from app.database import db
 from app.extentions import avatars, db_session
 import hashlib
+from datetime import datetime
 
 
 def tasks(id, **kwargs):
@@ -250,6 +251,57 @@ def generate_avatar(value, **kwargs):
         '<img src="{}" class="{}" title="{}">'.
         format(url_avatar, str(classes), str(title))
     )
+    
+
+def the_next(value, **kwargs):
+    
+    course = db.query(Courses). \
+        filter(Courses.user_id == current_user.id). \
+        filter(Courses.state == 1). \
+        order_by(Courses.name)
+    
+    next_task = db.query(Tasks). \
+        filter(Tasks.user_id == current_user.id). \
+        filter(Tasks.state == 1). \
+        order_by(Tasks.delivery_day)
+    
+    next_plan = db.query(StudyPlan). \
+        filter(StudyPlan.user_id == current_user.id). \
+        filter(StudyPlan.state == 1). \
+        order_by(StudyPlan.start_date)
+        
+    next_goals = db.query(StudyPlanGoals).\
+        join(StudyPlan, StudyPlanGoals.plan_id == StudyPlan.id).\
+        filter(StudyPlanGoals.state == 1).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.user_id == current_user.id)
+        
+    if 'task' in kwargs:
+        if kwargs.get('task', True):
+            next = next_task.first()
+    
+    elif 'stuty_plan' in kwargs:
+        if kwargs.get('stuty_plan', True):
+            next = next_plan.first()
+            
+    elif 'study_plan_goals' in kwargs:
+        if kwargs.get('study_plan_goals', True):
+            next = next_goals.first()
+            
+    else:
+        next = course.first()
+        
+    if 'data' in kwargs:
+        if kwargs.get('data') == 'name':
+            return next.name
+        
+        elif kwargs.get('data') == 'id':
+            return next.id
+        
+        elif kwargs.get('data') == 'title':
+            return next.title
+        
+    return next
 
 class Filter():
 
@@ -264,3 +316,4 @@ class Filter():
         app.jinja_env.filters['generate_avatar'] = generate_avatar
         app.jinja_env.filters['paginate_courses'] = paginate_courses
         app.jinja_env.filters['study_plan_goals'] = study_plan_goals
+        app.jinja_env.filters['next'] = the_next

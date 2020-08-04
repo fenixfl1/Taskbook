@@ -3,9 +3,19 @@
 	<div class="container-fluid">
 		
 		<div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
-
 			{# main content #}
 			<div class="col-md-9 card-container">
+
+				<div class="row justify-content-md-start mr-2">
+					<div class="card col-md-12 mb-3" style="height: 18em;">
+						<div class="card-header bg-white">
+							<h3 class="card-text">
+								<h3 class="text-center"> {{ name }} </h3>
+							</h3>
+						</div>
+					</div>
+				</div>
+
 				<div class="row justify-content-md-start" id="card">
 					{% if assignments | length > 0 %}
 						{% for i in range(course_id | tasks(this=True, done=find)) %}
