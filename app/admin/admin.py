@@ -48,7 +48,7 @@ class AdminView(ModelView):
 
     def inaccessible_callback(self, name, **kwargs):
 
-        return redirect(url_for('users.index'))
+        return redirect(url_for('users.subjects'))
 
 
 class UserView(AdminView):

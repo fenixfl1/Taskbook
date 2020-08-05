@@ -146,6 +146,7 @@ def courses(id):
         title='Courses: {}'.format(courses.name),
         course=courses,
         assignments=task,
+        name=courses.name,
         course_id=id,
         find=find
     )
