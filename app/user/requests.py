@@ -31,7 +31,7 @@ def fisrt_request_func():
                                    roles=['Admin'])
         db.commit()
 
-        print("User admin has created!")
+        print(" * User admin has created!")
 
 
 def before_request_func():

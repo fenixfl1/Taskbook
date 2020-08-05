@@ -56,44 +56,11 @@
 
             <hr class="sidebar-divider">
 
-            <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item">
+                <a class="nav-link" href="/">
                     <i class="fas fa-chalkboard-teacher text-whit"></i>
                     <span>Mis cursos</span>
                 </a>
-
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
-                  aria-labelledby="alertsDropdown">
-                    <h6 class="dropdown-header"> Mis cursos </h6>
-
-                    {% if courses | courses(0) > 0 %}
-                        {% set pagination = (1 | paginate_courses(0) ) %}
-
-                        {% for course in pagination.items %}
-                            <a class="dropdown-item d-flex align-items-center" 
-                              href="{{ url_for('users.courses',id=course.id) }}">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-primary">
-                                        {{ course.name | generate_avatar(size=300,
-                                                        class='card-img-top rounded-circle') }}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="small text-gray-500"> {{ course.teacher }} </div>
-                                    <span class="font-weight-bold">
-                                        {{ course.name }}
-                                    </span>
-                                </div>
-                            </a>
-                        {% endfor %}
-                            <a class="dropdown-item text-center small text-gray-500" href="#">
-                                Ver todos los cursos
-                            </a>
-                    {% else %}
-                        <a href="/courses" title="">Ningun curso agregardo</a>
-                    {% endif %}
-                </div>
             </li>
 
             <li class="nav-item">
@@ -264,7 +231,7 @@
                             <div class="dropdown-menu dropdown-menu-right
                                     shadow animated--grow-in" aria-labelledby="userDropdown">
 
-                                <a class="dropdown-item" href="{{url_for('users.profile',user=current_user.first_name) }}">
+                                <a class="dropdown-item" href="{{url_for('users.profile', id=current_user.id, user=current_user.first_name) }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
                                 </a>
 

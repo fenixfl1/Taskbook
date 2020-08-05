@@ -3,7 +3,7 @@ import os
 import sys
 from runserver import app
 
-app.config.mapping(
+app.config.from_mapping(
     BASE_URL='http://localhost:5000',
     USE_NGROK=os.environ.get('USE_NGROK', 'False') == 'True'
 )

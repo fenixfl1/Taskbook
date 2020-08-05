@@ -17,10 +17,8 @@ def create_app(setting_module, **kwargs):
     app.config.from_object(setting_module)
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    celery = kwargs.get('celery')
-
-    if celery:
-        init_celery(celery, app)
+    if kwargs.get('celery'):
+        init_celery(kwargs.get('celery'), app)
 
     if app.config.get('TESTING', True):
         print(" * Running in development mode")
@@ -46,7 +44,7 @@ def create_app(setting_module, **kwargs):
                       register_form=ExtendRegisterForm,
                       confirm_register_form=ExtendRegisterForm)
 
-    # register blueprint
+    # register blueprints
     from .user import user_view
     app.register_blueprint(user_view)
 
@@ -69,7 +67,7 @@ def create_app(setting_module, **kwargs):
     from .user.errors import error_404_handler
     app.register_error_handler(404, error_404_handler)
 
-    # Register context request
+    # Register context requests
     from .user.requests import before_request_func
     app.before_request(before_request_func)
 
