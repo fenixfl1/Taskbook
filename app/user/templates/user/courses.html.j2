@@ -8,10 +8,13 @@
 
 				<div class="row justify-content-md-start mr-2">
 					<div class="card col-md-12 mb-3" style="height: 18em;">
-						<div class="card-header bg-white">
-							<h3 class="card-text">
-								<h3 class="text-center"> {{ name }} </h3>
-							</h3>
+						<div class="card-body">
+							<figure class="figure">
+								{{ name | generate_avatar(size=300, class='card-img-top') }}
+								<h3 class="card-text">
+									<h3 class="text-center"> {{ name }} </h3>
+								</h3>
+							</figure>
 						</div>
 					</div>
 				</div>

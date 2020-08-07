@@ -231,7 +231,7 @@
                             <div class="dropdown-menu dropdown-menu-right
                                     shadow animated--grow-in" aria-labelledby="userDropdown">
 
-                                <a class="dropdown-item" href="{{url_for('users.profile',user=current_user.first_name) }}">
+                                <a class="dropdown-item" href="{{url_for('users.profile', id=current_user.id, user=current_user.first_name) }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
                                 </a>
 

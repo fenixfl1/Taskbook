@@ -97,7 +97,7 @@ def subjects():
 
     return render_template(
         'user/all_courses.html.j2',
-        title='Courses -',
+        title='Index -',
         subjects_user=courses,
         current_page=page,
         total_pages=total_pages,
