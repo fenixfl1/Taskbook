@@ -34,9 +34,16 @@ function countDown (selector) {
 $(document).ready(function() {
 
     const cards = $('.card').each(function (index) {
-
         $(this).find('#date').append($(this).find('.fecha').val()); 
     });
-    
-    // countDown();
+
+    new Glider(document.querySelector('.glider-list'), {
+        slidesToScroll: 1,
+        slidesToShow: 3.3,
+        dots: '.dots',
+        arrows: {
+            prev: '.carousel-control-prev-icon',
+            next: '.carousel-control-next-icon'
+        }
+    });
 });

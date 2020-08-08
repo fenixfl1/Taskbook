@@ -1,290 +1,209 @@
--- MySQL dump 10.13  Distrib 8.0.20, for Linux (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost    Database: taskbook
--- ------------------------------------------------------
--- Server version	8.0.20-0ubuntu0.20.04.1
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 08-08-2020 a las 21:03:20
+-- Versión del servidor: 10.4.11-MariaDB
+-- Versión de PHP: 7.4.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `class_schedule`
+-- Base de datos: `taskbook`
 --
 
-DROP TABLE IF EXISTS `class_schedule`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `class_schedule`
+--
+
 CREATE TABLE `class_schedule` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `course_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `course_id` int(11) DEFAULT NULL,
   `day` char(1) NOT NULL,
   `start_date` time NOT NULL,
   `end_date` time NOT NULL,
   `classroom` varchar(5) NOT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `course_id` (`course_id`),
-  CONSTRAINT `class_schedule_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `class_schedule_chk_1` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `class_schedule`
+-- Estructura de tabla para la tabla `course`
 --
 
-LOCK TABLES `class_schedule` WRITE;
-/*!40000 ALTER TABLE `class_schedule` DISABLE KEYS */;
-/*!40000 ALTER TABLE `class_schedule` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `course`
---
-
-DROP TABLE IF EXISTS `course`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `teacher_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `teacher_id` int(11) DEFAULT NULL,
   `name` varchar(80) NOT NULL,
   `finished` tinyint(1) DEFAULT NULL,
   `qualification` char(1) DEFAULT NULL,
   `table_name` varchar(10) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `teacher_id` (`teacher_id`),
-  CONSTRAINT `course_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `course_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`),
-  CONSTRAINT `course_chk_1` CHECK ((`finished` in (0,1))),
-  CONSTRAINT `course_chk_2` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `course`
+-- Volcado de datos para la tabla `course`
 --
 
-LOCK TABLES `course` WRITE;
-/*!40000 ALTER TABLE `course` DISABLE KEYS */;
-/*!40000 ALTER TABLE `course` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `course` (`id`, `user_id`, `teacher_id`, `name`, `finished`, `qualification`, `table_name`, `state`) VALUES
+(1, 1, 1, 'Matemática I', 0, NULL, 'courses', 1),
+(2, 1, NULL, 'Teoría de Base de Datos', 0, NULL, 'courses', 1),
+(3, 1, NULL, 'Sistema Operativo I', 0, NULL, 'courses', 1),
+(4, 1, NULL, 'Diseño de Sistema', 0, NULL, 'courses', 1),
+(5, 1, NULL, 'Matematica II', 0, NULL, 'courses', 1),
+(6, 1, NULL, 'Calculo I', 0, NULL, 'courses', 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `event`
+-- Estructura de tabla para la tabla `event`
 --
 
-DROP TABLE IF EXISTS `event`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `title` varchar(150) NOT NULL,
   `location` varchar(100) NOT NULL,
-  `url` text,
+  `url` text DEFAULT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
   `comment` varchar(100) DEFAULT NULL,
   `table_name` varchar(10) DEFAULT NULL,
   `finished_in` datetime DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `event_chk_1` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `event`
+-- Estructura de tabla para la tabla `notify`
 --
 
-LOCK TABLES `event` WRITE;
-/*!40000 ALTER TABLE `event` DISABLE KEYS */;
-/*!40000 ALTER TABLE `event` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notify`
---
-
-DROP TABLE IF EXISTS `notify`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notify` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `title` varchar(250) NOT NULL,
   `msg` text NOT NULL,
   `notify_time` datetime NOT NULL,
   `published_at` datetime DEFAULT NULL,
   `readed` tinyint(1) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `notify_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `notify_chk_1` CHECK ((`readed` in (0,1))),
-  CONSTRAINT `notify_chk_2` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `notify`
+-- Estructura de tabla para la tabla `role`
 --
 
-LOCK TABLES `notify` WRITE;
-/*!40000 ALTER TABLE `notify` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notify` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `role`
+-- Volcado de datos para la tabla `role`
 --
 
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Admin','Control total de la aplicacion'),(2,'User','Usuario común');
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `role` (`id`, `name`, `description`) VALUES
+(1, 'Admin', 'Control total de la applicacion');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `roles_users`
+-- Estructura de tabla para la tabla `roles_users`
 --
 
-DROP TABLE IF EXISTS `roles_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles_users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `role_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `role_id` (`role_id`),
-  CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `roles_users`
+-- Volcado de datos para la tabla `roles_users`
 --
 
-LOCK TABLES `roles_users` WRITE;
-/*!40000 ALTER TABLE `roles_users` DISABLE KEYS */;
-INSERT INTO `roles_users` VALUES (1,1,1),(2,2,1);
-/*!40000 ALTER TABLE `roles_users` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `roles_users` (`id`, `user_id`, `role_id`) VALUES
+(1, 1, 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `study_plan`
+-- Estructura de tabla para la tabla `study_plan`
 --
 
-DROP TABLE IF EXISTS `study_plan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `study_plan` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
-  `start_date` date DEFAULT NULL,
+  `start_date` date NOT NULL,
   `created_at` datetime DEFAULT NULL,
+  `done` tinyint(1) DEFAULT NULL,
   `table_name` varchar(10) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `study_plan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `study_plan_chk_1` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `study_plan`
+-- Volcado de datos para la tabla `study_plan`
 --
 
-LOCK TABLES `study_plan` WRITE;
-/*!40000 ALTER TABLE `study_plan` DISABLE KEYS */;
-INSERT INTO `study_plan` VALUES (1,1,'Curso de React','2020-07-16','2020-07-16 15:34:05','study-plan',1),(2,2,'Curso de SQL','2020-03-31','2020-07-16 18:08:00','study-plan',0),(3,1,'Python','2020-03-04','2020-07-16 20:55:00','study-plan',1),(4,1,'Teoría de Música ','2020-07-23','2020-07-16 20:56:00','study-plan',1),(5,1,'Dreak Dance','2020-07-25','2020-07-17 18:55:08','study-plan',1),(6,2,'Curso de Piano','2020-07-30','2020-07-17 21:09:11','study-plan',1);
-/*!40000 ALTER TABLE `study_plan` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `study_plan` (`id`, `user_id`, `name`, `start_date`, `created_at`, `done`, `table_name`, `state`) VALUES
+(1, 1, 'Curso de Python', '2020-08-25', '2020-08-01 23:19:05', 0, 'study-plan', 1),
+(2, 1, 'Curso de SQL', '2020-08-15', '2020-08-01 23:19:49', 0, 'study-plan', 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `study_plan_goals`
+-- Estructura de tabla para la tabla `study_plan_goals`
 --
 
-DROP TABLE IF EXISTS `study_plan_goals`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `study_plan_goals` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `plan_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `plan_id` int(11) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
-  `url` text,
+  `url` text DEFAULT NULL,
   `deadline` datetime NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
   `table_name` varchar(25) DEFAULT NULL,
   `finished_in` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `done` tinyint(1) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `plan_id` (`plan_id`),
-  CONSTRAINT `study_plan_goals_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `study_plan` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `study_plan_goals_chk_1` CHECK ((`done` in (0,1))),
-  CONSTRAINT `study_plan_goals_chk_2` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `study_plan_goals`
+-- Volcado de datos para la tabla `study_plan_goals`
 --
 
-LOCK TABLES `study_plan_goals` WRITE;
-/*!40000 ALTER TABLE `study_plan_goals` DISABLE KEYS */;
-INSERT INTO `study_plan_goals` VALUES (1,1,'Stado',NULL,'2020-07-25 17:08:00',NULL,'study_plan_goals',NULL,'2020-07-16 17:09:00',1,1),(2,2,'Clausulas',NULL,'2020-07-16 18:09:00',NULL,'study_plan_goals',NULL,'2020-07-16 18:09:25',0,1),(3,1,'Query',NULL,'2020-07-16 18:09:00',NULL,'study_plan_goals','2020-07-16 18:23:00','2020-07-16 18:23:43',0,0),(4,1,'React Routes',NULL,'2020-07-26 00:00:00','Crear y proteger rutas ','study_plan_goals',NULL,'2020-07-17 00:48:35',0,0);
-/*!40000 ALTER TABLE `study_plan_goals` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `study_plan_goals` (`id`, `plan_id`, `title`, `url`, `deadline`, `comment`, `table_name`, `finished_in`, `created_at`, `done`, `state`) VALUES
+(1, 1, 'Manejo de Strings', NULL, '2020-08-03 00:00:00', NULL, 'study_plan_goals', NULL, '2020-08-03 16:48:09', 0, 0);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `task`
+-- Estructura de tabla para la tabla `task`
 --
 
-DROP TABLE IF EXISTS `task`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `task` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `course_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL,
   `name` varchar(80) NOT NULL,
   `assigned_in` datetime DEFAULT NULL,
   `delivery_day` datetime NOT NULL,
@@ -292,67 +211,48 @@ CREATE TABLE `task` (
   `comment` varchar(150) DEFAULT NULL,
   `table_name` varchar(10) DEFAULT NULL,
   `done` tinyint(1) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `course_id` (`course_id`),
-  CONSTRAINT `task_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `task_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `task_chk_1` CHECK ((`done` in (0,1))),
-  CONSTRAINT `task_chk_2` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `task`
+-- Volcado de datos para la tabla `task`
 --
 
-LOCK TABLES `task` WRITE;
-/*!40000 ALTER TABLE `task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `task` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `task` (`id`, `user_id`, `course_id`, `name`, `assigned_in`, `delivery_day`, `finished_in`, `comment`, `table_name`, `done`, `state`) VALUES
+(1, 1, 1, 'Números Complejos', '0008-01-02 00:39:00', '2020-08-09 00:00:00', NULL, NULL, 'tasks', 0, 1),
+(2, 1, 2, 'Sentencias SQL', '2010-08-01 00:00:00', '2010-08-05 00:00:00', NULL, '', 'tasks', 0, 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `teacher`
+-- Estructura de tabla para la tabla `teacher`
 --
 
-DROP TABLE IF EXISTS `teacher`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teacher` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `full_name` varchar(80) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone_number` varchar(22) DEFAULT NULL,
   `table_name` varchar(10) DEFAULT NULL,
-  `state` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `full_name` (`full_name`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `teacher_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `teacher_chk_1` CHECK ((`state` in (0,1)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `state` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `teacher`
+-- Volcado de datos para la tabla `teacher`
 --
 
-LOCK TABLES `teacher` WRITE;
-/*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-/*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `teacher` (`id`, `user_id`, `full_name`, `email`, `phone_number`, `table_name`, `state`) VALUES
+(1, 1, 'Maria Sanchez', NULL, NULL, 'teachers', 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Estructura de tabla para la tabla `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `first_name` varchar(80) NOT NULL,
   `last_name` varchar(80) NOT NULL,
@@ -363,33 +263,238 @@ CREATE TABLE `user` (
   `last_login_at` datetime DEFAULT NULL,
   `current_login_at` datetime DEFAULT NULL,
   `current_login_ip` varchar(100) DEFAULT NULL,
-  `login_count` int DEFAULT NULL,
+  `login_count` int(11) DEFAULT NULL,
   `confirmed_at` datetime DEFAULT NULL,
-  `table_name` varchar(10) NOT NULL,
-  `active` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  CONSTRAINT `user_chk_1` CHECK ((`active` in (0,1)))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `table_name` varchar(10) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL
+) ;
 
 --
--- Dumping data for table `user`
+-- Volcado de datos para la tabla `user`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin@taskbook.com','Reynaldo','Rosario','$6$rounds=656000$lw8Bej/QpwQ3XMyL$3B1d4CZG7XBZvaa6d5HQZ8poOt.LppKkr/IwhFUKNbb8Zdyfq9C1V02z5EoucuI.WQVo7h2sqWnWiGiJtbdyk1','+18293594707','DO','M','2020-07-18 04:36:37','2020-07-18 04:38:36','127.0.0.1',99,'2020-07-16 12:35:10','users',1),(2,'benjaminfl119@gmail.com','Benjamin','Rosario','$6$rounds=656000$.7Fsn5.VN75lARKW$sUNoSW12We55Ql1r5En0ScRUqFhiO7ZXwgzVVTgoszEO1TjifSMSq.jGPWl6yy8rXVGL0wJ3IX6uYWV3ysKIW.','+18293594707','DO','M','2020-07-18 01:25:26','2020-07-18 01:32:52','127.0.0.1',3,'2020-07-16 18:01:06','users',1);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `user` (`id`, `email`, `first_name`, `last_name`, `password`, `phone_number`, `country`, `gender`, `last_login_at`, `current_login_at`, `current_login_ip`, `login_count`, `confirmed_at`, `table_name`, `active`) VALUES
+(1, 'benjaminfl119@gmail.com', 'Benjamin', 'Rosario', '$6$rounds=656000$Oi6RuqIVJRJm8/0Q$.4/l.I0HQdtxmNh04earOOV2NLhn2UCdaQ0rAhwjp0TPaIlUBT034JNG31.FPYzyNTCJI0WYygnGXRMEDbWlk1', '+18293594707', 'DO', 'M', '2020-08-08 05:59:43', '2020-08-08 17:35:07', '127.0.0.1', 64, '2020-08-01 20:46:15', 'users', 1),
+(2, 'tvfenix43@gmail.com', 'benjamin', 'rosario', '$6$rounds=656000$Uh3okkQnU0puZQ6V$clgy4x1ZJk5sDinrGUIr.sZuHMi/SdXyPpJUxmrh1MnTNRJtlyeKYBEkkxAEUa1xI50HwzhxscGEZswGu1.Cz1', '+18098696786', 'DO', 'M', NULL, NULL, NULL, NULL, NULL, 'users', 1),
+(3, 'solojuegosfl119@gmail.com', 'benjamin', 'rosario', '$6$rounds=656000$9eGhuYISKQhlYdda$uA7ol0vMCKc6OMmmC/oHie4dnmQyFdsxX/kGA9qTjg74piyh2AX1z.Rlowqmw/Vr.xm.OxqpM.1GxUVq2oRR40', '+18098696786', 'DO', 'M', NULL, NULL, NULL, NULL, NULL, 'users', 1);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `class_schedule`
+--
+ALTER TABLE `class_schedule`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `course_id` (`course_id`);
+
+--
+-- Indices de la tabla `course`
+--
+ALTER TABLE `course`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `teacher_id` (`teacher_id`);
+
+--
+-- Indices de la tabla `event`
+--
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `notify`
+--
+ALTER TABLE `notify`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indices de la tabla `roles_users`
+--
+ALTER TABLE `roles_users`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `role_id` (`role_id`);
+
+--
+-- Indices de la tabla `study_plan`
+--
+ALTER TABLE `study_plan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `study_plan_goals`
+--
+ALTER TABLE `study_plan_goals`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `plan_id` (`plan_id`);
+
+--
+-- Indices de la tabla `task`
+--
+ALTER TABLE `task`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `course_id` (`course_id`);
+
+--
+-- Indices de la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `full_name` (`full_name`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `class_schedule`
+--
+ALTER TABLE `class_schedule`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `course`
+--
+ALTER TABLE `course`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `event`
+--
+ALTER TABLE `event`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `notify`
+--
+ALTER TABLE `notify`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `role`
+--
+ALTER TABLE `role`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `roles_users`
+--
+ALTER TABLE `roles_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `study_plan`
+--
+ALTER TABLE `study_plan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `study_plan_goals`
+--
+ALTER TABLE `study_plan_goals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `task`
+--
+ALTER TABLE `task`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `class_schedule`
+--
+ALTER TABLE `class_schedule`
+  ADD CONSTRAINT `class_schedule_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `course`
+--
+ALTER TABLE `course`
+  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `course_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`);
+
+--
+-- Filtros para la tabla `event`
+--
+ALTER TABLE `event`
+  ADD CONSTRAINT `event_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `notify`
+--
+ALTER TABLE `notify`
+  ADD CONSTRAINT `notify_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `roles_users`
+--
+ALTER TABLE `roles_users`
+  ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+--
+-- Filtros para la tabla `study_plan`
+--
+ALTER TABLE `study_plan`
+  ADD CONSTRAINT `study_plan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `study_plan_goals`
+--
+ALTER TABLE `study_plan_goals`
+  ADD CONSTRAINT `study_plan_goals_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `study_plan` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `task`
+--
+ALTER TABLE `task`
+  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `task_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  ADD CONSTRAINT `teacher_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2020-07-18  0:46:15

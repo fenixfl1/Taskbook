@@ -3,68 +3,163 @@
     <div class="container-fluid">
         {% include 'messages.html' %}
         
-        <div class="row justify-content-md-between mt-3 ml-1">
+        <div class="row justify-content-md-between mt-3 ml-1 conetnt-list">
             
-            <div class="col-md-9 card-container">
-                
-                <div class="row justify-content-md-star">
-                    {% if courses | courses(finished=find) > 0 %}
-                        {% for courses in subjects_user.items %}
-                            {% set dato = [
-                                courses.name, 
-                                courses.id] %}
-                            <div class="card border-primary card-row mx-2 mb-5">
-                                <figure>
-                                    {{ courses.name | generate_avatar(size=300,
-                                    class='card-img-top') }}
-                                </figure>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title"> 
-                                        {{ courses.name }}
-                                        <span></span>
-                                    </h5>
-                                    {% if courses.teacher %}
-                                        <p class="card-text"> {{ courses.teacher }} </p>
-                                    {% else %}
-                                        <p class="card-text">
-                                            <div class="dropdown no-arrow">
-                                                <a href="#" class="dropdown-toggle"
-                                                    type="button" id="dropdownMenuButton"
-                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    Asignar instructor
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#staticBackdropTeacher"
-                                                        class="dropdown-item cursor">
-                                                        Nuevo
+            <div class="col-md-9">
+                <div class="d-sm-flex align-items-center justify-content-start ml-n3 mt-1 mb-1 row-title">
+                    <h3 class="h3 mb-0 text-gray-800"> 
+                        Mis cursos
+                    </h3>
+                    <a class="ml-3 link-card" href="#">Explorar todos</a>
+                    <i class="fas fa-angle-right mx-1"></i>
+                </div>
+
+                <hr class="sidebar-divider d-none d-md-block ml-n3 mt-n1">
+
+                <div class="row-glider-container ml-n3">
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+
+                    <div class="glider-list">
+                        {% if courses | courses(finished=find) > 0 %}
+                            {% for courses in subjects_user.items %}
+                                {% set dato = [ courses.name, courses.id] %}
+                                <div class="card border-primary card-row-list mr-3 mt-0 ml-0">
+                                    <figure>
+                                        {{ courses.name | generate_avatar(size=300,
+                                        class='card-img-top') }}
+                                    </figure>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title"> 
+                                            {{ courses.name }}
+                                            <span></span>
+                                        </h5>
+                                        {% if courses.teacher %}
+                                            <p class="card-text"> {{ courses.teacher }} </p>
+                                        {% else %}
+                                            <p class="card-text">
+                                                <div class="dropdown no-arrow">
+                                                    <a href="#" class="dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                        Asignar instructor
                                                     </a>
-                                                    <button class="dropdown-item dropright cursor"
-                                                    onclick='assignTeacher({{ dato | tojson }})'
-                                                    data-toggle="modal" data-target="#assingTeachers">
-                                                    Existente
-                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a href="#" data-toggle="modal"
+                                                            data-target="#staticBackdropTeacher"
+                                                            class="dropdown-item cursor">
+                                                            Nuevo
+                                                        </a>
+                                                        <button class="dropdown-item dropright cursor"
+                                                        onclick='assignTeacher({{ dato | tojson }})'
+                                                        data-toggle="modal" data-target="#assingTeachers">
+                                                        Existente
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </p>
-                                    {% endif %}
-                                    
-                                    <a href=" {{url_for('users.courses', id=courses.id)}} "
-                                    class="mx-auto" title="Ir al curso">
-                                        <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
-                                    </a>
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <a href=" {{url_for('users.courses', id=courses.id)}} "
+                                        class="mx-auto" title="Ir al curso">
+                                            <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
-                        alt="Empty space" class="img-empty m-auto">
-                    {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+                            alt="Empty space" class="img-empty m-auto">
+                        {% endif %}
+                    </div>
+                    
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
+                <div class="d-sm-flex align-items-center justify-content-start ml-n3 mt-1 mb-1 row-title">
+                    <h3 class="h3 mb-0 text-gray-800"> 
+                        Plan de estudios
+                    </h3>
+                    <a class="ml-3 link-card" href="#">Explorar todos</a>
+                    <i class="fas fa-angle-right mx-1"></i>
+                </div>
+
+                <hr class="sidebar-divider d-none d-md-block ml-n3 mt-n1">
+
+                <div class="row-glider-container ml-n3">
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+
+                    <div class="glider-list">
+                        {% if plan | plan(done=find) > 0 %}
+                            {% for plan in study_plan.items %}
+                                {% set dato = [ plan.name, plan.id] %}
+                                <div class="card border-primary card-row-list mr-3 mt-0 ml-0">
+                                    <figure>
+                                        {{ plan.name | generate_avatar(size=300,
+                                        class='card-img-top') }}
+                                    </figure>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title"> 
+                                            {{ plan.name }}
+                                            <span></span>
+                                        </h5>
+                                        {# {% if plan.teacher %}
+                                            <p class="card-text"> {{ courses.teacher }} </p>
+                                        {% else %}
+                                            <p class="card-text">
+                                                <div class="dropdown no-arrow">
+                                                    <a href="#" class="dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                        Asignar instructor
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a href="#" data-toggle="modal"
+                                                            data-target="#staticBackdropTeacher"
+                                                            class="dropdown-item cursor">
+                                                            Nuevo
+                                                        </a>
+                                                        <button class="dropdown-item dropright cursor"
+                                                        onclick='assignTeacher({{ dato | tojson }})'
+                                                        data-toggle="modal" data-target="#assingTeachers">
+                                                        Existente
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </p>
+                                        {% endif %} #}
+                                        
+                                        <a href="  "
+                                        class="mx-auto" title="Ir al curso">
+                                            <img src="{{ url_for('static',filename='icons-svg/icons/arrow-right-circle.svg') }}" style="width: 2rem;">
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <img src="{{ url_for('static',filename='images/undraw/undraw_empty.svg') }}" 
+                            alt="Empty space" class="img-empty m-auto">
+                        {% endif %}
+                    </div>
+                    
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 mt-5">
                 <div class="list-group" id="list-ta" role="tablist">
                     <a class="list-group-item  d-flex justify-content-between 
                         align-items-cente" href="?courses=all">
