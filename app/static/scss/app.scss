@@ -64,6 +64,93 @@
 	}
 }
 
+.row-title {
+	cursor: pointer;
+	.link-card {
+		display: none;
+	}
+}
+
+.row-title:hover {
+	transition: all 500ms ease-out;
+	.link-card {
+		visibility: visible;
+		display: inline;
+	}
+}
+
+.row-glider-container {
+	position: relative;
+	button {
+		position: absolute;
+		top: 50%;
+		border: none;
+		outline: none;
+		display: block;
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+		line-height: 30px;
+		text-align: center;
+		background: none;
+		color: #ffff;
+		opacity: 100%;
+	}
+	.btn-prev {
+		left: -20px;
+		z-index: 150;
+	}
+
+	.btn-next {
+		right: -20px;
+		z-index: 150;
+	}
+}
+
+.glider-list {
+	height: 300px;
+	padding: 0%;
+	.card-row-list {
+		width: 12em;
+		max-height: 300px;
+		margin: 25px;
+		&:nth-child(3n+3) {
+			border-right: -1px;
+		}
+		figure {
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: 50%;
+	
+			img {
+				width: 100%;
+				height: 100%;
+				transition: all 500ms ease-out;
+			}
+	
+			.button {
+				position: absolute;
+				opacity: 0;
+				visibility: hidden;
+			}
+	
+			.text-img {
+				position: absolute;
+				top: 0;
+				padding-top: 10px;
+				width: 100%;
+				height: 100%;
+				background: rgba(174,221,215,0.8);
+				opacity: 0;
+				visibility: 0;
+				transition: all 500ms ease-out;
+				text-align: center;
+			}
+		}
+	}
+}
+
 .card-container {
 	margin-bottom: 4em;
 	.mx-2 {
@@ -76,6 +163,7 @@
 	margin-left: 4.2em !important;
 	margin-right: 4.2em !important;
 }
+
 
 .card-list {
 	width: 97%;
@@ -93,10 +181,6 @@
 	line-height: 18px;
 	overflow: hidden;
 }
-
-// .nav-footer {
-// 	max-height: 50px !important;
-// }
 
 .img-empty {
 	width: 40rem;

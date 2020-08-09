@@ -47,4 +47,5 @@ env/
 bin/
 Pipfile
 Pipfile.lock
+prepros.config
 *.json

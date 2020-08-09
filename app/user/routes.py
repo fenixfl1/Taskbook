@@ -71,6 +71,11 @@ def subjects():
         filter(Courses.user_id == current_user.id).\
         filter(Courses.finished == 0).\
         filter(Courses.state == 1)
+        
+    get_study_plan = db_session.query(StudyPlan).\
+        filter(StudyPlan.user_id == current_user.id).\
+        filter(StudyPlan.state == 1).\
+        filter(StudyPlan.done == 0).paginate(page, 100, 0)
 
     find = 'both'
     args = request.args.get('courses')
@@ -97,8 +102,9 @@ def subjects():
 
     return render_template(
         'user/all_courses.html.j2',
-        title='Courses -',
+        title='Index -',
         subjects_user=courses,
+        study_plan=get_study_plan,
         current_page=page,
         total_pages=total_pages,
         find=find
@@ -146,7 +152,7 @@ def courses(id):
         title='Courses: {}'.format(courses.name),
         course=courses,
         assignments=task,
-        name=courses.name,
+        current_course=courses,
         course_id=id,
         find=find
     )

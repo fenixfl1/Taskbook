@@ -1,20 +1,46 @@
 {% extends 'base.html' %} {% block content %}
 
 	<div class="container-fluid">
+
+		<div class="d-sm-flex align-items-center justify-content-start ml-2 mt-4 mb-1">
+			<h1 class="h3 mb-0 text-gray-800"> 
+				{{ current_course.name }}
+			</h1>
+			{% if current_course.teacher %}
+				<span class="ml-3 font-weight-ligh">
+					{{ current_course.teacher }}
+				</span>
+			{% else %}
+				{% set dato = [ current_course.name, current_course.id] %}
+
+				<p class="ml-3 font-weight-ligh">
+                    <div class="dropdown no-arrow">
+                        <a href="#" class="dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Asignar instructor
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#" data-toggle="modal" data-target="#staticBackdropTeacher"
+                              class="dropdown-item cursor">
+                                Nuevo
+                            </a>
+                            <button class="dropdown-item dropright cursor" onclick='assignTeacher({{ dato | tojson }})'
+                              data-toggle="modal" data-target="#assingTeachers">
+                                Existente
+                            </button>
+                        </div>
+                    </div>
+                </p>
+			{% endif %}
+		</div>
+
+		<hr class="sidebar-divider d-none d-md-block ml-2 mt-n1">
 		
 		<div class="row justify-content-md-between mt-3 ml-1" style="height: 83vh">
+
 			{# main content #}
 			<div class="col-md-9 card-container">
-
-				<div class="row justify-content-md-start mr-2">
-					<div class="card col-md-12 mb-3" style="height: 18em;">
-						<div class="card-header bg-white">
-							<h3 class="card-text">
-								<h3 class="text-center"> {{ name }} </h3>
-							</h3>
-						</div>
-					</div>
-				</div>
 
 				<div class="row justify-content-md-start" id="card">
 					{% if assignments | length > 0 %}
@@ -70,10 +96,24 @@
 			{# sidebar right #}
 			<div class="list-group col-md-3 d-none d-sm-inline-block" id="list-ta" role="tablist">
 
-				<button type="button" class="btn btn-secondary btn-block mb-3"
-	              data-toggle="modal" data-target="#staticBackdrop">
-	                Neuva Tarea
-	            </button>
+				<div class="btn-group mb-3 btn-block" role="group" aria-label="Course config">
+					<button type="button" class="btn btn-secondary btn-delete" title="Eliminar este curso">
+	                    <img src="{{ url_for('static',filename='icons-svg/icons/trash.svg') }}" alt="">
+	                </button>
+					<button type="button" class="btn btn-secondary"
+	                  data-toggle="modal" data-target="#editSubject" title="Editar este curso">
+	                    <img src="{{url_for('static',filename='icons-svg/icons/pen.svg')}}" style="width: 1rem;">
+	                </button>
+	                <button type="button" class="btn btn-secondary"
+	                  data-toggle="modal" data-target="#qualification" title="Marcar como cursada"
+	                    onclick="editCourse(course_id)">
+	                    <img src="{{url_for('static',filename='icons-svg/icons/check2.svg')}}" alt="Editar">
+	                </button>
+					<button type="button" class="btn btn-secondary "
+					  data-toggle="modal" data-target="#staticBackdrop" title="Agregar tarea">
+						<i class="fas fa-tasks"></i>
+					</button>
+	            </div>
 
 			  	<a class="list-group-item list-group-item-action d-flex justify-content-between 
                     align-items-cente" href="?tasks=all" >
@@ -103,21 +143,6 @@
                         {{ course_id | tasks(this=True, progress=True) }}%
                     </span>
 				</p>
-
-				<div class="btn-group mt-3 btn-block" role="group" aria-label="Course config">
-					<button type="button" class="btn btn-secondary btn-delete" title="Eliminar">
-	                    <img src="{{ url_for('static',filename='icons-svg/icons/trash.svg') }}" alt="">
-	                </button>
-					<button type="button" class="btn btn-secondary"
-	                  data-toggle="modal" data-target="#editSubject">
-	                    Editar este curso
-	                </button>
-	                <button type="button" class="btn btn-secondary"
-	                  data-toggle="modal" data-target="#qualification" title="Marcar como cursada"
-	                    onclick="editCourse(course_id)">
-	                    <img src="{{url_for('static',filename='icons-svg/icons/check2.svg')}}" alt="Editar">
-	                </button>
-	            </div>
 			</div>
 		</div>
 	</div>
