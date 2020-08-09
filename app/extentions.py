@@ -21,7 +21,9 @@ mail = Mail()
 security = Security()
 csrf = CSRFProtect()
 avatars = Avatars()
-adm = Admin(name='Taskbook', template_mode='bootstrap3')
+adm = Admin(name='Taskbook',
+            template_mode='bootstrap3',
+            static_url_path='static')
 login = LoginManager()
 migrate = Migrate()
 celery = make_celery()

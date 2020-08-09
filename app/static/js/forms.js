@@ -1,7 +1,7 @@
-$(document).ready(function () {
+y$(document).ready(function () {
 
-	$('#startDate').format = "YYYY-MM-DDThh:mm:ss.ms"
-	$('#endDate').format = "YYYY-MM-DDThh:mm:ss.ms"
+	// $('#startDate').format = "YYYY-MM-DDThh:mm:ss.ms"
+	// $('#endDate').format = "YYYY-MM-DDThh:mm:ss.ms"
 
 	// function to validate form of create new teachers
 	$('#submitTeacher').on('click', function() {

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from app import create_app, celery
 from app.database import init_db
 import app as module

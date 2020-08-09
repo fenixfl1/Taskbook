@@ -3,7 +3,7 @@ from wtforms.validators import DataRequired, Length
 from wtforms import SubmitField, FileField, StringField, \
     TextAreaField, BooleanField, SelectField, RadioField
 from wtforms.fields.html5 import EmailField, URLField, \
-    DateTimeField, DateTimeLocalField, DateField
+    DateTimeLocalField, DateField
 from wtforms_alchemy import PhoneNumberField
 from wtforms_alchemy.fields import QuerySelectField
 from app.database.models import Courses, Teachers, StudyPlan
