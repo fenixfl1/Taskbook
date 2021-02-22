@@ -29,10 +29,10 @@ def create_app(setting_module, **kwargs):
         init_celery(celery, app)
 
     if app.config.get('TESTING', True):
-        print("Running in development mode")
+        print(" * Running in development mode")
         app.config.from_envvar('APP_DEVELOPMENT_SETTINGS', silent=False)
     else:
-        print("Running in production mode")
+        print(" * Running in production mode")
         app.config.from_envvar('APP_PRODUCTION_SETTINGS', silent=False)
 
     # library integrations
